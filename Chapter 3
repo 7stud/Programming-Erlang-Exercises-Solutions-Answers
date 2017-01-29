@@ -13,7 +13,7 @@
 10> Addr.
 "123 Maple St"
 
-11> f(Addr).    %<=="forget" the Addr variable     
+11> f(Addr).    %<=="forget" the Addr variable or use a different variable name in the expressions below.     
 ok
 
 12> [ _,{house, Addr} | [] ] = Street.   %Here the variable name _ is used instead of a name like FirstHouse.
