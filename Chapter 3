@@ -16,3 +16,11 @@
 43> Addr.
 "123 Maple Dr"
 
+44> f(Addr).   %<=="forget" that the Addr variable exists.    
+ok
+
+45> [Head,{house, Addr} | []] = Houses.
+[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+
+46> Addr.
+"15 Elm St"
