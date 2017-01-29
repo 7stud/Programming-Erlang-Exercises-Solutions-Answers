@@ -7,7 +7,7 @@
 8> Street = [ H1,H2 | [] ].     %See botton of p. 38
 [{house,"123 Maple St"},{house,"456 Maple St"}]
 
-9> [{house, Addr} | Tail] = Street.
+9> [{house, Addr} | Tail] = Street.  %Instead of Tail, use the variable name _ instead.
 [{house,"123 Maple St"},{house,"456 Maple St"}]
 
 10> Addr.
@@ -16,7 +16,7 @@
 11> f(Addr).    %<=="forget" the Addr variable     
 ok
 
-12> [ _,{house, Addr} | [] ] = Street.
+12> [ _,{house, Addr} | [] ] = Street.   %Use the variable name _ instead of a name like Head.
 [{house,"123 Maple St"},{house,"456 Maple St"}]
 
 13> Addr.
