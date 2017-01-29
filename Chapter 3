@@ -6,8 +6,8 @@
 
 8> Street = [ H1,H2 | [] ].     %See botton of p. 38
 [{house,"123 Maple St"},{house,"456 Maple St"}]
-
-9> [{house, Addr} | Tail] = Street.  %Instead of Tail, you should use the variable name _ instead.
+you
+9> [{house, Addr} | Tail] = Street.  %Instead of Tail, prefer the variable name _ instead.
 [{house,"123 Maple St"},{house,"456 Maple St"}]
 
 10> Addr.
