@@ -1,26 +1,24 @@
-39> H1 = {house, "123 Maple Dr"}.            
-{house,"123 Maple Dr"}
+6> H1 = {house, "123 Maple St"}.
+{house,"123 Maple St"}
 
-40> H2 = {house, "15 Elm St"}.   
-{house,"15 Elm St"}
-    
-41> Houses = [H1, H2 | [] ].
-* 2: syntax error before: '.'
+7> H2 = {house, "456 Maple St"}.
+{house,"456 Maple St"}
 
-41> Houses = [H1,H2 | [] ]. 
-[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+8> Street = [ H1,H2 | [] ].     
+[{house,"123 Maple St"},{house,"456 Maple St"}]
 
-42> [{house, Addr} | Tail] = Houses.
-[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+9> [{house, Addr} | Tail] = Street.
+[{house,"123 Maple St"},{house,"456 Maple St"}]
 
-43> Addr.
-"123 Maple Dr"
+10> Addr.
+"123 Maple St"
 
-44> f(Addr).   %<=="forget" that the Addr variable exists.    
+11> f(Addr).    %<=="forget" the Addr variable     
 ok
 
-45> [Head,{house, Addr} | []] = Houses.
-[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+12> [ _,{house, Addr} | [] ] = Street.
+[{house,"123 Maple St"},{house,"456 Maple St"}]
 
-46> Addr.
-"15 Elm St"
+13> Addr.
+"456 Maple St"
+
