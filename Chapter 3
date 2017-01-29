@@ -1,0 +1,18 @@
+39> H1 = {house, "123 Maple Dr"}.            
+{house,"123 Maple Dr"}
+
+40> H2 = {house, "15 Elm St"}.   
+{house,"15 Elm St"}
+    
+41> Houses = [H1, H2 | [] ].
+* 2: syntax error before: '.'
+
+41> Houses = [H1,H2 | [] ]. 
+[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+
+42> [{house, Addr} | Tail] = Houses.
+[{house,"123 Maple Dr"},{house,"15 Elm St"}]
+
+43> Addr.
+"123 Maple Dr"
+
