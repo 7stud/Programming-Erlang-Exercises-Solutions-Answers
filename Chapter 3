@@ -16,7 +16,7 @@
 11> f(Addr).    %<=="forget" the Addr variable     
 ok
 
-12> [ _,{house, Addr} | [] ] = Street.   %Here the variable name _ is used instead of a name like Head.
+12> [ _,{house, Addr} | [] ] = Street.   %Here the variable name _ is used instead of a name like H1.
 [{house,"123 Maple St"},{house,"456 Maple St"}]
 
 13> Addr.
