@@ -1,1 +1,1 @@
-![macvim image]("/macvim-copy.png")
+![macvim image]("/images/macvim-copy.png")
