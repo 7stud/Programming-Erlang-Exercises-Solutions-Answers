@@ -34,5 +34,17 @@ ok
 86> Addr.
 "7 Maple St"
 
+%This syntax also seems to work:
+
+87> f(Addr).                             
+ok
+
+88> [_, _, {house, Addr}] = Street.      
+[{house,"3 Maple St"},
+ {house,"5 Maple St"},
+ {house,"7 Maple St"}]
+ 
+89> Addr.
+"7 Maple St"
 
 
