@@ -25,7 +25,7 @@
 83> Tail.
 [{house,"5 Maple St"},{house,"7 Maple St"}]
 
-84> f(Addr).    %"forget" the Addr variable (or use a different variable name in the expressions below).            
+84> f(Addr).    %"forget" (or unbind) the Addr variable. Or use a different variable name in the expressions below.             
 ok
 
 85> [_, _, {house, Addr} | [] ] = Street.   %This syntax is described on the bottom of p. 38. See below for alternative syntax.
