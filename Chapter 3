@@ -1,24 +1,38 @@
-6> H1 = {house, "123 Maple St"}.
-{house,"123 Maple St"}
+77> H1 = {house, "3 Maple St"}.  
+{house,"3 Maple St"}
 
-7> H2 = {house, "456 Maple St"}.
-{house,"456 Maple St"}
+78> H2 = {house, "5 Maple St"}.
+{house,"5 Maple St"}
 
-8> Street = [ H1,H2 | [] ].     %This syntax is described on the bottom of p. 38.
-[{house,"123 Maple St"},{house,"456 Maple St"}]
+79> H3 = {house, "7 Maple St"}.
+{house,"7 Maple St"}
 
-9> [{house, Addr} | Tail] = Street.  %Here, instead of Tail you should prefer the variable name _
-[{house,"123 Maple St"},{house,"456 Maple St"}]
+80> Street = [H1, H2, H3].
+[{house,"3 Maple St"},
+ {house,"5 Maple St"},
+ {house,"7 Maple St"}]
+ 
+81> [{house, Addr} | Tail] = Street.
+[{house,"3 Maple St"},
+ {house,"5 Maple St"},
+ {house,"7 Maple St"}]
+ 
+82> Addr.
+"3 Maple St"
 
-10> Addr.
-"123 Maple St"
+83> Tail.
+[{house,"5 Maple St"},{house,"7 Maple St"}]
 
-11> f(Addr).    %<=="forget" the Addr variable or use a different variable name in the expressions below.     
+84> f(Addr).    %"forget" the Addr variable (or use a different variable name in the expressions below).            
 ok
 
-12> [ _,{house, Addr} | [] ] = Street.   %Here the variable name _ is used instead of a name like FirstHouse.
-[{house,"123 Maple St"},{house,"456 Maple St"}]
+85> [_, _, {house, Addr} | [] ] = Street.   %This syntax is described on the bottom of p. 38.
+[{house,"3 Maple St"},
+ {house,"5 Maple St"},
+ {house,"7 Maple St"}]
+ 
+86> Addr.
+"7 Maple St"
 
-13> Addr.
-"456 Maple St"
+
 
