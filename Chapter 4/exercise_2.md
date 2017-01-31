@@ -56,9 +56,9 @@ tuple_to_list(T) ->
 ```
 
 Wow, like a boss!  My first erlang one liner:
-
-    tuple_to_list(T) -> [element(I, T) || I <- lists:sequ(1, size(T))].
-
+```erlang
+tuple_to_list(T) -> [element(I, T) || I <- lists:sequ(1, size(T))].
+```
 In the shell:
 
 ```erlang
