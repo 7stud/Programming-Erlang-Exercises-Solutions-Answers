@@ -24,8 +24,32 @@ perimeter({rectangle, Height, Width}) ->
 perimeter({circle, Radius}) ->
     2 * math:pi() * Radius;
 perimeter({right_triangle, Side1, Side2}) ->
-    Side1 + Side2 + math:sqrt((Side1*Side1) + (Side2*Side2)).
+    Side1 + Side2 + math:sqrt((Side1*Side1) + (Side2*Side2))
+```
 
+In the shell:
+
+```erlang
+52> c(geometry).
+{ok,geometry}
+
+53> geometry:perimeter({square, 2}).
+8
+
+54> geometry:perimeter({rectangle, 2, 4}).
+12
+
+55> geometry:perimeter({circle, 4}).      
+25.132741228718345
+
+56> geometry:perimeter({right_triangle, 4, 4}).
+13.65685424949238
+
+58> geometry:area({circle, 10}).
+314.2
+
+59> geometry:area({right_triangle, 3, 4}). 
+6.0
 
 
 ```
