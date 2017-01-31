@@ -39,10 +39,21 @@ In the shell:
 Oh boy...I looked at the exercise again while thinking about list comprehensions:
 
 ```
+module(my).
+-compile(export_all).
+
 tuple_to_list(T) -> 
     [
-        element(I, T) || I <- lists:sequ(1, size(T))
+        element(I, T) || I <- lists:seq(1, size(T))
     ].
+
+%tuple_to_list({}) -> [];
+%tuple_to_list(T) -> tuple_to_list_acc(size(T), T, []).
+%
+%tuple_to_list_acc(0, _, Acc) -> Acc;
+%tuple_to_list_acc(CurrIndex, T, Acc) ->
+%   NewAcc = [element(CurrIndex, T) | Acc],
+%   tuple_to_list_acc(CurrIndex-1, T, NewAcc).
 ```
 
 Wow, like a boss!  My first erlang one liner:
