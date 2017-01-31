@@ -55,7 +55,7 @@ tuple_to_list(Tuple) ->
 %   tuple_to_list_acc(CurrIndex-1, T, NewAcc).
 ```
 
-Wow, like a boss!  My first erlang one liner:
+Wow, like a boss!  My first ever erlang one liner:
 ```erlang
 tuple_to_list(Tuple) -> [element(Index, Tuple) || Index <- lists:seq(1, size(Tuple) )].
 ```
