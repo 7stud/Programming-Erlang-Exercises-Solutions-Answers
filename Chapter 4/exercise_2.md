@@ -52,16 +52,16 @@ Wow, like a boss!  My first erlang one liner:
 In the shell:
 
 ```erlang
-15> c(my).                                                    
+30> c(my).
 {ok,my}
 
-16> tuple_to_list({1, true, {2.3, false}, fun(X) -> X*2 end}).
-[1,true,{2.3,false},#Fun<erl_eval.6.90072148>]
+31> my:tuple_to_list({1, 2, 3}).
+[1,2,3]
 
-17> tuple_to_list({}).                                        
+32> my:tuple_to_list({}).       
 []
 
-19> tuple_to_list({1, 2, 3}).
-[1,2,3]
+33> my:tuple_to_list({1, true, {2.3, false}, fun(X) -> X*2 end}).
+[1,true,{2.3,false},#Fun<erl_eval.6.90072148>]
 
 ```
