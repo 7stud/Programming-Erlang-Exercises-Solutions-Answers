@@ -45,7 +45,7 @@ tuple_to_list(T) ->
     ].
 ```
 
-Wow!  Like a boss!  My first erlang one liner:
+Wow, like a boss!  My first erlang one liner:
 
     tuple_to_list(T) -> [element(I, T) || I <- lists:sequ(1, size(T))].
 
