@@ -35,3 +35,26 @@ In the shell:
 84> my:tuple_to_list({1, true, {2.3, "hello"}}).
 [1,true,{2.3,"hello"}]
 ```
+
+Oh boy....And now, list comprehensions to the rescue:
+
+```
+tuple_to_list(T) -> 
+    [
+        element(I, T) || I <-- lists:sequ(1, size(T))
+    ].
+```
+
+In the shell:
+
+```erlang
+16> tuple_to_list({1, true, {2.3, false}, fun(X) -> X*2 end}).
+[1,true,{2.3,false},#Fun<erl_eval.6.90072148>]
+
+17> tuple_to_list({}).                                        
+[]
+
+19> tuple_to_list({1, 2, 3}).
+[1,2,3]
+
+```
