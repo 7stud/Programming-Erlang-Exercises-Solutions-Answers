@@ -75,3 +75,5 @@ In the shell:
 [1,true,{2.3,false},#Fun<erl_eval.6.90072148>]
 
 ```
+
+That solution made me realize that a list comprehension is really erlang's version of a for-in loop, e.g. `for word in words: #do something with word` 
