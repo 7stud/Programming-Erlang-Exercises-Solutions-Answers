@@ -1,4 +1,4 @@
-I used the following `erlang` module functions:
+I used the following functions from the `erlang` module:
 
 ```
 size/1        Gets the size of a tuple.  
