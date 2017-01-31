@@ -7,7 +7,7 @@ element/2     Gets the element of a tuple at the specified index.
 my.erl:
 ```erlang
 -module(my).
--compile(export_all).   %You use this instead of -export([f/1, f/2...]).
+-compile(export_all).   %You use this instead of -export([f/1, g/2...]).
 
 tuple_to_list({}) -> [];
 tuple_to_list(T) -> tuple_to_list_acc(size(T), T, []).   %Will acces the elements of the tuple starting at the largest 
