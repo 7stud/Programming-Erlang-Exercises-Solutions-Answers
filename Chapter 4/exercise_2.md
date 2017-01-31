@@ -39,7 +39,7 @@ In the shell:
 Oh boy...I looked at the exercise again while thinking about list comprehensions:
 
 ```erlang
-module(my).
+-module(my).
 -compile(export_all).
 
 tuple_to_list(T) -> 
