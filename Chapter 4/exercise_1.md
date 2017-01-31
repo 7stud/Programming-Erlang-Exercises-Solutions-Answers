@@ -1,7 +1,7 @@
 ```erlang
 
 -module(geometry).
--export([area/1, test/0, perimeter/1]).
+-export([area/1, test/0, perimeter/1]).  %Add perimeter() to list of exports.
 
 test() ->
     4 = area({square, 2}),
