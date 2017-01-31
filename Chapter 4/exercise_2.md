@@ -33,6 +33,7 @@ In the shell:
 
 83> my:tuple_to_list({1, true, "hello"}).
 [1,true,"hello"]
+
+84> my:tuple_to_list({1, true, {2.3, "hello"}}).
+[1,true,{2.3,"hello"}]
 ```
-
-
