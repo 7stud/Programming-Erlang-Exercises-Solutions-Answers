@@ -19,7 +19,7 @@ tuple_to_list_acc(CurrIndex, T, Acc) ->
 
 In the shell:
 
-```
+```erlang
 80> c(my).
 {ok,my}
 
@@ -38,7 +38,7 @@ In the shell:
 
 Oh boy...I looked at the exercise again while thinking about list comprehensions:
 
-```
+```erlang
 module(my).
 -compile(export_all).
 
