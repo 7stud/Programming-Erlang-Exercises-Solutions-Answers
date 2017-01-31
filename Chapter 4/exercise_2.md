@@ -41,13 +41,13 @@ Oh boy...I looked at the exercise again while thinking about list comprehensions
 ```
 tuple_to_list(T) -> 
     [
-        element(I, T) || I <-- lists:sequ(1, size(T))
+        element(I, T) || I <- lists:sequ(1, size(T))
     ].
 ```
 
 Wow!  Like a boss!  My first erlang one liner:
 
-    tuple_to_list(T) -> [element(I, T) || I <-- lists:sequ(1, size(T))].
+    tuple_to_list(T) -> [element(I, T) || I <- lists:sequ(1, size(T))].
 
 In the shell:
 
