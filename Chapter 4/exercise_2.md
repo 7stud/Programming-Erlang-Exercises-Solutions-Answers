@@ -1,8 +1,8 @@
 I used the following functions from the `erlang` module:
 
 ```
-size/1        Gets the size of a tuple.  
-element/2     Gets the element of a tuple at the specified index.
+size/1        Gets the size of a tuple: size(Tuple).
+element/2     Gets the element of a tuple at the specified index: element(Index, Tuple).
 ```
 my.erl:
 ```erlang
