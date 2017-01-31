@@ -21,6 +21,7 @@ tuple_to_list_acc(CurrIndex, T, Acc) ->
 
 In the shell:
 
+```
 80> c(my).
 {ok,my}
 
@@ -32,6 +33,6 @@ In the shell:
 
 83> my:tuple_to_list({1, true, "hello"}).
 [1,true,"hello"]
-
+```
 
 
