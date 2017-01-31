@@ -42,9 +42,9 @@ Oh boy...I looked at the exercise again while thinking about list comprehensions
 -module(my).
 -compile(export_all).
 
-tuple_to_list(T) -> 
+tuple_to_list(Tuple) -> 
     [
-        element(I, T) || I <- lists:seq(1, size(T))
+        element(Index, Tuple) || Index <- lists:seq(1, size(Tuple) )
     ].
 
 %tuple_to_list({}) -> [];
@@ -57,7 +57,7 @@ tuple_to_list(T) ->
 
 Wow, like a boss!  My first erlang one liner:
 ```erlang
-tuple_to_list(T) -> [element(I, T) || I <- lists:sequ(1, size(T))].
+tuple_to_list(Tuple) -> [element(Index, Tuple) || Index <- lists:seq(1, size(Tuple) )].
 ```
 In the shell:
 
