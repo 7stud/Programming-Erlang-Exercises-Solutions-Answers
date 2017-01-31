@@ -76,4 +76,4 @@ In the shell:
 
 ```
 
-That solution made me realize that a list comprehension is really erlang's version of a for-loop.
+That solution made me realize that a list comprehension is really erlang's version of a for-in loop.
