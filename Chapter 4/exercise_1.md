@@ -42,8 +42,8 @@ In the shell:
 55> geometry:perimeter({circle, 4}).      
 25.132741228718345
 
-56> geometry:perimeter({right_triangle, 4, 4}).
-13.65685424949238
+56> geometry:perimeter({right_triangle, 3, 4}).
+12.0
 
 58> geometry:area({circle, 10}).
 314.2
