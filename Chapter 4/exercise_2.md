@@ -19,4 +19,19 @@ tuple_to_list_acc(CurrIndex, T, Acc) ->
    tuple_to_list_acc(CurrIndex-1, T, NewAcc).
 ```
 
+In the shell:
+
+80> c(my).
+{ok,my}
+
+81> my:tuple_to_list({1, 2, 3}).
+[1,2,3]
+
+82> my:tuple_to_list({}).       
+[]
+
+83> my:tuple_to_list({1, true, "hello"}).
+[1,true,"hello"]
+
+
 
