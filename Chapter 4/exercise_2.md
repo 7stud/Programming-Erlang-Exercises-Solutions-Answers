@@ -1,4 +1,4 @@
-Will use the following `erlang` module functions:
+I used the following `erlang` module functions:
 
 `erlang:size/1`        Gets the size of a tuple.  
 `erlang:element/2`     Gets the element of a tuple at the specified index.
