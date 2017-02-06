@@ -177,7 +177,7 @@ Finally, to return a tuple from `ts_diff()` like `timer:now_diff()`:
 
 ```erlang
 fix_times(L) ->
-    [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
+    [T|Ts] = lists:reverse(L), 
     Acc = [],
     fix_times_acc(T, Ts, Acc).
 
