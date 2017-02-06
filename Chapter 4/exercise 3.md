@@ -17,7 +17,7 @@ Start:  {X, Y, 999999}
 End:    {X, Y+1, 200}
 ```
 
-i.e the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you get:
+i.e. the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you get:
 
 ```
 Start:  {X, Y, 999999}  
@@ -174,7 +174,7 @@ done
 
 Note that there are no negative terms anymore.  
 
-Finally, to return a tuple from `ts_diff()` like `timer:now_diff()`:
+Finally, to return a tuple from `ts_diff()` like `timer:now_diff()` does:
 
 ```erlang
 ts_diff(End, Start) ->
