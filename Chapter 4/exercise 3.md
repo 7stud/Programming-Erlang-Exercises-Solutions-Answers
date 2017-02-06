@@ -176,22 +176,11 @@ Note that there are no negative terms anymore.
 Finally, to return a tuple from `ts_diff()` like `timer:now_diff()`:
 
 ```erlang
-fix_times(L) ->
-    [T|Ts] = lists:reverse(L), 
-    Acc = [],
-    fix_times_acc(T, Ts, Acc).
-
-fix_times_acc(T, [], Acc) ->
-    list_to_tuple(   % ****CHANGE HERE****
-      [T|Acc]
-    ); 
-fix_times_acc(T1, [T2|Tail], Acc) ->
-    if
-        T1 < 0 -> 
-            fix_times_acc(T2-1, Tail, [1000000+T1|Acc]);
-        true -> 
-            fix_times_acc(T2, Tail, [T1|Acc])
-    end.
+ts_diff(End, Start) ->
+    Result = fix_times(
+      [element(I, End) - element(I, Start) || I <- lists:seq(1, size(End))]
+     ),
+    list_to_tuple(Result).
 
 ```
 
