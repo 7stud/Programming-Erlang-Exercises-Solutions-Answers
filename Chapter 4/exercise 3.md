@@ -20,10 +20,10 @@ End:    {X, Y+1, 200}
 i.e. the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you get:
 
 ```
-Start:  {X, Y, 999999}  
-End:    {X, Y+1, 200}
+  End:    {X, Y+1, 200}
+- Start:  {X, Y, 999999}  
 ------------------------
-        {0, 1, -999799}
+          {0, 1, -999799}
 ```
 
 In order to fix the negative term, you need to borrow 1 from the Secs and add it to the the Micros:
