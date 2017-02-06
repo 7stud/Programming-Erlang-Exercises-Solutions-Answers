@@ -31,7 +31,9 @@ What you need to do, is borrow 1 from the Secs and add it to the the Micros:
         {0, 0, 1*1000000 + (-999799)  = {0, 0, 201}
 ```
 
-Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term to see if it's negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention that that was one of the functions we should to look at, I thought I would try to implement my own function to accomplish the same thing:
+Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term to see if it's negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
+
+Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention it in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
 
 
 ```erlang
