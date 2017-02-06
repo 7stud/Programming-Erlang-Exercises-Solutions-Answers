@@ -10,4 +10,22 @@ time_func(F) ->
     ].
 ```
 
-If you think about it a little bit, when the Start time is something like `{X, Y, 999999}`  and the end time is `{X, Y+1, 200}`, i.e the function F took 201 micro seconds to execute, and you subtranct 200 - 999999, like the code does, then you will get a negative number, -999799, for the number of micro seconds the function took to execute.
+If you think about it a little bit, when you have Start and End times like this:
+
+```
+Start:  {X, Y, 999999}  
+End:    {X, Y+1, 200}
+```
+
+i.e the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you will get:
+
+```
+Start:  {X, Y, 999999}  
+End:    {X, Y+1, 200}
+------------------------
+        {0, 1, -999799}
+```
+
+What you need to do, is borrow 1 from the Secs and add it to the the Micros:
+
+`{0, 0, 1*1000000 + (-999799)  = {0, 0, 201}`
