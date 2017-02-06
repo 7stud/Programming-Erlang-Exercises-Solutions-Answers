@@ -28,7 +28,7 @@ End:    {X, Y+1, 200}
 
 In order to fix the negative term, you need to borrow 1 from the Secs and add it to the the Micros:
 ```
-        {0, 0, 1*1000000 + (-999799)  = {0, 0, 201}
+        {0, 0, -999799 + 1*1000000} = {0, 0, 201}
 ```
 
 Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term to see if it's negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
@@ -111,6 +111,25 @@ done
 24> 
 ```
 
-Note there are no negative terms.
+Note there are no negative terms anymore.  
+
+And, if you want to return a timestamp tuple from time_func:
+
+```erlang
+time_func(F) -> 
+    Start = now(),
+    %io:format("~w~n", [Start]),
+    F(),
+    End = now(),
+    %io:format("~w~n", [End]),
+    Times = [
+     element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
+    ],
+    list_to_tuple(
+      fix_timestamp(Times)
+    ).
+
+```
+
 
 
