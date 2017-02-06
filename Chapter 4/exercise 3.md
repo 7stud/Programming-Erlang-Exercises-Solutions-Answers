@@ -27,5 +27,6 @@ End:    {X, Y+1, 200}
 ```
 
 What you need to do, is borrow 1 from the Secs and add it to the the Micros:
-
-`{0, 0, 1*1000000 + (-999799)  = {0, 0, 201}`
+```
+        {0, 0, 1*1000000 + (-999799)  = {0, 0, 201}
+```
