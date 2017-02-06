@@ -47,7 +47,7 @@ fix_times(L) ->
     fix_times_acc(T, Ts, Acc).
 
 fix_times_acc(T, [], Acc) ->
-    [T|Acc].
+    [T|Acc];
 fix_times_acc(T1, [T2|Tail], Acc) ->
     if
         T1 < 0 -> 
@@ -55,6 +55,7 @@ fix_times_acc(T1, [T2|Tail], Acc) ->
         true -> 
             fix_times_acc(T2, Tail, [T1|Acc])
     end.
+
 ```
 
 Here's how `fix_times()` works in the shell:
