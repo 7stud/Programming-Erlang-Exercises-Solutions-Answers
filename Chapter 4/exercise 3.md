@@ -17,7 +17,7 @@ Start:  {X, Y, 999999}
 End:    {X, Y+1, 200}
 ```
 
-i.e the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you will get:
+i.e the function F took 201 micro seconds to execute, and then you subtract the elements of the two tuples, you get:
 
 ```
 Start:  {X, Y, 999999}  
