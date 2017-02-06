@@ -55,6 +55,7 @@ fix_timestamp(T1, [T2|Tail], Acc) ->
 
 Here's how `fix_timestamp()` works in the shell:
 
+```erlang
 16> c(lib_misc).
 {ok,lib_misc}
 
@@ -63,6 +64,7 @@ Here's how `fix_timestamp()` works in the shell:
 
 18> lib_misc:fix_timestamp([1, -500, -1000]).
 [0,999499,999000]  %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas, to fix Secs.
+```
 
 Adding fix_timestamp() to the naive solution:
 
