@@ -26,7 +26,7 @@ End:    {X, Y+1, 200}
         {0, 1, -999799}
 ```
 
-What you need to do, is borrow 1 from the Secs and add it to the the Micros:
+In order to fix the negative term, you need to borrow 1 from the Secs and add it to the the Micros:
 ```
         {0, 0, 1*1000000 + (-999799)  = {0, 0, 201}
 ```
@@ -57,8 +57,60 @@ Here's how fix_timestamp() works in the shell:
 
 16> c(lib_misc).
 {ok,lib_misc}
+
 17> lib_misc:fix_timestamp([0, 1, -999799]).
 [0,0,201]
 
 18> lib_misc:fix_timestamp([1, -500, -1000]).
 [0,999499,999000]  %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas, to fix Secs.
+
+Adding fix_timestamp() to the naive solution:
+
+```erlang
+time_func(F) -> 
+    Start = now(),
+    %io:format("~w~n", [Start]),
+    F(),
+    End = now(),
+    %io:format("~w~n", [End]),
+    Times = [
+     element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
+    ],
+    fix_timestamp(Times).
+```
+
+In the shell:
+
+```erlang
+21> c(lib_misc).
+
+%This time executing time_func() twenty times
+22> lib_misc:for2(fun lib_misc:time_func/1, F, 20).
+looping...
+[0,2,228709]
+[0,2,187678]
+[0,2,175273]
+[0,2,187329]
+[0,2,223996]
+[0,2,162220]
+[0,2,180352]
+[0,2,199191]
+[0,2,155705]
+[0,2,162073]
+[0,2,168187]
+[0,2,162762]
+[0,2,158665]
+[0,2,166814]
+[0,2,169264]
+[0,2,163484]
+[0,2,225341]
+[0,2,185394]
+[0,2,127794]
+[0,2,134793]
+done
+24> 
+```
+
+Note there are no negative terms.
+
+
