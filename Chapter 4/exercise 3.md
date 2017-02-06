@@ -35,49 +35,36 @@ Therefore, in order to normalize the timestamp so that all the terms are positiv
 
 Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention that function in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
 
-
 ```erlang
-fix_timestamp(L) ->
+ts_diff(End, Start) ->
+    fix_times(
+      [element(I, End) - element(I, Start) || I <- lists:seq(1, size(End))]
+     ).
+
+fix_times(L) ->
     [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
     Acc = [],
-    fix_timestamp(T, Ts, Acc).
+    fix_times_acc(T, Ts, Acc).
 
-fix_timestamp(T, [], Acc) ->
-    [T|Acc];
-fix_timestamp(T1, [T2|Tail], Acc) ->
+fix_times_acc(T, [], Acc) ->
+    [T|Acc].
+fix_times_acc(T1, [T2|Tail], Acc) ->
     if
         T1 < 0 -> 
-            fix_timestamp(T2-1, Tail, [1000000+T1|Acc]);
+            fix_times_acc(T2-1, Tail, [1000000+T1|Acc]);
         true -> 
-            fix_timestamp(T2, Tail, [T1|Acc])
+            fix_times_acc(T2, Tail, [T1|Acc])
     end.
 ```
 
-Here's how `fix_timestamp()` works in the shell:
+Here's how `fix_times()` works in the shell:
 
 ```erlang
-16> c(lib_misc).
-{ok,lib_misc}
-
-17> lib_misc:fix_timestamp([0, 1, -999799]).
+42> lib_misc:fix_times([0, 1, -999799]). 
 [0,0,201]
 
-18> lib_misc:fix_timestamp([1, -500, -1000]).
-[0,999499,999000]  %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas, to fix Secs.
-```
-
-Adding fix_timestamp() to the naive solution:
-
-```erlang
-time_func(F) -> 
-    Start = now(),
-    F(),
-    End = now(),
-    
-    Times = [
-     element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
-    ],
-    fix_timestamp(Times).
+43> lib_misc:fix_times([1, -500, -1000]).
+[0,999499,999000]   %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas, to fix Secs.
 ```
 
 For testing, I created a for-loop function to run `time_func()` on a given function F, a given number of times N:
@@ -119,7 +106,37 @@ looping...
 done
 ```
 
-Now look at the output using the modified solution that calls `fix_timestamp()`:
+Here's the modified solution:
+
+```erlang
+time_func(F) -> 
+    Start = now(),
+    F(),
+    End = now(),
+    ts_diff(End, Start).
+
+ts_diff(End, Start) ->
+    fix_times(
+      [element(I, End) - element(I, Start) || I <- lists:seq(1, size(End))]
+     ).
+
+fix_times(L) ->
+    [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
+    Acc = [],
+    fix_times_acc(T, Ts, Acc).
+
+fix_times_acc(T, [], Acc) ->
+    [T|Acc];
+fix_times_acc(T1, [T2|Tail], Acc) ->
+    if
+        T1 < 0 -> 
+            fix_times_acc(T2-1, Tail, [1000000+T1|Acc]);
+        true -> 
+            fix_times_acc(T2, Tail, [T1|Acc])
+    end.
+```
+
+In the shell:
 
 ```erlang
 30> c(lib_misc).
@@ -156,21 +173,25 @@ done
 
 Note that there are no negative terms anymore.  
 
-And, if you want to return a timestamp tuple from time_func:
+Finally, to return a tuple from `ts_diff()` like `timer:now_diff()`:
 
 ```erlang
-time_func(F) -> 
-    Start = now(),
-    %io:format("~w~n", [Start]),
-    F(),
-    End = now(),
-    %io:format("~w~n", [End]),
-    Times = [
-     element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
-    ],
-    list_to_tuple(
-      fix_timestamp(Times)
-    ).
+fix_times(L) ->
+    [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
+    Acc = [],
+    fix_times_acc(T, Ts, Acc).
+
+fix_times_acc(T, [], Acc) ->
+    list_to_tuple(   % ****CHANGE HERE****
+      [T|Acc]
+    ); 
+fix_times_acc(T1, [T2|Tail], Acc) ->
+    if
+        T1 < 0 -> 
+            fix_times_acc(T2-1, Tail, [1000000+T1|Acc]);
+        true -> 
+            fix_times_acc(T2, Tail, [T1|Acc])
+    end.
 
 ```
 
