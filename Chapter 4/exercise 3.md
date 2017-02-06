@@ -71,17 +71,16 @@ Adding fix_timestamp() to the naive solution:
 ```erlang
 time_func(F) -> 
     Start = now(),
-    %io:format("~w~n", [Start]),
     F(),
     End = now(),
-    %io:format("~w~n", [End]),
+    
     Times = [
      element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
     ],
     fix_timestamp(Times).
 ```
 
-For testing, I created a for-loop function to run time_func() on a given function F, a given number of times N:
+For testing, I created a for-loop function to run `time_func()` on a given function F, a given number of times N:
 
 ```erlang
 for2(F, Arg, N) ->
@@ -120,7 +119,7 @@ looping...
 done
 ```
 
-Now look at the output using the modified solution that calls fix_timestamp:
+Now look at the output using the modified solution that calls `fix_timestamp()`:
 
 ```erlang
 30> c(lib_misc).
@@ -128,6 +127,7 @@ Now look at the output using the modified solution that calls fix_timestamp:
 %Define some random function that takes a couple of seconds to execute:
 31> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
 
+%This time run the for-loop 20 times:
 32> lib_misc:for2(fun lib_misc:time_func/1, F, 20). 
 looping...
 [0,2,228709]
