@@ -10,7 +10,7 @@ time_func(F) ->
     ].
 ```
 
-If you think about it a little bit, if you have Start and End times like this:
+But if you think about it a little bit, if you have Start and End times like this:
 
 ```
 Start:  {X, Y, 999999}  
@@ -28,12 +28,12 @@ End:    {X, Y+1, 200}
 
 In order to fix the negative term, you need to borrow 1 from the Secs and add it to the the Micros:
 ```
-        {0, 0, -999799 + 1*1000000} = {0, 0, 201}
+        {0, 0, -999799 + 1*1000000} => {0, 0, 201}
 ```
 
 Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term produced by the naive solution to see if the term is negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
 
-Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention it in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
+Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention that function in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
 
 
 ```erlang
@@ -79,13 +79,54 @@ time_func(F) ->
     fix_timestamp(Times).
 ```
 
-In the shell:
+For testing, I created a for-loop function to run time_func() on a given function F, a given number of times N:
+
+```erlang
+for2(F, Arg, N) ->
+    io:format("~s~n", ["looping..."]),
+    loop(F, Arg, N).
+loop(_, _, 0) ->
+    done;
+loop(F, Arg, N) when N > 0 ->
+    Result = F(Arg),
+    io:format("~p~n", [Result]),
+    loop(F, Arg, N-1).
+```
+
+In the following output, you can see negative terms produced by the naive solution:
 
 ```erlang
 21> c(lib_misc).
 
-%This time executing time_func() twenty times
-22> lib_misc:for2(fun lib_misc:time_func/1, F, 20). 
+%Define some random function that takes a couple of seconds to execute:
+22> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
+
+%Apparently, in order to pass a named function as an argument to another function
+%you have to use the following syntax:
+23> lib_misc:for2(fun lib_misc:time_func/1, F, 10).
+looping...
+[0,2,167616]
+[0,3,-860245]
+[0,2,156090]
+[0,2,177153]
+[0,2,152959]
+[0,2,148198]
+[0,2,142560]
+[0,3,-840577]
+[0,2,164850]
+[0,2,238998]
+done
+```
+
+Now look at the output using the modified solution that calls fix_timestamp:
+
+```erlang
+30> c(lib_misc).
+
+%Define some random function that takes a couple of seconds to execute:
+31> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
+
+32> lib_misc:for2(fun lib_misc:time_func/1, F, 20). 
 looping...
 [0,2,228709]
 [0,2,187678]
