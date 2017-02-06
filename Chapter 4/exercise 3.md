@@ -39,7 +39,7 @@ Erlang does provide a function called `timer:now_diff` that will neatly subtract
 ts_diff(End, Start) ->
     fix_times(
       [element(I, End) - element(I, Start) || I <- lists:seq(1, size(End))]
-     ).
+    ).
 
 fix_times(L) ->
     [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
