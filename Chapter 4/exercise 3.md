@@ -65,7 +65,7 @@ Here's how `fix_times()` works in the shell:
 [0,0,201]
 
 43> lib_misc:fix_times([1, -500, -1000]).
-[0,999499,999000]   %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas, to fix Secs.
+[0,999499,999000]   %borrow 1 from Secs to fix Micros, which leaves Secs equal to -501, then borrow 1 from Megas to fix Secs.
 ```
 
 For testing, I created a for-loop function to run `time_func()` on a given function F, a given number of times N:
