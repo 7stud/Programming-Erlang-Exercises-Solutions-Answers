@@ -1,4 +1,4 @@
-Here is a naive implementation:
+Here is a naive implementation of `time_func()`:
 
 ```erlang
 time_func(F) -> 
