@@ -10,7 +10,7 @@ time_func(F) ->
     ].
 ```
 
-If you think about it a little bit, when you have Start and End times like this:
+If you think about it a little bit, if you have Start and End times like this:
 
 ```
 Start:  {X, Y, 999999}  
@@ -31,7 +31,7 @@ In order to fix the negative term, you need to borrow 1 from the Secs and add it
         {0, 0, -999799 + 1*1000000} = {0, 0, 201}
 ```
 
-Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term to see if it's negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
+Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term produced by the naive solution to see if the term is negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
 
 Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention it in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
 
@@ -53,7 +53,7 @@ fix_timestamp(T1, [T2|Tail], Acc) ->
     end.
 ```
 
-Here's how fix_timestamp() works in the shell:
+Here's how `fix_timestamp()` works in the shell:
 
 16> c(lib_misc).
 {ok,lib_misc}
@@ -85,7 +85,7 @@ In the shell:
 21> c(lib_misc).
 
 %This time executing time_func() twenty times
-22> lib_misc:for2(fun lib_misc:time_func/1, F, 20).
+22> lib_misc:for2(fun lib_misc:time_func/1, F, 20). 
 looping...
 [0,2,228709]
 [0,2,187678]
@@ -111,7 +111,7 @@ done
 24> 
 ```
 
-Note there are no negative terms anymore.  
+Note that there are no negative terms anymore.  
 
 And, if you want to return a timestamp tuple from time_func:
 
