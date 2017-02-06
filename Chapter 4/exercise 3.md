@@ -119,7 +119,7 @@ time_func(F) ->
 ts_diff(End, Start) ->
     fix_times(
       [element(I, End) - element(I, Start) || I <- lists:seq(1, size(End))]
-     ).
+    ).
 
 fix_times(L) ->
     [T|Ts] = lists:reverse(L),  %[Megas, Secs, Micros] => [Micros, Secs, Megas]
