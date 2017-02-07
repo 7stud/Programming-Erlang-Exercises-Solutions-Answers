@@ -352,7 +352,7 @@ helloa
 ok
 ```
 
-So `~s` will take a list of nested lists and concatenate them all into a single string.
+So `~s` will take a list of nested lists and concatenate them all into a single string.  That is what I used to display the return value of `my_date_string()`.  The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).
 
 
 
