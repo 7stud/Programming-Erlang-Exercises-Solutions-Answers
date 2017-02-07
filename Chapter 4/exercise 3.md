@@ -352,8 +352,30 @@ helloa
 ok
 ```
 
-So `~s` will take a list of nested lists and concatenate them all into a single string.  That is what I used to display the return value of `my_date_string()`.  The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).
+So `~s` will take a list of nested lists and concatenate them all into a single string.  That is what I used to display the return value of `my_date_string()`.  The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
 
+    ~FieldWidth.Precision.PaddingModControl.
+    
+ To represent hours like this:
+ 
+     1:09:05
+     
+I used a FieldWidth of 2, nothing for the Precision because I don't think it applies to integers, 0 for the padding, and `w` for the Control character, giving me:
+
+    ~2..0w
+    
+If you don't use a formatting sequence like that, then when you the time has single digits in it, you will get output like this:
+ 
+ 1:9:5
+ 
+ You can test that out by doing this:
+ ```erlang
+ my_date_string() ->
+    %{Y, Mon, D} = date(),
+    %{H, M, S} = time(),
+    io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, 1, 9, 5] ).  % ***Hard code single digits for the time****
+
+```
 
 
 
