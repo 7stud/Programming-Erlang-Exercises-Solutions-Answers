@@ -268,7 +268,7 @@ In the shell:
 ["2017",45,"2",45,"7",32,"11",58,"53",58,"54"]
 ```
 
-What the heck is that garbage?  Well, look at this:
+What the heck is all that garbage?  Well, look at this:
 
 ```erlang
 45> Now = lib_misc:my_date_string().
@@ -279,7 +279,7 @@ What the heck is that garbage?  Well, look at this:
 ok
 ```
 
-It's a bit confusing how that works.  Let's start with this:
+It's a bit confusing how that works.  Let's start with converting the integer 2017:
 
 ```erlang
 50> io_lib:format("~w", [2017]).
@@ -290,10 +290,10 @@ The ***control sequence*** `~w` takes the single integer 2017 and turns it into 
 
     "2017"
 
-That string is really a list in erlang, which you can see here:
+Remember, a string is really a list in erlang, which you can see here:
 
 ```erlang
-51> [$2, $0, $1, $7].  %using the $ syntax on p. 40
+51> [$2, $0, $1, $7].  %using the $ syntax on p. 40 to get the ascii code for each character
 "2017"
 ```
 
@@ -304,7 +304,7 @@ Or, equivalently:
 "2017"
 ```
 
-So `~w` takes a single integer 2017, and converts it into a list of four integers: `[50,48,49,55]`.  If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string (if the integers in the list represent characters, then that's the output you want to see; but if the integers in the list happen to be the temperature readings on successive days, than you certainly don't want to see a string!).
+So `~w` takes a single integer 2017, and converts it into a list of four integers: `[50,48,49,55]`.  If ***all*** the integers in a list happen to be the ascii codes for printable characters, then the erlang shell prints out the list as a string (if the integers in the list represent characters, then that's the output you want to see; but if the integers in the list happen to be the temperature readings on successive days, than you certainly don't want to see a string!).
 
 Then `lib_format()` returns the result wrapped in a list:
 
@@ -329,12 +329,12 @@ The whole result is equivalent to:
     %      V              V
     [ [50,48,49,55], 45, [50], .... ]
     %                ^
-    %                | the ascii code for a '-'
+    %                | an integer, which is also the ascii code for a '-'
     
 That looks like a nightmare of nested lists!  How do we get a single string out of that?  Look at what the ***control sequence*** `~s` does to a list of nested lists:
 
 ```erlang
-57> io:format("~s~n", [ ["hello", 97] ]).   %97 is the ascii code for the character 'a'.
+57> io:format("~s~n", [ ["hello", 97] ]).   %97 is an inteer, which is also the ascii code for the character 'a'.
 helloa
 ok
 ```
@@ -357,7 +357,7 @@ helloa
 ok
 ```
 
-A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a single list!  That is what I used to display the return value of `my_date_string()`.  
+A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a flat list with no nested lists!  That is what I used to display the return value of `my_date_string()`.  
 
 The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
 
