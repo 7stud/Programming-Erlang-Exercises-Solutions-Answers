@@ -247,7 +247,7 @@ looping...
 done
 ```
 
-Here's my solution for my_date_string():
+Here's my solution for `my_date_string()`:
 
 my_date_string() ->
     {Y, Mon, D} = date(),
@@ -289,13 +289,17 @@ The ***control sequence*** `~w` takes the single integer 2017 and turns it into 
 
 That string is really a list in erlang, which you can see here:
 
+```erlang
 51> [$2, $0, $1, $7].  %using the $ syntax on p. 40
 "2017"
+```
 
 Or, equivalently:
 
+```erlang
 53> [50,48,49,55].
 "2017"
+```
 
 If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string.
 
@@ -304,9 +308,10 @@ Then `lib_format()` returns the result wrapped in a list:
     ["2017"]
 
 That's equivalent to:
-
+```erlang
 > [[50,48,49,55]].
 ["2017"]
+```
 
 Okay, that's one term.  Now let's look at the whole result:
 
