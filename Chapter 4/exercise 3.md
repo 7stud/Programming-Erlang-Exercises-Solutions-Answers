@@ -193,7 +193,7 @@ time_func(F) ->
     F(),
     End = now(),
     DiffMicros = total_micros(End) - total_micros(Start),
-    timestamp(DiffMicros, size(End)).  %I added a 'size' parameter to timestamp() 
+    timestamp(DiffMicros, size(End)).  %I added a 'tuple size' parameter to timestamp() 
                                        %to make it more general (instead of just using 3).
 
 total_micros(Tuple) ->
@@ -204,11 +204,11 @@ total_micros(Tuple) ->
     ],
     round(lists:sum(Result)).  %round() converts to integer.
 
-timestamp(N, Len) ->
+timestamp(N, TSize) ->
     %round() converts to integer, enabling the use of div:
     List = [
-        N div round(math:pow(1000000, Len-I)) 
-        || I <- lists:seq(1, Len) 
+        N div round(math:pow(1000000, TSize-I)) 
+        || I <- lists:seq(1, TSize) 
     ],
     list_to_tuple(List).
 
