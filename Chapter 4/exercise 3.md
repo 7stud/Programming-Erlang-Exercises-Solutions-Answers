@@ -373,7 +373,7 @@ I used a field Width of 2; nothing for the Precision because I don't think it ap
     
 If you don't use a formating sequence like that, and the time has single digits in it, you will get output like this:
  
- 1:9:5
+    1:9:5
  
  You can see that by altering `my_date_string()`:
  ```C
