@@ -204,13 +204,15 @@ total_micros(Tuple) ->
     ],
     round(lists:sum(Result)).  %round() converts to integer.
 
+timestamp(_, 0) ->
+    [];
 timestamp(N, TSize) ->
-    %round() converts to integer, enabling the use of div:
-    List = [
-        N div round(math:pow(1000000, TSize-I)) 
-        || I <- lists:seq(1, TSize) 
-    ],
-    list_to_tuple(List).
+    Units = round(math:pow(1000000, TSize-1)),
+    UnitsCount = N div Units,
+    NewN = N - (Units * UnitsCount),
+    %I tried the following syntax(on p. 56)instead of using an Acc:
+    [UnitsCount|timestamp(NewN, TSize-1)].
+
 
 ```
 
