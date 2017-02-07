@@ -6,7 +6,7 @@ time_func(F) ->
     F(),
     End = now(),
     [
-     element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
+      element(I, End) - element(I, Start) || I <- lists:seq(1, size(Start) )
     ].
 ```
 
