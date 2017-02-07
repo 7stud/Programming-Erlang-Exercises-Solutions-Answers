@@ -286,7 +286,7 @@ It's a bit confusing how that works.  Let's start with this:
 ["2017"]
 ```
 
-The ***control sequence*** `~w` takes the single integer 2017 and turns it into four charcters, which is represented by the list:
+The ***control sequence*** `~w` takes the single integer 2017 and turns it into four characters: '2', '0', '1', '7', which is represented by the list:
 
     "2017"
 
@@ -304,7 +304,7 @@ Or, equivalently:
 "2017"
 ```
 
-If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string.
+So `~w` takes a single integer 2017, and converts it into a list of four integers: `[50,48,49,55]`.  If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string (if the integers in the list represent characters, then that's the output you want to see; but if the integers in the list happen to be the temperature readings on successive days, than you certainly don't want to see a string!).
 
 Then `lib_format()` returns the result wrapped in a list:
 
@@ -328,6 +328,8 @@ The whole result is equivalent to:
     %   "2017"           "2" 
     %      V              V
     [ [50,48,49,55], 45, [50], .... ]
+    %                ^
+    %                | the ascii code for a '-'
     
 That looks like a nightmare of nested lists!  How do we get a single string out of that?  Look at what the ***control sequence*** `~s` does to a list of nested lists:
 
@@ -355,7 +357,7 @@ helloa
 ok
 ```
 
-A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. single list!  That is what I used to display the return value of `my_date_string()`.  
+A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a single list!  That is what I used to display the return value of `my_date_string()`.  
 
 The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
 
@@ -365,15 +367,15 @@ The control sequences are described in the [io:format/2 docs](http://erlang.org/
  
      1:09:05
      
-I used a field Width of 2; nothing for the Precision because I don't think it applies to integers; 0 for the padding; and `w` for the Control character, giving me:
+I used a field Width of 2; nothing for the Precision because I don't think that it applies to integers; 0 for the padding; and `w` for the Control character, giving me:
 
     ~2..0w
     
-If you don't use a formatting sequence like that, and the time has single digits in it, you will get output like this:
+If you don't use a formating sequence like that, and the time has single digits in it, you will get output like this:
  
  1:9:5
  
- You can test that out by doing this:
+ You can test see that by doing this:
  ```C
  my_date_string() ->
     %{Y, Mon, D} = date(),
@@ -391,16 +393,3 @@ looked better than:
     01:09:05
     
 so I didn't use a field width, etc. for the hours.
-
-
-
-
-
-
-
-    
-    
-
-
-`
-
