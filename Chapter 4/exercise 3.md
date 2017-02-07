@@ -10,7 +10,7 @@ time_func(F) ->
     ].
 ```
 
-But if you think about it a little bit, if you have Start and End times like this:
+If you have Start and End times like this:
 
 ```
 Start:  {X, Y, 999999}  
