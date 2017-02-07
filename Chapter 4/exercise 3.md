@@ -46,15 +46,15 @@ fix_times(L) ->
     Acc = [],
     fix_times_acc(T, Ts, Acc).
 
-fix_times_acc(T, [], Acc) ->
-    [T|Acc];
 fix_times_acc(T1, [T2|Tail], Acc) ->
     if
         T1 < 0 -> 
             fix_times_acc(T2-1, Tail, [1000000+T1|Acc]);
         true -> 
             fix_times_acc(T2, Tail, [T1|Acc])
-    end.
+    end;
+fix_times_acc(T, [], Acc) ->
+    [T|Acc].
 
 ```
 
