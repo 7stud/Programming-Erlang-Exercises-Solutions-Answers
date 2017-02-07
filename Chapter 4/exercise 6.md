@@ -17,3 +17,9 @@ In the shell:
 119> math_functions:filter(F, L).
 [0,2,4,6,8,10]
 ```
+
+Or even:
+```erlang
+math_functions:filter(fun math_functions:even1/1, L).
+[0,2,4,6,8,10]
+```
