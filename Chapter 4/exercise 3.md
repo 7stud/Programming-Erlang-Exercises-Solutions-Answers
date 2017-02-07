@@ -31,7 +31,7 @@ In order to fix the negative term, you need to borrow 1 from the Secs and add it
         {0, 0, -999799 + 1*1000000} => {0, 0, 201}
 ```
 
-Therefore, in order to normalize the timestamp so that all the terms are positive, you have to examine each term produced by the naive solution to see if the term is negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
+Therefore, in order to normalize a timestamp so that all the terms are positive, you have to examine each term produced by the naive solution to see if the term is negative, and if it is, then you have to go to the bigger term on the left and borrow 1 from it.  
 
 Erlang does provide a function called `timer:now_diff` that will neatly subtract two timestamps for you, but because the exercise didn't mention that function in the list of functions that we should to look at, I thought I would try to implement my own function to accomplish the same thing:
 
