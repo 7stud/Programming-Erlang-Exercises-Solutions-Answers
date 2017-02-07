@@ -188,7 +188,6 @@ ts_diff(End, Start) ->
 Here's an alternate solution for `time_func()` that converts the Start and End tuples to total microseconds, subtracts them, then converts the result back to a timestamp tuple:
 
 ```erlang
-
 time_func(F) -> 
     Start = now(),
     F(),
@@ -199,18 +198,19 @@ time_func(F) ->
 
 total_micros(Tuple) ->
     TSize = size(Tuple),
-    Result = 
-        [
-            element(I, Tuple) * math:pow(1000000, TSize-I)  
-            || I <- lists:seq(1, TSize)
-        ],
+    Result = [
+        element(I, Tuple) * math:pow(1000000, TSize-I)  
+        || I <- lists:seq(1, TSize)
+    ],
     round(lists:sum(Result)).  %round() converts to integer.
 
 timestamp(N, Len) ->
     %round() converts to integer, enabling the use of div:
-    List = [N div round(math:pow(1000000, Len-I)) || I <- lists:seq(1, Len) ],
+    List = [
+        N div round(math:pow(1000000, Len-I)) 
+        || I <- lists:seq(1, Len) 
+    ],
     list_to_tuple(List).
-
 
 ```
 
