@@ -208,9 +208,9 @@ timestamp(_, 0) ->
 timestamp(Micros, TSize) ->
     Units = round(math:pow(1000000, TSize-1)),
     UnitsCount = Micros div Units,
-    NewMicros = Micros - (Units * UnitsCount),
-    %I tried the following methodology(on p. 56) instead of using an Acc:
-    [UnitsCount|timestamp(NewMicros, TSize-1)].
+    NewMicros = Micros rem Units,
+    %I tried the following methodology(from p. 56) instead of using an Acc:
+    [UnitsCount|timestamp(NewMicros, TSize-1)].   
 ```
 
 In the shell, 
