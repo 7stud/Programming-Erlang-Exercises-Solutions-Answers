@@ -8,7 +8,7 @@ split_acc([H|T], Evens, Odds) ->
     split_acc(T, Evens, [H|Odds]);
 split_acc([], Evens, Odds) ->
     {lists:reverse(Evens), lists:reverse(Odds)}.
-``
+```
 
 In the shell:
 
