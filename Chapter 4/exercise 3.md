@@ -217,8 +217,6 @@ timestamp(Micros, TSize) ->
 In the shell, 
 
 ```erlang
-%Define some random function that takes a couple of seconds to execute:
-31> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
 
 164> c(lib_misc).                                   
 {ok,lib_misc}
