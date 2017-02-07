@@ -194,8 +194,8 @@ time_func(F) ->
     F(),
     End = now(),
     DiffMicros = total_micros(End) - total_micros(Start),
-    timestamp(DiffMicros, size(End)).  %I added a 'len' parameter to timestamp() 
-                                       %to make it more general.
+    timestamp(DiffMicros, size(End)).  %I added a 'size' parameter to timestamp() 
+                                       %to make it more general (instead of just using 3).
 
 total_micros(Tuple) ->
     TSize = size(Tuple),
