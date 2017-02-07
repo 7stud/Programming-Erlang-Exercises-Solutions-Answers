@@ -247,5 +247,50 @@ looping...
 done
 ```
 
+Here's my solution for my_date_string():
 
+my_date_string() ->
+    {Y, Mon, D} = date(),
+    {H, M, S} = time(),
+    io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, H, M, S] ).
+
+
+In the shell:
+
+```erlang
+43> c(lib_misc).
+{ok,lib_misc}
+
+44> lib_misc:my_date_string().
+["2017",45,"2",45,"7",32,"11",58,"53",58,"54"]
+```
+
+What the heck is that garbage?  Well, look at this:
+
+```erlang
+45> Now = lib_misc:my_date_string().
+["2017",45,"2",45,"7",32,"11",58,"55",58,"32"]
+
+46> io:format("~s~n", [Now]).
+2017-2-7 11:55:32
+ok
+```
+
+It's a bit confusing how that works.  Let's start with this:
+
+```erlang
+50> io_lib:format("~w", [2017]).
+["2017"]
+```
+
+The *control sequence* `~w` takes the single integer 2017 and turns it into four charcters, which is represented by the list:
+
+    "2017"
+
+then lib_format returns the results wrapped in a list:
+
+    ["2017"]
+
+
+`
 
