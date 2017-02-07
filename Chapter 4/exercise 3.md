@@ -185,7 +185,7 @@ ts_diff(End, Start) ->
 
 ```
 
-Here's an alternate solution for `time_func()` that converts the Start and End tuple to total microseconds, subtracts them, then converts back to a timestamp tuple:
+Here's an alternate solution for `time_func()` that converts the Start and End tuples to total microseconds, subtracts them, then converts the result back to a timestamp tuple:
 
 ```erlang
 
