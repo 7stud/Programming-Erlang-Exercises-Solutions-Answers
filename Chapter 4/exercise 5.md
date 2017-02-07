@@ -21,12 +21,7 @@ even3(X) ->
     end.
 
 
- 
-odd1(X) -> 
-    case X rem 2 of
-        1           -> true;
-        0           -> false
-    end.
+% odd() can be defined in the same myriad ways as above, plus one additional way:
 
 odd2(X) -> not even1(X).
 ```
