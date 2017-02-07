@@ -393,7 +393,3 @@ looked better than:
     01:09:05
     
 so I didn't use a field width, etc. for the hours.
-
---------------------
-
-Python `datetime` module?  I'm facile with python, and I used to know the ins and outs of the datetime module.  It's a vast module.  I'm not doing this exercise.  I'm sure erlang has fine date/time handling functions.  When I need to use them, I'll dig into them.
