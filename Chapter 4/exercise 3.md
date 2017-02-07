@@ -283,13 +283,81 @@ It's a bit confusing how that works.  Let's start with this:
 ["2017"]
 ```
 
-The *control sequence* `~w` takes the single integer 2017 and turns it into four charcters, which is represented by the list:
+The ***control sequence*** `~w` takes the single integer 2017 and turns it into four charcters, which is represented by the list:
 
     "2017"
 
-then lib_format returns the results wrapped in a list:
+That string is really a list in erlang, which you can see here:
+
+51> [$2, $0, $1, $7].  %using the $ syntax on p. 40
+"2017"
+
+Or, equivalently:
+
+53> [50,48,49,55].
+"2017"
+
+If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string.
+
+Then `lib_format()` returns the result wrapped in a list:
 
     ["2017"]
+
+That's equivalent to:
+
+> [[50,48,49,55]].
+["2017"]
+
+Okay, that's one term.  Now let's look at the whole result:
+
+```erlang
+45> Now = lib_misc:my_date_string().
+["2017",45,"2",45,"7",32,"11",58,"55",58,"32"]
+```
+
+The whole result is equivalent to:
+    
+    %   "2017"           "2" 
+    %      V              V
+    [ [50,48,49,55], 45, [50], .... ]
+    
+That looks like a nightmare of nested lists!  How do we get a single string out of that?  But, look at what the ***control sequence*** `~s` does to a list of nested lists:
+
+```erlang
+57> io:format("~s~n", [ ["hello", 97] ]).   %97 is the ascii code for the character 'a'.
+helloa
+ok
+```
+
+Remember, `["hello", 97]` is equivalent to `[ [104,101,108,108,111], 97]`:
+
+```erlang
+59> io:format("~w~n", ["hello"]).
+[104,101,108,108,111]
+ok
+
+60> [ [104,101,108,108,111], 97].
+["hello",97]
+
+62> Nested = [ [104,101,108,108,111], 97].
+["hello",97]
+
+63> io:format("~s~n", [Nested]).
+helloa
+ok
+```
+
+So `~s` will take a list of nested lists and concatenate them all into a single string.
+
+
+
+
+
+
+
+
+    
+    
 
 
 `
