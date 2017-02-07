@@ -247,13 +247,16 @@ looping...
 done
 ```
 
+-----------------------------
+
 Here's my solution for `my_date_string()`:
 
+```erlang
 my_date_string() ->
     {Y, Mon, D} = date(),
     {H, M, S} = time(),
     io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, H, M, S] ).
-
+```
 
 In the shell:
 
