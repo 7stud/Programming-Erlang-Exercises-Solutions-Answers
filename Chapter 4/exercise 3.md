@@ -329,7 +329,7 @@ The whole result is equivalent to:
     %      V              V
     [ [50,48,49,55], 45, [50], .... ]
     
-That looks like a nightmare of nested lists!  How do we get a single string out of that?  But, look at what the ***control sequence*** `~s` does to a list of nested lists:
+That looks like a nightmare of nested lists!  How do we get a single string out of that?  Look at what the ***control sequence*** `~s` does to a list of nested lists:
 
 ```erlang
 57> io:format("~s~n", [ ["hello", 97] ]).   %97 is the ascii code for the character 'a'.
@@ -340,7 +340,7 @@ ok
 Remember, `["hello", 97]` is equivalent to `[ [104,101,108,108,111], 97]`:
 
 ```erlang
-59> io:format("~w~n", ["hello"]).
+59> io:format("~w~n", ["hello"]).  %A quick way to get all the ascii codes for a string.
 [104,101,108,108,111]
 ok
 
@@ -355,19 +355,21 @@ helloa
 ok
 ```
 
-So `~s` will take a list of nested lists and concatenate them all into a single string.  That is what I used to display the return value of `my_date_string()`.  The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
+A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. single list!  That is what I used to display the return value of `my_date_string()`.  
 
-    ~FieldWidth.Precision.PaddingModControl.
+The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
+
+    ~Width.Precision.PaddingModControl.
     
  To represent hours like this:
  
      1:09:05
      
-I used a FieldWidth of 2, nothing for the Precision because I don't think it applies to integers, 0 for the padding, and `w` for the Control character, giving me:
+I used a field Width of 2; nothing for the Precision because I don't think it applies to integers; 0 for the padding; and `w` for the Control character, giving me:
 
     ~2..0w
     
-If you don't use a formatting sequence like that, then when you the time has single digits in it, you will get output like this:
+If you don't use a formatting sequence like that, and the time has single digits in it, you will get output like this:
  
  1:9:5
  
@@ -376,9 +378,19 @@ If you don't use a formatting sequence like that, then when you the time has sin
  my_date_string() ->
     %{Y, Mon, D} = date(),
     %{H, M, S} = time(),
-    io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, 1, 9, 5] ).  % ***Hard code single digits for the time****
+    io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, 1, 9, 5] ).  % ***Hard coded single digits for the time****
 
 ```
+
+I decided I liked the way:
+
+    1:09:05
+    
+looked better than:
+
+    01:09:05
+    
+so I didn't use a field width, etc. for the hours.
 
 
 
