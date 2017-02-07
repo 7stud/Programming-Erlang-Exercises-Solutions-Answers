@@ -1,8 +1,6 @@
 ```erlang
 split(L) ->
-    Odds = [],
-    Evens = [],
-    split_acc(L, Odds, Evens).
+    split_acc(L, [], []).
 
 split_acc([H|T], Evens, Odds) when (H rem 2 =:= 0) ->
     split_acc(T, [H|Evens], Odds);
