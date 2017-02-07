@@ -372,7 +372,7 @@ If you don't use a formatting sequence like that, then when you the time has sin
  1:9:5
  
  You can test that out by doing this:
- ```erlang
+ ```C
  my_date_string() ->
     %{Y, Mon, D} = date(),
     %{H, M, S} = time(),
