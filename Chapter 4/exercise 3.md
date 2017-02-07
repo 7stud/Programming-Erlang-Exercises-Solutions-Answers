@@ -212,9 +212,43 @@ timestamp(Micros, TSize) ->
     NewMicros = Micros - (Units * UnitsCount),
     %I tried the following syntax(on p. 56) instead of using an Acc:
     [UnitsCount|timestamp(NewMicros, TSize-1)].
-
-    
-
-
 ```
+
+In the shell, 
+
+```erlang
+%Define some random function that takes a couple of seconds to execute:
+31> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
+
+164> c(lib_misc).                                   
+{ok,lib_misc}
+
+165> lib_misc:timestamp(100, 3).                    
+[0,0,100]
+
+166> lib_misc:timestamp(0, 3).  
+[0,0,0]
+
+167> lib_misc:timestamp(1000000*1000000+1500000, 3).
+[1,1,500000]
+
+%Define some random function that takes a couple of seconds to execute:
+31> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
+
+168> lib_misc:for2(fun lib_misc:time_func/1, F, 10).
+looping...
+[0,2,166518]
+[0,2,63600]
+[0,2,138325]
+[0,2,118236]
+[0,2,134436]
+[0,2,89460]
+[0,2,114554]
+[0,2,112772]
+[0,2,121008]
+[0,2,118641]
+done
+```
+
+
 
