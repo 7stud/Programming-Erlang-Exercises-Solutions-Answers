@@ -367,7 +367,7 @@ The control sequences are described in the [io:format/2 docs](http://erlang.org/
  
      1:09:05
      
-I used a field Width of 2; nothing for the Precision because I don't think it applies to integers; 0 for the padding; and `w` for the Control character, giving me:
+I used a field Width of 2; nothing for the Precision because I don't think it applies to integers; 0 for the padding; nothing for Mod; and `w` for the Control character, giving me:
 
     ~2..0w
     
@@ -375,7 +375,7 @@ If you don't use a formating sequence like that, and the time has single digits 
  
  1:9:5
  
- You can test that by doing this:
+ You can see that by altering `my_date_string()`:
  ```C
  my_date_string() ->
     %{Y, Mon, D} = date(),
