@@ -251,7 +251,7 @@ done
 
 Here's my solution for `my_date_string()`:
 
-```
+```C
 my_date_string() ->
     {Y, Mon, D} = date(),
     {H, M, S} = time(),
