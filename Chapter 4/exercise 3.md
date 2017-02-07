@@ -206,12 +206,14 @@ total_micros(Tuple) ->
 
 timestamp(_, 0) ->
     [];
-timestamp(N, TSize) ->
+timestamp(Micros, TSize) ->
     Units = round(math:pow(1000000, TSize-1)),
-    UnitsCount = N div Units,
-    NewN = N - (Units * UnitsCount),
-    %I tried the following syntax(on p. 56)instead of using an Acc:
-    [UnitsCount|timestamp(NewN, TSize-1)].
+    UnitsCount = Micros div Units,
+    NewMicros = Micros - (Units * UnitsCount),
+    %I tried the following syntax(on p. 56) instead of using an Acc:
+    [UnitsCount|timestamp(NewMicros, TSize-1)].
+
+    
 
 
 ```
