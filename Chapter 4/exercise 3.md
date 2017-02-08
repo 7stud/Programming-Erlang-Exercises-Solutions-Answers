@@ -436,4 +436,9 @@ In the shell:
 "2017-2-7 22:09:20"
 ```
 
-Because the result shown in the shell has quotes around it, that means it's one flat list of integers, and all the integers happen to be indentical to printable ascii codes.
+Because the result shown in the shell has quotes around it, that means it's one flat list of integers, and all the integers happen to be indentical to printable ascii codes.  To see the actual list:
+```erlang
+112> io:format("~w~n", [lib_misc:my_date_string()]). 
+[50,48,49,55,45,50,45,55,32,50,50,58,52,56,58,52,55]
+ok
+```
