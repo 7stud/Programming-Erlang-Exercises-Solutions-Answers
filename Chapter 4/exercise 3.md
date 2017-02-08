@@ -403,8 +403,8 @@ looked better than:
     
 so I didn't use a field width, etc. for the hours.
 
----------------------Edit------------
-```erlang
+---------------------------------
+```C
 my_date_string() ->
     {Y, Month, D} = date(),
     {H, M, S} = time(),
