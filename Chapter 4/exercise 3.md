@@ -91,7 +91,7 @@ In the following output, you can see negative terms produced by the naive soluti
 22> F = fun() -> [X*X || X <- lists:seq(1, 1000000), X rem 2 =:= 0] end.
 
 %Apparently, in order to pass a named function as an argument to another function
-%you have to use the following syntax:
+%you have to use the following syntax: fun module:func_name/arity
 23> lib_misc:for2(fun lib_misc:time_func/1, F, 10).
 looping...
 [0,2,167616]
