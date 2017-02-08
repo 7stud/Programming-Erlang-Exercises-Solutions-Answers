@@ -424,4 +424,13 @@ flatten_acc([], Acc) ->
     Acc.
 ```
 
+In the shell:
+```erlang
+110> c(lib_misc).              
+{ok,lib_misc}
 
+111> lib_misc:my_date_string().
+"2017-2-7 22:09:20"
+```
+
+Because the result shown in the shell has quotes around it, that means it's one flat list of integers, where all the integers happen to be indentical to printable ascii codes.
