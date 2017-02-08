@@ -433,4 +433,4 @@ In the shell:
 "2017-2-7 22:09:20"
 ```
 
-Because the result shown in the shell has quotes around it, that means it's one flat list of integers, where all the integers happen to be indentical to printable ascii codes.
+Because the result shown in the shell has quotes around it, that means it's one flat list of integers, and all the integers happen to be indentical to printable ascii codes.
