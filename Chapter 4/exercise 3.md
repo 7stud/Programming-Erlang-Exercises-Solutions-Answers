@@ -343,7 +343,7 @@ The whole result is equivalent to:
 That looks like a nightmare of nested lists!  How do we get a single string out of that?  Well, look at what the ***control sequence*** `~s` does to a list of nested lists:
 
 ```erlang
-57> io:format("~s~n", [ ["hello", 97] ]).   %97 is an inteer, which is also the ascii code for the character 'a'.
+57> io:format("~s~n", [ ["hello", 97] ]).   %97 is an integer, which is also the ascii code for the character 'a'.
 helloa
 ok
 ```
@@ -366,7 +366,7 @@ helloa
 ok
 ```
 
-A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a flat list with no nested lists!  That is what I used to display the return value of `my_date_string()`.  (Edit: Alright, I decided to flatten the list myself. My `flatten()` function is at the end).
+A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a flat list with no nested lists!  That is what I used to display the return value of `my_date_string()`.  (Edit: Alright, I decided to flatten the list myself so that `my_date_string()` doesn't return a nested list that looks like garbage. My `flatten()` function is at the bottom of the page).
 
 The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
 
