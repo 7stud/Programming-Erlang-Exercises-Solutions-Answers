@@ -304,9 +304,18 @@ Or, equivalently:
 "2017"
 ```
 
-So `~w` takes a single integer 2017, and converts it into a list of four integers: `[50,48,49,55]`.  If ***all*** the integers in a list happen to be the ascii codes for printable characters, then the erlang shell prints out the list as a string (if the integers in the list represent characters, then that's the output you want to see; but if the integers in the list happen to be the temperature readings on successive days, than you certainly don't want to see a string!).
+So `~w` takes a single integer 2017, and converts it into a list of four integers: `[50,48,49,55]`.  If ***all*** the integers in a list happen to be ascii codes for printable characters, then the erlang shell prints out the list as a string. If the integers in the list represent characters, then that's the output you want to see; but if the integers in the list happen to be the temperature readings on successive days, than you certainly don't want to see a string!  To prevent the shell from converting a list of integers to characters, you can use `~w`:
 
-Then `lib_format()` returns the result wrapped in a list:
+```erlang
+54> X = [50,48,49,55].
+"2017"
+
+55> io:format("~w~n", [X]).
+[50,48,49,55]
+ok
+```
+
+After `lib_format()` converts the single integer 2017 to a list of four integers [50,48,49,55], `lib_format()` returns the result wrapped in a list:
 
     ["2017"]
 
@@ -331,7 +340,7 @@ The whole result is equivalent to:
     %                ^
     %                | an integer, which is also the ascii code for a '-'
     
-That looks like a nightmare of nested lists!  How do we get a single string out of that?  Look at what the ***control sequence*** `~s` does to a list of nested lists:
+That looks like a nightmare of nested lists!  How do we get a single string out of that?  Well, look at what the ***control sequence*** `~s` does to a list of nested lists:
 
 ```erlang
 57> io:format("~s~n", [ ["hello", 97] ]).   %97 is an inteer, which is also the ascii code for the character 'a'.
@@ -357,7 +366,7 @@ helloa
 ok
 ```
 
-A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a flat list with no nested lists!  That is what I used to display the return value of `my_date_string()`.  
+A hah!  The control sequence `~s` will take a list of nested lists and concatenate them all into a single string, i.e. a flat list with no nested lists!  That is what I used to display the return value of `my_date_string()`.  (Edit: Alright, I decided to flatten the list myself. My `flatten()` function is at the end).
 
 The control sequences are described in the [io:format/2 docs](http://erlang.org/doc/man/io.html#format-2).  The general form of a control sequence is:
 
@@ -393,3 +402,26 @@ looked better than:
     01:09:05
     
 so I didn't use a field width, etc. for the hours.
+
+---------------------Edit------------
+```erlang
+my_date_string() ->
+    {Y, Month, D} = date(),
+    {H, M, S} = time(),
+    Result = io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Month, D, H, M, S] ),
+    flatten(Result).
+    
+flatten(L) -> 
+    Result = flatten_acc(L, []),
+    lists:reverse(Result).
+
+flatten_acc([H|T], Acc) ->
+    if
+        is_list(H)  -> flatten_acc(T, flatten_acc(H, Acc));
+        true        -> flatten_acc(T, [H|Acc])
+    end;    
+flatten_acc([], Acc) ->
+    Acc.
+```
+
+
