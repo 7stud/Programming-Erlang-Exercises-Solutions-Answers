@@ -340,7 +340,7 @@ The whole result is equivalent to:
     %                ^
     %                | an integer, which is also the ascii code for a '-'
     
-That looks like a nightmare of nested lists!  How do we get a single string out of that?  Well, look at what the ***control sequence*** `~s` does to a list of nested lists:
+That looks like a nightmare of nested lists!  How do we get a single, flat list out of that?  Well, look at what the ***control sequence*** `~s` does to a list of nested lists:
 
 ```erlang
 57> io:format("~s~n", [ ["hello", 97] ]).   %97 is an integer, which is also the ascii code for the character 'a'.
