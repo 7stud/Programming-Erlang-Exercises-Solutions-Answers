@@ -387,7 +387,7 @@ If you don't use a formating sequence like that, and the time has single digits 
  You can see that by altering `my_date_string()`:
  ```C
  my_date_string() ->
-    %{Y, Mon, D} = date(),
+    {Y, Mon, D} = date(),
     %{H, M, S} = time(),
     io_lib:format("~w-~w-~w ~w:~2..0w:~2..0w", [Y, Mon, D, 1, 9, 5] ).  % ***Hard coded single digits for the time****
 
