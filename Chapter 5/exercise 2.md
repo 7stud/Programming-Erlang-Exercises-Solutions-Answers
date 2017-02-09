@@ -1,4 +1,4 @@
-`map_search_pred()`:
+The `map_search_pred()` function:
 
 -module(my).
 -compile(export_all).
