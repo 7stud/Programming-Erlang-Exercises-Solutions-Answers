@@ -48,19 +48,28 @@ In the shell:
 
 Oh boy, dealing with binaries without them having been introduced yet in the book.  Well, they look like strings with `<<` and `>>` around them, e.g. `<<"hello">>`.
 
-Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
+Figuring out how to do a sanity check on deeply nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
 
 ```javascript
 {
-  "src_path": "a/b/c",
-  "connection_name": "google",
   "log_level": "warn",
   "in_memory":  true,
   "port": 2707,
 }
 ```
 
-My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.
+My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.  For instance, here is the SanityMap I used:
+
+```erlang
+SanityMap = #{<<"log_level">> => [<<"warn">>, <<"debug">>], <<"in_memory">> => [true, false], <<"port">> => lists:seq(2700, 2800)}.
+#{<<"in_memory">> => [true,false],
+  <<"log_level">> => [<<"warn">>,<<"debug">>],
+  <<"port">> => [2700,2701,2702,2703,2704,2705,2706,2707,2708,2709,2710,
+   2711,2712,2713,2714,2715,2716,2717,2718,2719,2720,2721,2722,
+   2723,2724,2725|...]}
+```
+
+The return value of my `sanity_check()` function is a map with the keys in the ConfigMap and values of true or false to indicate whether they passed the sanity check:
 
 ```erlang
 sanity_check(SanityMap, DataMap) ->
@@ -92,6 +101,39 @@ sanity_check_acc([], _, _, AccMap) ->
     AccMap.
 ```
 
+In the shell:
+
+```erlang
+37> c(my).
+{ok,my}
+
+38> f(ConfigMap).
+ok
+
+39> ConfigMap = my:read_config("my_config.config").                                                                  #{<<"in_memory">> => true,
+  <<"log_level">> => <<"warn">>,
+  <<"port">> => 2707}
+  
+40> SanityMap.                                     
+#{<<"in_memory">> => [true,false],
+  <<"log_level">> => [<<"warn">>,<<"debug">>],
+  <<"port">> => [2700,2701,2702,2703,2704,2705,2706,2707,2708,2709,2710,
+   2711,2712,2713,2714,2715,2716,2717,2718,2719,2720,2721,2722,
+   2723,2724,2725|...]}
+   
+41> my:sanity_check(SanityMap, ConfigMap).         
+#{<<"in_memory">> => true,<<"log_level">> => true,<<"port">> => true}
+
+42> SanityMap2 = SanityMap#{<<"log_level">> => [<<"debug">>, <<"info">>]}.
+#{<<"in_memory">> => [true,false],
+  <<"log_level">> => [<<"debug">>,<<"info">>],
+  <<"port">> => [2700,2701,2702,2703,2704,2705,2706,2707,2708,2709,2710,
+   2711,2712,2713,2714,2715,2716,2717,2718,2719,2720,2721,2722,
+   2723,2724,2725|...]}
+   
+43> my:sanity_check(SanityMap2, ConfigMap).                               
+#{<<"in_memory">> => true,<<"log_level">> => false,<<"port">> => true}
+```
 
 
 
