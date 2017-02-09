@@ -4,17 +4,18 @@ The `map_search_pred()` function:
 -compile(export_all).
 
 map_search_pred(Map, Pred) ->
-    find(maps:keys(Map), Pred, Map).
+    map_search_pred(maps:keys(Map), Pred, Map).
 
-find([Key|Keys], Pred, Map) ->
+map_search_pred([Key|Keys], Pred, Map) ->
     Val = maps:get(Key, Map),
 
     case Pred(Key, Val) of
         true -> {Key, Val};
-        false -> find(Keys, Pred, Map)
+        false -> map_search_pred(Keys, Pred, Map)
     end;
-find([], _, _) ->
+map_search_pred([], _, _) ->
     none.
+
 ```
 
 In the shell:
