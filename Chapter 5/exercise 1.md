@@ -1,4 +1,4 @@
-The functions `maps:to_json(Map)`, etc. don't exist, so I installed `rebar3` and I created an erlang project that specifies `jsx` as a dependency.  `jsx` is a third party json handling library for erlang.  To get setup with rebar3, see [here](http://stackoverflow.com/questions/34278982/what-is-the-easiest-way-for-beginners-to-install-a-module).
+The json functions mentions on p.84 don't exist, e.g. `maps:to_json(Map)`, so I installed `rebar3` and I created an erlang project that specifies `jsx` as a dependency.  `jsx` is a third party json handling library for erlang.  To get setup with rebar3 and jsx, see [here](http://stackoverflow.com/questions/34278982/what-is-the-easiest-way-for-beginners-to-install-a-module).
 
 Oh boy, file I/O without any guidance from the book!
 
