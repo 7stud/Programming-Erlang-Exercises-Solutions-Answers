@@ -11,13 +11,11 @@ Reading configuration files:
 read_config(Fname) ->
     case file:read_file(Fname) of
         {ok, Binary}    ->  
-            convert_to_map(Binary);
+            jsx:decode(Binary, [return_maps]);
         {error, Reason} -> 
             Reason
     end.
 
-convert_to_map(Binary) ->
-    jsx:decode(Binary, [return_maps]).
 ```
 
 my_config.config:
