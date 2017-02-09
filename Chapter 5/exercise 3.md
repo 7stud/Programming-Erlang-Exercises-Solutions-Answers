@@ -2,10 +2,10 @@ I know ruby pretty well, and once again, just like the python datetime exercise 
 
 Here is my implementation of Ruby's `Hash#any?` method, which is very similar to the `map_search_pred()` function in Exercise 2:
 
+```erlang
 -module(my).
 -compile(export_all).
 
-```erlang
 any(Map, Pred) -> any(maps:keys(Map), Map, Pred).
 
 any([Key|Keys], Map, Pred) ->
