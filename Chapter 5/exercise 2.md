@@ -1,4 +1,4 @@
-The `map_search_pred()` function:
+My `map_search_pred()` function:
 ```erlang
 -module(my).
 -compile(export_all).
