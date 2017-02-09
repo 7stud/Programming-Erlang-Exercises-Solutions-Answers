@@ -10,6 +10,7 @@ any(Map, Pred) -> any(maps:keys(Map), Map, Pred).
 
 any([Key|Keys], Map, Pred) ->
     Val = maps:get(Key, Map),
+    
     case Pred(Key, Val) of
         true -> true;
         false -> any(Keys, Map, Pred)
