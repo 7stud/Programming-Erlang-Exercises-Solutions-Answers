@@ -46,5 +46,53 @@ In the shell:
   <<"runner_dirs">> => [<<"/dir1">>,<<"/dir2">>]}
 ```
 
+Oh boy, dealing with binaries without them having been introduced yet in the book.
+
+Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
+
+```javascript
+{
+  "src_path": "a/b/c",
+  "connection_name": "google",
+  "log_level": "warn",
+  "in_memory":  true,
+  "port": 2707,
+}
+```
+
+My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.
+
+```erlang
+sanity_check(SanityMap, DataMap) ->
+    sanity_check_acc(
+      maps:keys(DataMap), 
+      DataMap, 
+      SanityMap, 
+      #{}
+    ).
+
+sanity_check_acc([Key|Keys], DataMap, SanityMap, AccMap) ->
+    DMVal = maps:get(Key, DataMap),
+    case SanityMap of  %Mimic if-else with pattern matching 
+        #{Key := WhiteList} ->  %Pattern matching maps is broken in erlang 17.5,
+            sanity_check_acc(    %so I used erlang 19.2, which is only slightly better.
+              Keys, 
+              DataMap,
+              SanityMap, 
+              AccMap#{Key => lists:member(DMVal, WhiteList)}
+            );
+        _ -> sanity_check_acc(
+               Keys,
+               DataMap,
+               SanityMap,
+               AccMap
+             )
+    end;
+sanity_check_acc([], _, _, AccMap) ->
+    AccMap.
+```
+
+
+
 
 
