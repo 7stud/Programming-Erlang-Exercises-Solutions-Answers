@@ -44,9 +44,9 @@ In the shell:
   <<"runner_dirs">> => [<<"/dir1">>,<<"/dir2">>]}
 ```
 
-Oh boy, dealing with binaries without them having been introduced yet in the book.  Well, they look like strings with `<<` and `>>` around them, e.g. `<<"hello">>`.
+Oh boy, dealing with binaries without them having been introduced in the book yet.  Well, they look like strings with `<<` and `>>` around them, e.g. `<<"hello">>`.
 
-Figuring out how to do a sanity check on deeply nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
+Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
 
 ```javascript
 {
@@ -56,7 +56,7 @@ Figuring out how to do a sanity check on deeply nested json seemed too difficult
 }
 ```
 
-My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.  For instance, here is the SanityMap I used:
+My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.  For instance, here is a SanityMap I used:
 
 ```erlang
 48> SanityMap = #{
@@ -72,7 +72,13 @@ My approach was to write a function that accepts the ConfigMap, as well as a San
    2723,2724,2725|...]}
 ```
 
-The return value of my `sanity_check()` function is a map with the keys in the ConfigMap and values of true or false to indicate whether they passed the sanity check:
+The return value of my `sanity_check()` function is a map with the keys in the ConfigMap and values of true or false to indicate whether they passed the sanity check, e.g.:
+
+```erlang
+41> my:sanity_check(SanityMap, ConfigMap).         
+#{<<"in_memory">> => true,<<"log_level">> => true,<<"port">> => true}
+```
+Here's my sanity_check() function:
 
 ```erlang
 sanity_check(SanityMap, DataMap) ->
