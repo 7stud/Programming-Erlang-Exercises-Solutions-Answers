@@ -46,7 +46,7 @@ In the shell:
   <<"runner_dirs">> => [<<"/dir1">>,<<"/dir2">>]}
 ```
 
-Oh boy, dealing with binaries without them having been introduced yet in the book.
+Oh boy, dealing with binaries without them having been introduced yet in the book.  Well, they look like strings with `<<` and `>>` around them, e.g. `<<"hello">>`.
 
 Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
 
