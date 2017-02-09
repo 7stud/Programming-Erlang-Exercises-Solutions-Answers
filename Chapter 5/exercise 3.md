@@ -6,9 +6,11 @@ The bit inside the `[ ]` means it's optional when you call the method named `any
  
      any? { |(key, value)| block } → true or false 
      
-The stuff inside the `{ }` is known as a block, which is just an anonymous function that will be passed to the method named `any?`.  Yes, in ruby a method name can contain the `?` character.  The `?` character signals that the method returns true or false.  Note that ruby does not use `{}` in place of `()` for method calls.  If `any?` took a non-function argument you would call `any?` like this:
+The stuff inside the `{ }` is known as a block, which is just an anonymous function that will be passed to the method named `any?`.  Yes, in ruby a method name can contain the `?` character.  The `?` character signals that the method returns true or false.  And no, ruby does not use `{}` in place of `()` for method calls.  If `any?` took a non-function argument you would call `any?` like this:
 
     any?(arg1) {|(key, val)| key+val == 10}
+    
+Rather, ruby has a special syntax for sending an anonymous function to a method: you specify a block after the function call.
     
 The part between the pipes:
 
