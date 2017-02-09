@@ -61,7 +61,12 @@ Figuring out how to do a sanity check on deeply nested json seemed too difficult
 My approach was to write a function that accepts the ConfigMap, as well as a SanityMap, where the SanityMap contains keys that match some or all of the keys in the ConfigMap, and the values in the SanityMap are (white) lists of accepted values for that key.  For instance, here is the SanityMap I used:
 
 ```erlang
-SanityMap = #{<<"log_level">> => [<<"warn">>, <<"debug">>], <<"in_memory">> => [true, false], <<"port">> => lists:seq(2700, 2800)}.
+48> SanityMap = #{
+48> <<"log_level">> => [<<"warn">>, <<"debug">>], 
+48> <<"in_memory">> => [true, false], 
+48> <<"port">> => lists:seq(2700, 2800)
+48> }.
+
 #{<<"in_memory">> => [true,false],
   <<"log_level">> => [<<"warn">>,<<"debug">>],
   <<"port">> => [2700,2701,2702,2703,2704,2705,2706,2707,2708,2709,2710,
