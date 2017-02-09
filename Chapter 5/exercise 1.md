@@ -98,7 +98,7 @@ sanity_check_acc([Key|Keys], ConfigMap, SanityMap, AccMap) ->
               SanityMap, 
               AccMap#{Key => lists:member(ConfigVal, WhiteList)}
             );
-        _ -> sanity_check_acc(
+        _ -> sanity_check_acc(     %If there's no matching key in ConfigMap, skip it.
                Keys,
                ConfigMap,
                SanityMap,
