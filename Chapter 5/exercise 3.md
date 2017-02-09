@@ -10,17 +10,17 @@ The stuff inside the `{ }` is known as a block, which is just an anonymous funct
 
     any?(arg1) {|(key, val)| key+val == 10}
     
-Rather, ruby has a special syntax for sending an anonymous function to a method: you specify a block after the function call.
+Ruby has a special syntax for sending an anonymous function to a method: you specify a block (denoted with `{ }` after the method call.
     
 The part between the pipes:
 
     |(key, value)|
     
-is the parameter list for the method. And `block` is just a standin for some code. The code should return true or false for each key/value pair in the Hash.  The return value of `any?` is signified by:
+is the parameter list for the method. And `block`, confusingly, is just a standin for some code. The code should return true or false for each key/value pair in the Hash.  The return value of `any?` is signified by:
 
     → true or false 
 
-The `Hash#any?` method traverses a Hash looking for an element for which block(Key, Val) returns true, and if found `Hash#any?` immediately returns true. 
+The `any?` method traverses a Hash looking for an element for which block(Key, Val) returns true, and if found `any?`halts and immediately returns true.  If the block never returns true, then `any?` returns false.
 
 Here is my implementation of Ruby's `Hash#any?` method, which is very similar to the `map_search_pred()` function in Exercise 2:
 
