@@ -1,6 +1,6 @@
 I know ruby pretty well, and once again, just like the python datetime exercise in Chapter 4, this is a vast exercise. A Hash is ruby's equivalent of a map in erlang.  One thing you have to know about ruby is that a *block* in ruby is similar to an anonymous function, which is equivalent to a fun in erlang.  So ruby methods that take a block are methods that accept an anonymous function as an argument.
 
-Here is my implementation of Ruby's `Hash#any?` method, which is very similar to the `map_search_pred()` function in Exercise 2.  The `Hash#any?` method traverses a Hash looking for an element for which block(Key, Val) is true, and if found the method immediately returns true. 
+Here is my implementation of Ruby's `Hash#any?` method, which is very similar to the `map_search_pred()` function in Exercise 2.  The `Hash#any?` method traverses a Hash looking for an element for which block(Key, Val) returns true, and if found `Hash#any?` immediately returns true. 
 
 ```erlang
 -module(my).
