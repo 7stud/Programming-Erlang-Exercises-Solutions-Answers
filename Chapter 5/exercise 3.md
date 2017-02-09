@@ -37,7 +37,7 @@ any([Key|Keys], Map, Pred) ->
         true -> true;
         false -> any(Keys, Map, Pred)
     end;
-any([], _, _) ->
+any([], _, _) ->   %If the whole Keys list was traversed and Pred never returned true, return false.
     false.
 ```
 
