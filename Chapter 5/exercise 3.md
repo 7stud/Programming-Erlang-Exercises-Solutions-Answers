@@ -5,6 +5,7 @@ Here is my implementation of Ruby's `Hash#any?` method, which is very similar to
 -module(my).
 -compile(export_all).
 
+```erlang
 any(Map, Pred) -> any(maps:keys(Map), Map, Pred).
 
 any([Key|Keys], Map, Pred) ->
@@ -15,7 +16,7 @@ any([Key|Keys], Map, Pred) ->
     end;
 any([], _, _) ->
     false.
-
+```
 
 In the shell:
 
