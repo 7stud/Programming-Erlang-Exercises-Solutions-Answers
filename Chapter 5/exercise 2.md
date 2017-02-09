@@ -1,5 +1,5 @@
 The `map_search_pred()` function:
-
+```erlang
 -module(my).
 -compile(export_all).
 
@@ -15,6 +15,7 @@ find([Key|Keys], Pred, Map) ->
     end;
 find([], _, _) ->
     none.
+```
 
 In the shell:
 
