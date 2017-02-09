@@ -1,0 +1,1 @@
+I know Ruby pretty well, and once again, just like the Python datetime exercise in Chapter 4, this is a vast exercise. One thing you have to know is that a *block* in ruby is similar to an anonymous function, which is equivalent to a fun in erlang.  So Ruby methods that take a block are methods that accept an anonymous function as an argument.
