@@ -10,7 +10,7 @@ The stuff inside the `{ }` is known as a block, which is just an anonymous funct
 
     any?(arg1) {|(key, val)| key+val == 10}
     
-Ruby has a special syntax for sending an anonymous function to a method: you specify a block (denoted with `{ }` after the method call.
+Ruby has a special syntax for sending an anonymous function to a method: you specify a block (denoted with `{ }` ) after the method call.
     
 The part between the pipes:
 
