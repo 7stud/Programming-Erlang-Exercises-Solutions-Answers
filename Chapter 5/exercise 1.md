@@ -81,27 +81,27 @@ The return value of my `sanity_check()` function is a map with the keys in the C
 Here's my sanity_check() function:
 
 ```erlang
-sanity_check(SanityMap, DataMap) ->
+sanity_check(SanityMap, ConfigMap) ->
     sanity_check_acc(
-      maps:keys(DataMap), 
-      DataMap, 
+      maps:keys(ConfigMap), 
+      ConfigMap, 
       SanityMap, 
       #{}
     ).
 
-sanity_check_acc([Key|Keys], DataMap, SanityMap, AccMap) ->
-    DMVal = maps:get(Key, DataMap),
+sanity_check_acc([Key|Keys], ConfigMap, SanityMap, AccMap) ->
+    ConfigVal = maps:get(Key, ConfigMap),
     case SanityMap of  %Mimic if-else with pattern matching 
         #{Key := WhiteList} ->  %Pattern matching maps is broken in erlang 17.5,
             sanity_check_acc(    %so I used erlang 19.2, which is only slightly better.
               Keys, 
-              DataMap,
+              ConfigMap,
               SanityMap, 
-              AccMap#{Key => lists:member(DMVal, WhiteList)}
+              AccMap#{Key => lists:member(ConfigVal, WhiteList)}
             );
         _ -> sanity_check_acc(
                Keys,
-               DataMap,
+               ConfigMap,
                SanityMap,
                AccMap
              )
