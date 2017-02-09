@@ -129,7 +129,7 @@ ok
 41> my:sanity_check(SanityMap, ConfigMap).         
 #{<<"in_memory">> => true,<<"log_level">> => true,<<"port">> => true}
 
-42> SanityMap2 = SanityMap#{<<"log_level">> => [<<"debug">>, <<"info">>]}.
+42> SanityMap2 = SanityMap#{<<"log_level">> := [<<"debug">>, <<"info">>]}.
 #{<<"in_memory">> => [true,false],
   <<"log_level">> => [<<"debug">>,<<"info">>],
   <<"port">> => [2700,2701,2702,2703,2704,2705,2706,2707,2708,2709,2710,
