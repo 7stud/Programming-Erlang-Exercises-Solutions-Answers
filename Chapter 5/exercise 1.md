@@ -91,9 +91,9 @@ sanity_check(SanityMap, ConfigMap) ->
 
 sanity_check_acc([Key|Keys], ConfigMap, SanityMap, AccMap) ->
     ConfigVal = maps:get(Key, ConfigMap),
-    case SanityMap of  %Mimic if-else with pattern matching 
+    case SanityMap of  %Mimic if-else with pattern matching. 
         #{Key := WhiteList} ->  %Pattern matching maps is broken in erlang 17.5,
-            sanity_check_acc(    %so I used erlang 19.2, which is only slightly better.
+            sanity_check_acc(   %so I used erlang 19.2 to run this, which is only slightly better.
               Keys, 
               ConfigMap,
               SanityMap, 
