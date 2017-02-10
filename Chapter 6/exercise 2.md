@@ -2,7 +2,7 @@ On p. 97, the book says that detailed error messages should go to a log file.  G
 
 ```C
 $ cat mylog.log
-2017-2-9 21:39:12
+2017-2-9 21:56:05
 Error: a
 Stack trace:
 [{e,gen_e,1,[{file,"e.erl"},{line,10}]},
@@ -12,7 +12,7 @@ Stack trace:
  {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
  {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
-2017-2-9 21:39:13
+2017-2-9 21:56:06
 Error: a
 Stack trace:
 [{e,gen_e,1,[{file,"e.erl"},{line,10}]},
@@ -22,7 +22,7 @@ Stack trace:
  {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
  {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
-2017-2-9 21:39:13
+2017-2-9 21:56:07
 Error: a
 Stack trace:
 [{e,gen_e,1,[{file,"e.erl"},{line,10}]},
@@ -32,6 +32,7 @@ Stack trace:
  {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
  {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
+
 
 ```
 
