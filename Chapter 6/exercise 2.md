@@ -68,7 +68,7 @@ demo3() ->
         error:X ->
             case file:open("mylog.log", [append]) of
                 {ok, F} -> 
-                    %error to log file:
+                    %error message to log file:
                     io:format(  %You don't have to deal with binaries with 
                       F,        %this verion of io:format()
                       "~s~nError: ~w~nStack trace:~n~p~n---~n",
@@ -76,7 +76,7 @@ demo3() ->
                     ),
                     file:close(F),
                     
-                    %error to user:
+                    %error message for return value of this function:
                     lists:flatten(
                       io_lib:format("There was an error: ~p", [X])
                     )
