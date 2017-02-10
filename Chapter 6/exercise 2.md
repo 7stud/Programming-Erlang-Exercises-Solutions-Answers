@@ -36,7 +36,7 @@ Stack trace:
 
 ```
 
-Here's the format string I used:
+Here's the format string I used for output to the log file:
 
 ```erlang
            error (might not be something convertible to a string, so I used ~w)
