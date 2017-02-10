@@ -15,7 +15,7 @@ read(Fname) ->
     end.
 ```
 
-`io_lib:format()` is to sprintf() as `io:format()` is to printf(), i.e. `io_lib:format()` returns a formatted string rather than sending it to stdout.   The problem with `io_lib:format()` is that it returns a list of nested lists, which won't readily display as a string unless you use `io:format("~s", [FormattedString])` on it, and error() does not appear to use `~s`(as far as I can tell error() is using `~p` to output the error message).  Luckily, `lists:flatten(DeepList)` will flatten a nested list, which the shell then will display as a string if *all* the integers in the list happen to be ascii codes for printable characters.
+`io_lib:format()` is to sprintf() as `io:format()` is to printf(), i.e. `io_lib:format()` returns a formatted string rather than sending it to stdout.   The problem with `io_lib:format()` is that it returns a list of nested lists, which won't readily display as a string unless you use `io:format("~s", [FormattedString])` on it, and error() does not appear to use `~s`(as far as I can tell error() is using `~p` to output the error message).  Luckily, `lists:flatten(DeepList)` will flatten a nested list much like `~s`.
 
 In the shell:
 ```erlang
