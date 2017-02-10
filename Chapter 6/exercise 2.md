@@ -38,7 +38,7 @@ Stack trace:
 
 Here's the format string I used:
 
-```C
+```erlang
            error (might not be something convertible to a string, so I used ~w)
              |
              V
