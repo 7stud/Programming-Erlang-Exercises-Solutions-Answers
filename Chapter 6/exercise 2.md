@@ -48,7 +48,7 @@ Here's the format string I used:
 timestamp                stacktrace(~p breaks up long lines at sensible places)
 ```
 
-We had to write a function called `my_date_string()` foor Exercise 4 in Chapter 4, and I used that function for the timestamp in the log file.  Here is the code:
+We had to write a function called `my_date_string()` for Exercise 4 in Chapter 4, and I used that function for the timestamp in the log file.  Here is the code:
 
 ```erlang
 -module(e).
