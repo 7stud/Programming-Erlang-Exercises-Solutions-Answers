@@ -43,7 +43,7 @@ demo3() ->
                 {ok, F} -> 
                     Msg = erlang:list_to_binary(
                         io_lib:format(
-                            "~s~nError: ~w~nStack trace:~n~w~n---~n", 
+                            "~s~nError: ~w~nStack trace:~n~p~n---~n", 
                             [my_date_string(), X, erlang:get_stacktrace()] 
                          )
                     ),
