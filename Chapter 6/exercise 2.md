@@ -81,7 +81,8 @@ demo3() ->
                     lists:flatten(
                       io_lib:format("There was an error: ~p", [X])
                     )
-            end
+            end   %I had a bitch of a time trying to figure out what punctuation was 
+                  %required here as well as for the previous line
     end.
     
 ```
