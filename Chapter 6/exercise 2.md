@@ -38,7 +38,7 @@ Stack trace:
 Here's the format string I used:
 
 ```C
-           error (might not be a list, so I used ~w)
+           error (might not be a list that is convertible to a string, so I used ~w)
              |
              V
 "~s~nError: ~w~nStack trace:~n~p~n---~n",
@@ -46,8 +46,6 @@ Here's the format string I used:
   |                            |
 timestamp                stacktrace(~p breaks up long lines at sensible places)
 ```
-
-For Exercise 4 in Chapter 4, 
 
 We had to write a function called `my_date_string()` foor Exercise 4 in Chapter 4, and I used that function for the timestamp in the log file.  Here is the code:
 
