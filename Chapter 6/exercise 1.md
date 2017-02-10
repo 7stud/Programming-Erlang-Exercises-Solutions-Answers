@@ -9,7 +9,7 @@ read(Fname) ->
         {ok, Bin}       -> Bin;
         {error, Why}    ->
             error(lists:flatten(io_lib:format(
-                "Couldn't read file ~s: ~w",
+                "Couldn't read file '~s': ~w",
                 [Fname, Why]
             )))
     end.
@@ -19,13 +19,13 @@ read(Fname) ->
 
 In the shell:
 ```erlang
-4> c(myfile).        
+10> c(myfile).                  
 {ok,myfile}
 
-5> myfile:read("non_existant").
-** exception error: "Couldn't read file non_existant: enoent"
+11> myfile:read("non_existent").
+** exception error: "Couldn't read file 'non_existent': enoent"
      in function  myfile:read/1 (myfile.erl, line 8)
      
-6> myfile:read("out.txt").     
+12> myfile:read("out.txt").     
 <<"goodbye mars: \"hello world\"\n">>
 ```
