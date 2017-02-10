@@ -64,22 +64,26 @@ gen_e(5) -> error(a).
 
 
 demo3() ->
+
     try gen_e(5)
     catch
         error:X ->
             case file:open("mylog.log", [append]) of
                 {ok, F} -> 
-                    io:format(
-                      F, 
+                    %error to log file:
+                    io:format(  %You don't have to deal with binaries with 
+                      F,        %this verion of io:format()
                       "~s~nError: ~w~nStack trace:~n~p~n---~n",
                       [my_date_string(), X, erlang:get_stacktrace()]
                     ),
                     file:close(F),
-
+                    
+                    %error to user:
                     lists:flatten(
                       io_lib:format("There was an error: ~p", [X])
                     )
-            end
+            end  %I had a bitch of time trying to figure out the required
+                 %punctuation for the end of this line and the previous line
     end.
     
 ```
