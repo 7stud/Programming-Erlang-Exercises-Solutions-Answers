@@ -1,3 +1,26 @@
+On p. 97, the book says that detailed error messages should go to a log file.  Great, more file I/O without any instruction!  Here is the format for the output to the log file that I settled on:
+
+```C
+$ cat mylog.log
+2017-2-9 21:15:15
+Error: a
+Stack trace:
+[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+---
+2017-2-9 21:15:16
+Error: a
+Stack trace:
+[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+---
+2017-2-9 21:15:16
+Error: a
+Stack trace:
+[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+---
+```
+
+Here is the code:
+
 ```erlang
 -module(e).
 -compile(export_all).
@@ -33,4 +56,19 @@ demo3() ->
             end
     end.
     
+```
+
+In the shell:
+```erlang
+85> c(e).     
+{ok,e}
+
+86> e:demo3().
+"There was an error: a"
+
+87> e:demo3().
+"There was an error: a"
+
+88> e:demo3().
+"There was an error: a"
 ```
