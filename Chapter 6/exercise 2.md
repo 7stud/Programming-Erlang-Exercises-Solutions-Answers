@@ -55,13 +55,11 @@ We had to write a function called `my_date_string()` for Exercise 4 in Chapter 4
 -compile(export_all).
 -import(lib_misc, [my_date_string/0]).
 
-
 gen_e(1) -> a;
 gen_e(2) -> throw(a);
 gen_e(3) -> exit(a);
 gen_e(4) -> {'EXIT', a};
 gen_e(5) -> error(a).
-
 
 demo3() ->
 
