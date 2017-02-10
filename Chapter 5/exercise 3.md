@@ -16,7 +16,11 @@ The part between the pipes:
 
     |(key, value)|
     
-is the parameter list for the anonymouse function. And `block`, somewhat confusingly, is just a standin for some code. The code should return true or false for each key/value pair in the Hash.  The return value of `any?` is signified by:
+is the parameter list for the anonymouse function. And `block`here:
+
+    { |(key, value)| block }
+
+somewhat confusingly is just a standin for some code. The code should return true or false for each key/value pair in the Hash.  The return value of `any?` is signified by:
 
     → true or false 
 
