@@ -35,7 +35,21 @@ Stack trace:
 
 ```
 
-For Exercise 4 in Chapter 4, we had to write a function called `my_date_string()`.  I used that for the timestamp in the log file.  Here is the code:
+Here's the format string I used:
+
+```C
+           error (might not be a list, so I used ~w)
+             |
+             V
+"~s~nError: ~w~nStack trace:~n~p~n---~n",
+  ^                            ^
+  |                            |
+timestamp                stacktrace(~p breaks up long lines at sensible places)
+```
+
+For Exercise 4 in Chapter 4, 
+
+We had to write a function called `my_date_string()` foor Exercise 4 in Chapter 4, and I used that function for the timestamp in the log file.  Here is the code:
 
 ```erlang
 -module(e).
