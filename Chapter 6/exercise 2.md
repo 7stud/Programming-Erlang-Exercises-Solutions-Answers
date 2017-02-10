@@ -19,7 +19,7 @@ Stack trace:
 ---
 ```
 
-Here is the code:
+For Exercise 4 in Chapter 4, we had to write a function called `my_date_string()`.  I used that for the timestamp in the log file.  Here is the code:
 
 ```erlang
 -module(e).
