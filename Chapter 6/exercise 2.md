@@ -38,7 +38,7 @@ Stack trace:
 Here's the format string I used:
 
 ```C
-           error (might not be a list that is convertible to a string, so I used ~w)
+           error (might not be something convertible to a string, so I used ~w)
              |
              V
 "~s~nError: ~w~nStack trace:~n~p~n---~n",
