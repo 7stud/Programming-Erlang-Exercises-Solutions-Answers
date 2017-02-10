@@ -1,4 +1,4 @@
-Here's `myfile:read()`:
+`myfile:read()`:
 
 ```erlang
 -module(myfile).
