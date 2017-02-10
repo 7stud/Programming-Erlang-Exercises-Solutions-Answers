@@ -64,7 +64,6 @@ gen_e(5) -> error(a).
 
 
 demo3() ->
-
     try gen_e(5)
     catch
         error:X ->
