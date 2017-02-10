@@ -69,20 +69,17 @@ demo3() ->
         error:X ->
             case file:open("mylog.log", [append]) of
                 {ok, F} -> 
-                    Msg = erlang:list_to_binary(
-                        io_lib:format(
-                            "~s~nError: ~w~nStack trace:~n~p~n---~n", 
-                            [my_date_string(), X, erlang:get_stacktrace()] 
-                         )
+                    io:format(
+                      F, 
+                      "~s~nError: ~w~nStack trace:~n~p~n---~n",
+                      [my_date_string(), X, erlang:get_stacktrace()]
                     ),
-                    file:write(F, Msg),
                     file:close(F),
 
                     lists:flatten(
                       io_lib:format("There was an error: ~p", [X])
                     )
-            end   %I had a bitch of a time trying to figure out what punctuation was 
-                  %required here as well as for the previous line
+            end
     end.
     
 ```
