@@ -1,4 +1,4 @@
-On p. 97, the book says that detailed error messages should go to a log file.  Great, more file I/O without any instruction!  Here is the format for the output to the log file that I settled on:
+On p. 97, the book says that detailed error messages should go to a log file.  Great, more file I/O without any instruction!  Here is the format for the log file that I settled on:
 
 ```C
 $ cat mylog.log
