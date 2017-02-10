@@ -2,21 +2,37 @@ On p. 97, the book says that detailed error messages should go to a log file.  G
 
 ```C
 $ cat mylog.log
-2017-2-9 21:15:15
+2017-2-9 21:39:12
 Error: a
 Stack trace:
-[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+[{e,gen_e,1,[{file,"e.erl"},{line,10}]},
+ {e,demo3,0,[{file,"e.erl"},{line,15}]},
+ {erl_eval,do_apply,6,[{file,"erl_eval.erl"},{line,661}]},
+ {shell,exprs,7,[{file,"shell.erl"},{line,684}]},
+ {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
+ {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
-2017-2-9 21:15:16
+2017-2-9 21:39:13
 Error: a
 Stack trace:
-[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+[{e,gen_e,1,[{file,"e.erl"},{line,10}]},
+ {e,demo3,0,[{file,"e.erl"},{line,15}]},
+ {erl_eval,do_apply,6,[{file,"erl_eval.erl"},{line,661}]},
+ {shell,exprs,7,[{file,"shell.erl"},{line,684}]},
+ {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
+ {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
-2017-2-9 21:15:16
+2017-2-9 21:39:13
 Error: a
 Stack trace:
-[{e,gen_e,1,[{file,[101,46,101,114,108]},{line,10}]},{e,demo3,0,[{file,[101,46,101,114,108]},{line,15}]},{erl_eval,do_apply,6,[{file,[101,114,108,95,101,118,97,108,46,101,114,108]},{line,661}]},{shell,exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,684}]},{shell,eval_exprs,7,[{file,[115,104,101,108,108,46,101,114,108]},{line,639}]},{shell,eval_loop,3,[{file,[115,104,101,108,108,46,101,114,108]},{line,624}]}]
+[{e,gen_e,1,[{file,"e.erl"},{line,10}]},
+ {e,demo3,0,[{file,"e.erl"},{line,15}]},
+ {erl_eval,do_apply,6,[{file,"erl_eval.erl"},{line,661}]},
+ {shell,exprs,7,[{file,"shell.erl"},{line,684}]},
+ {shell,eval_exprs,7,[{file,"shell.erl"},{line,639}]},
+ {shell,eval_loop,3,[{file,"shell.erl"},{line,624}]}]
 ---
+
 ```
 
 For Exercise 4 in Chapter 4, we had to write a function called `my_date_string()`.  I used that for the timestamp in the log file.  Here is the code:
