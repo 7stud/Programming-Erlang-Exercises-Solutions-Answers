@@ -30,9 +30,9 @@ get_header(Bin, N) ->
         {_, << Header:4/binary, _/binary >>} = split_binary(Bin, N),
         unpack_header(Header)
     catch
-        error:{badmatch, _} -> error(eof);  %The only way you get a bad match
-        _:_ -> error                        %is if N is less than four bytes
-    end.                                    %from the end of Bin.                              
+        error:{badmatch, _} -> error(syncHeaderNotFound);  %The only way you get a bad match
+        _:_ -> error                                       %is if N is less than four bytes
+    end.                                                   %from the end of Bin.                              
 
 
 unpack_header(<< 2#11111111111:11, B:2, C:2, _D:1, E:4, F:2, G:1, _Bits:9 >>) ->
