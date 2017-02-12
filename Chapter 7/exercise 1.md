@@ -1,4 +1,4 @@
-`reverse(Bin)`.  
+`reverse(Bin)`:
 
 You can pretty much use a binary like a list, but instead of using cons(|) to add elements to a binary, you just use a comma: `<<X/integer, Y/binary>>`.
 
