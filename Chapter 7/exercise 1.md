@@ -4,7 +4,7 @@ You can pretty much use a binary like a list, but instead of using cons, `|`, to
 
      [H|T]
     
- for binaries you use:
+ you use:
  
      <<X, Rest/binary>>
      
