@@ -1,11 +1,20 @@
 `reverse(Bin)`:
 
-You can pretty much use a binary like a list, but instead of using cons, `|`, to add elements to a binary, you just use a comma: `<<ToAdd/integer, SomeBinary/binary>>`; and in pattern matching instead of using `[H|T]`, you use `<<X/integer, Rest/binary>>`:
+You can pretty much use a binary like a list, but instead of using cons, `|`, to add elements to a binary, you just use a comma: `<<ToAdd, SomeBinary/binary>>`.  In pattern matching, instead of using `[H|T]`, you use `<<X, Rest/binary>>`:
 
 ```erlang
 -module(bin).
 -compile(export_all).
 
+reverse(Bin) ->
+    reverse(Bin, <<>>).
+reverse(<<X, Rest/binary>>, Acc) ->
+    reverse(Rest, <<X, Acc/binary>>);
+reverse(<<>>, Acc) ->
+    Acc.
+    
+The default Type for a segment in a binary is `integer`, so the example above is equivalent to:
+    
 reverse(Bin) ->
     reverse(Bin, <<>>).
 reverse(<<X/integer, Rest/binary>>, Acc) ->      %The default Size of the integer Type is 8 bits, and
@@ -14,18 +23,7 @@ reverse(<<>>, Acc) ->                            %its Size can be omitted, and i
     Acc.                                         %be the rest of the binary that you are matching against.
 ```
 
-Because `integer` is the default Type of a segment in a binary, you could write the above example like this:
-
-```erlang
-reverse(Bin) ->
-    reverse(Bin, <<>>).
-reverse(<<X, Rest/binary>>, Acc) ->
-    reverse(Rest, <<X, Acc/binary>>);
-reverse(<<>>, Acc) ->
-    Acc.
-```
-
-Or, if you wanted to be explicit about the Size and the Type:
+Or, if you wanted to be explicit about the Size *and* the Type:
 
 ```erlang
 reverse(Bin) ->
