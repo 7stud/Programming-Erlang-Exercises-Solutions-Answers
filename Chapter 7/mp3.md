@@ -1,4 +1,4 @@
-I got interested in the example in this chapter about finding the synchronization header in an mp3 file.   I wanted to see if it would work on some random, free mp3 file I downloaded. There is a [treatise](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm) explaining the MPEG header format, and it presents the formula for calculating the frame length.  After borrowing some tricks I discovered in the [full code for the example](https://github.com/everpeace/programming-erlang-code/blob/master/code/mp3_sync.erl), here is what I ended up with:
+I got interested in the example in this chapter about finding the synchronization header in an mp3 file.   I wanted to see if it would work on some random, free mp3 file I downloaded. There is a [treatise](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm) explaining the MPEG header format, and it presents the formula for calculating the frame length.  After borrowing some tricks I discovered in the [full code for the example](https://github.com/everpeace/programming-erlang-code/blob/master/code/mp3_sync.erl), here is what I ended up with (I left the debugging output in the code):
 
 ```erlang
 -module(mp3).
@@ -174,4 +174,32 @@ sample_rate(F, {2,5}) ->
         [F, 2.5, SampleRate]
     ),
     SampleRate.  
+```
+
+In the shell:
+
+```erlang
+
+64> c(mp3).                                        
+{ok,mp3}
+
+65> mp3:sync_pos("TheRobbieBoydBand_OhAlaska.mp3").
+bitrate for 0101, V1, L1: 160
+sample rate for 2#01, 1: 48000
+bitrate for 0101, V1, L1: 160
+sample rate for 2#00, 1: 44100
+***free format BitRateIndex: 0000
+bitrate for 0100, V1, L1: 128
+sample rate for 2#01, 1: 48000
+bitrate for 0100, V1, L1: 128
+***Illegal SampleRateIndex: 0011
+bitrate for 0100, V1, L1: 128
+***Illegal SampleRateIndex: 0011
+bitrate for 1001, V1, L3: 128
+sample rate for 2#00, 1: 44100
+bitrate for 1001, V1, L3: 128
+sample rate for 2#00, 1: 44100
+bitrate for 1001, V1, L3: 128
+sample rate for 2#00, 1: 44100
+{ok,1120}
 ```
