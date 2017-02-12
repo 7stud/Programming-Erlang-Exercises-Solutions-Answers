@@ -27,6 +27,31 @@ reverse(<<>>, Acc) ->
 
 Or, if you wanted to be explicit about the Size and the Type:
 
+```erlang
+reverse(Bin) ->
+    reverse(Bin, <<>>).
+reverse(<<X:8/integer, Rest/binary>>, Acc) ->
+    reverse(Rest, <<X:8/integer, Acc/binary>>);
+reverse(<<>>, Acc) ->
+    Acc.
+```
+
+In the shell:
+```erlang
+10> c(bin).
+{ok,bin}
+
+11> bin:reverse(<<1, 2, 3, 4>>).
+<<4,3,2,1>>
+
+12> bin:reverse(<<>>).
+<<>>
+
+13> bin:reverse(<<97, 98, 99>>).
+<<"cba">>
+```
+
+
 
 
 
