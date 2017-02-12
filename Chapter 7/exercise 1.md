@@ -7,7 +7,37 @@ You can pretty much use a binary like a list, but instead of using cons, `|`, to
  you use:
  
      <<X, Rest/binary>>
-     
+
+Here's an example in the shell:
+```erlang
+15> f().                                     
+ok
+
+16> <<X, Rest/binary>> = <<97, 98, 99, 100>>.
+<<"abcd">>
+
+17> X.
+97
+
+18> Rest.
+<<"bcd">>
+```
+
+Or, you could do this:
+```erlang
+20> f().
+ok
+
+21> <<X:1/binary, Rest/binary>> = <<97, 98, 99, 100>>.
+<<"abcd">>
+
+22> X.
+<<"a">>
+
+23> Rest.
+<<"bcd">>
+```
+
 Here's the function:
 
 ```erlang
