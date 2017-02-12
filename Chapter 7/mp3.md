@@ -6,7 +6,7 @@ I got interested in the example in this chapter about finding the synchronizatio
 
 sync_pos(Fname) ->
     {ok, Bin} = file:read_file(Fname),
-    find_sync(Bin, 1140).
+    find_sync(Bin, 0).   %I also ran the program with values different than 0 for the start Pos.
 
 find_sync(Bin, Pos) ->
     case get_header(Bin, Pos) of
