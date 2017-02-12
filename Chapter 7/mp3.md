@@ -1,4 +1,4 @@
-I got interested in the example in this chapter about finding the synchronization header in an mp3 file.   I wanted to see if it would work on some random, free mp3 file I downloaded. There is a [treatise](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm) explaining the MPEG header format, and it presents the formula for calculating the frame length.  After using some tricks I discovered in the [full code for the example](https://github.com/everpeace/programming-erlang-code/blob/master/code/mp3_sync.erl), here is what I eneded up with:
+I got interested in the example in this chapter about finding the synchronization header in an mp3 file.   I wanted to see if it would work on some random, free mp3 file I downloaded. There is a [treatise](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm) explaining the MPEG header format, and it presents the formula for calculating the frame length.  After borrowing some tricks I discovered in the [full code for the example](https://github.com/everpeace/programming-erlang-code/blob/master/code/mp3_sync.erl), here is what I ended up with:
 
 ```erlang
 -module(mp3).
