@@ -6,7 +6,7 @@ I got interested in the example in this chapter about finding the synchronizatio
 
 sync_pos(Fname) ->
     {ok, Bin} = file:read_file(Fname),
-    find_sync(Bin, 0).   %I also ran the program with values different than 0 for the start Pos.
+    find_sync(Bin, 0).
 
 find_sync(Bin, Pos) ->
     case get_header(Bin, Pos) of
@@ -140,11 +140,11 @@ bit_rate(BitRateIndex, 2, 2) ->
     ),
     BitRate;
 
-%MPEG Version 2, Layer3 is equivalent to MPEG Version2, Layer2:
+%BitRate for MPEG Version 2, Layer3 is equivalent to BitRate for MPEG Version2, Layer2:
 bit_rate(BitRateIndex, 2, 3) ->
     bit_rate(BitRateIndex, 2, 2);
 
-%MPEG Version 2.5 is equivalent to MPEG Version 2: 
+%BitRate for MPEG Version 2.5 is equivalent to BitRate for MPEG Version 2: 
 bit_rate(BitRateIndex, {2,5}, Layer) ->
     bit_rate(BitRateIndex, 2, Layer).
 
@@ -173,7 +173,7 @@ sample_rate(F, {2,5}) ->
         "sample rate for 2#~2.2.0B, ~w: ~w~n",
         [F, 2.5, SampleRate]
     ),
-    SampleRate.  
+    SampleRate.   
 ```
 
 In the shell:
