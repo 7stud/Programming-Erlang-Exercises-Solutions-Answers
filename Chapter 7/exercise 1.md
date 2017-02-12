@@ -20,9 +20,10 @@ reverse(<<X, Rest/binary>>, Acc) ->
     reverse(Rest, <<X, Acc/binary>>);
 reverse(<<>>, Acc) ->
     Acc.
-    
+```
+
 The default Type for a segment in a binary is `integer`, so the example above is equivalent to:
-    
+```erlang
 reverse(Bin) ->
     reverse(Bin, <<>>).
 reverse(<<X/integer, Rest/binary>>, Acc) ->      %The default Size of the integer Type is 8 bits, and
@@ -31,7 +32,7 @@ reverse(<<>>, Acc) ->                            %its Size can be omitted, and i
     Acc.                                         %be the rest of the binary that you are matching against.
 ```
 
-Or, if you wanted to be explicit about the Size *and* the Type:
+Or, if you want to be explicit about the Size *and* the Type:
 
 ```erlang
 reverse(Bin) ->
