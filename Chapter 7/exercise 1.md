@@ -1,6 +1,6 @@
 `reverse(Bin)`:
 
-You can pretty much use a binary like a list, but instead of using cons, `|`, to add elements to a binary, you just use a comma: `<<ToAdd/integer, SomeBinary/binary>>`.
+You can pretty much use a binary like a list, but instead of using cons, `|`, to add elements to a binary, you just use a comma: `<<ToAdd/integer, SomeBinary/binary>>`; and in pattern matching instead of using `[H|T]`, you use `<<X/integer, Rest/binary>>`:
 
 ```erlang
 -module(bin).
