@@ -37,7 +37,7 @@ ok
 23> Rest.
 <<"bcd">>
 ```
-Note that the Size is specified in bits, but the total size of a segment is actually `Size * units`, and for the binary Type the default for units is 8, so the total size of X is `1*8 = 8 bits`.  In case you were wondering, the default units for the other Types is just 1.  In other words, for the binary type you specify the number of *bytes* for the segment, and for the other types you specify the number of *bits*.
+Note that the Size is specified in bits, but the total size of a segment is actually `Size * units`, and for the binary Type the default for units is 8, so the total size of X is `1*8 = 8 bits` (the default units for the other Types is 1).  In other words, for the binary type you specify the number of *bytes* for the segment, and for the other types you specify the number of *bits*.
 
 Now, for the exercise:
 
