@@ -17,7 +17,7 @@ But the exercise description really means:
 In other words, get the number of bytes of the binary returned by `term_to_binary()`, put that number into 4 bytes of a result binary, then add the return value of `term_to_binary()` to the result binary.  Effectively, the first 4 bytes will tell you how many bytes contain the data that follows.
 
 Here's my solution:
-```
+```erlang
 term_to_packet(Term) ->
     Bin = term_to_binary(Term),
     N = byte_size(Bin),
