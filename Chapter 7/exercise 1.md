@@ -1,6 +1,6 @@
 `reverse(Bin)`:
 
-Constructing a binary is much like constructing a list, but instead of using cons, `|`, to add element to a binary you use a comma: `<< ItemToAdd, SomeBinary/binary >>`.  And when pattern matching binaries, the equivalent of:
+Constructing a binary is much like constructing a list, but instead of using cons, `|`, to add an element to a binary you use a comma: `<< ItemToAdd, SomeBinary/binary >>`.  And when pattern matching binaries, the equivalent of:
 
      [H|T]
     
