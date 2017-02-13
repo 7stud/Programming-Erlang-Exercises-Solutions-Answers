@@ -64,7 +64,7 @@ reverse_list([], Acc) ->
     Acc.
 ```
 
-The default Type for a segment in a binary is `integer`, and the default Size for Type integer is 8 bits, so the example above is equivalent to:
+The default Type for a segment in a binary is `integer`, and the default Size for integer is 8 bits, so the example above is equivalent to:
 
 ```erlang
 reverse_bytes(Bin) ->
