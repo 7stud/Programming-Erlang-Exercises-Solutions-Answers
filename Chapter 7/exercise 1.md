@@ -37,7 +37,7 @@ ok
 23> Rest.
 <<"bcd">>
 ```
-Note that the Size is specified in bits, but the total size of a segment is actually `Size * units`, and for the binary Type the default for units is 8, so the total size of X is `1*8 = 8 bits` (the default for units for the other Types is 1).  In other words, for the binary type you specify the number of *bytes* for the segment, and for the other types you specify the number of *bits*.
+Note that the Size is specified in bits, but the total size of a segment is actually `Size * units`, and for the binary Type the default for units is 8, so the total size of X is `1*8 = 8 bits` (the default for units for the other Types is 1).  In other words, for the binary type the Size is the number of *bytes* for the segment, and for the other types the Size is the number of *bits*.
 
 Now, for the exercise:
 
@@ -47,14 +47,14 @@ Now, for the exercise:
 
 reverse_bytes(Bin) ->
     reverse_bytes(Bin, <<>>).
-reverse_bytes(<<X:8/integer, Rest/binary>>, Acc) ->
-    reverse_bytes(Rest, <<X:8/integer, Acc/binary>>);
-reverse_bytes(<<>>, Acc) ->
+reverse_bytes(<<X, Rest/binary>>, Acc) ->    %When matching, if a binary Type is the last segment
+    reverse_bytes(Rest, <<X, Acc/binary>>);  %its Size can be omitted, and its default Size will
+reverse_bytes(<<>>, Acc) ->                  %be the rest of the binary that you are matching against.
     Acc.
-
 ```
 
 Compare that to reversing a list:
+
 ```erlang
 reverse_list(List) ->
     reverse_list(List, []).
@@ -64,17 +64,7 @@ reverse_list([], Acc) ->
     Acc.
 ```
 
-The default Type for a segment in a binary is `integer`, so the example above is equivalent to:
-```erlang
-reverse_bytes(Bin) ->
-    reverse_bytes(Bin, <<>>).
-reverse_bytes(<<X/integer, Rest/binary>>, Acc) ->    %The default Size of the integer Type is 8 bits, and
-    reverse_bytes(Rest, <<X/integer, Acc/binary>>);  %when matching, if a binary Type is the last segment
-reverse_bytes(<<>>, Acc) ->                          %its Size can be omitted, and its default Size will
-    Acc.                                             %be the rest of the binary that you are matching against.
-```
-
-Or, if you want to be explicit about the Size *and* the Type:
+The default Type for a segment in a binary is `integer`, and the default Size for Type integer is 8 bits, so the example above is equivalent to:
 
 ```erlang
 reverse_bytes(Bin) ->
@@ -82,7 +72,7 @@ reverse_bytes(Bin) ->
 reverse_bytes(<<X:8/integer, Rest/binary>>, Acc) ->
     reverse_bytes(Rest, <<X:8/integer, Acc/binary>>);
 reverse_bytes(<<>>, Acc) ->
-    Acc.
+    Acc.                         
 ```
 
 In the shell:
