@@ -45,4 +45,4 @@ Let's remove the first 4 bits of the result, then see what we have:
 <<131,107,0,3,1,2,3>>
 ```
 
-...and that's the data from term_to_binary() that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is our data.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how far to read into the binary to get the data for one Term.
+...and that's the data from term_to_binary() that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is our data.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read from the binary to get the data for one Term.
