@@ -13,10 +13,10 @@ tests() ->
             104,105,70,64,9,153,153,153,153,153,154,107,0,3,1,2,3>>),
 
     %round trip:
-    Term1 = [3.12, hello, {abc, 1}],
-    Term1 = packet_to_term(term_to_packet([3.12, hello, {abc, 1}])),
-    Term2 = <<97, 98, 99>>,
-    Term2 = packet_to_term(term_to_packet(<<97, 98, 99>>)),
+    [3.12, hello, {abc, 1}] = packet_to_term(term_to_packet([3.12, hello, {abc, 1}])),
+    <<97, 98, 99>> = packet_to_term(term_to_packet(<<97, 98, 99>>)),
+    hello = packet_to_term(term_to_packet(hello)),
 
     tests_passed.
+
 ```
