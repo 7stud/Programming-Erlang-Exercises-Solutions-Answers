@@ -14,14 +14,14 @@ But the exercise description really means:
 
 > ...return a binary consisting of a 4-byte header *containing a number N*, followed by N bytes of data...
 
-In other words, get the number of bytes of the binary returned by `term_to_binary()`, put that number into 4 bytes of a result binary, then add the return value of `term_to_binary()` to the result binary.  Effectively, the first 4 bytes will tell you how many bytes contain the data that follows.
+In other words, get the number of bytes in the binary returned by `term_to_binary()`, put that number into 4 bytes of a result binary, then add the return value of `term_to_binary()` to the result binary.  That way, the first 4 bytes will tell you how many bytes contain the Term that follows.
 
 Here's my solution:
 ```erlang
 term_to_packet(Term) ->
     Bin = term_to_binary(Term),
     N = byte_size(Bin),
-    <<N:4/unit:8, Bin/binary>>.
+    <<N:4/unit:8, Bin/binary>>.  
 ```
 
 In the shell:
@@ -36,23 +36,23 @@ In the shell:
 If you remove the first 4 bytes of the result, you get:
 
 ```erlang
-169> c(bin).                              
+177> c(bin).                                
 {ok,bin}
 
-170> f().
+178> f().   
 ok
 
-171> Result = bin:term_to_packet([1, 2, 3]).           
+179> Result = bin:term_to_packet([1, 2, 3]).
 <<0,0,0,7,131,107,0,3,1,2,3>>
 
-172> <<X:4/unit:8, Rest/binary>> = Result.  
+180> <<N:4/unit:8, Rest/binary>> = Result.  
 <<0,0,0,7,131,107,0,3,1,2,3>>
 
-173> X.
+181> N.
 7
 
-174> Rest.
+182> Rest.
 <<131,107,0,3,1,2,3>>
 ```
 
-...and Rest is the return value of `term_to_binary()` that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove the first 4 bytes, and the rest of the binary is the binary representing the Term.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the binary for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
+Rest is the return value of `term_to_binary()` that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove the first 4 bytes, and the rest of the binary is the binary representing the Term.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the binary for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
