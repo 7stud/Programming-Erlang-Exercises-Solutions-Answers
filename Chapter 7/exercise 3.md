@@ -1,6 +1,6 @@
 ```erlang
 packet_to_term(Bin) ->
-    <<Size:4, TermBin:Size/binary, _Rest/binary>> = Bin,
+    <<Len:4/unit:8, TermBin:Len/binary, _Rest/binary>> = Bin,
     binary_to_term(TermBin).
 ```
 
@@ -8,18 +8,19 @@ This exercise demonstrates the important point that we can match a Size, then us
 
 In the shell:
 ```erlang
-77> c(bin).
+186> c(bin).                                                     
 {ok,bin}
 
-78> f().                                                
+187> f().
 ok
 
-79> Packet = bin:term_to_packet([1, 2, 3]).             
-<<120,54,176,0,48,16,32,3:4>>
+188> Packet = bin:term_to_packet([1, 2, 3]).                     
+<<0,0,0,7,131,107,0,3,1,2,3>>
 
-80> Bin = << Packet/bitstring, <<97, 98, 99>>/binary >>.  %Because Packet does not contain a whole
-<<120,54,176,0,48,16,32,54,22,38,3:4>>                    %number of bytes, its type is bitstring.
+189> PacketWithExtra = <<Packet/binary, <<97, 98, 99>>/binary >>.
+<<0,0,0,7,131,107,0,3,1,2,3,97,98,99>>
 
-81> bin:packet_to_term(Bin).                            
+190> bin:packet_to_term(PacketWithExtra).                        
 [1,2,3]
+
 ```
