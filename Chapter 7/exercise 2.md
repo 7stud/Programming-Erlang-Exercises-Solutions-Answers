@@ -30,9 +30,9 @@ In the shell:
 51> bin:term_to_packet([1, 2, 3]).
 <<120,54,176,0,48,16,32,3:4>>
 ```
-Well, the output is totally incomprehensible because erlang took the 4 bits we used for the size, then took 4 bits from the first byte of the binary for the list to form a new byte 120; then erlang took the remaining 4 bits of the first byte and added them to 4 bits from the second byte of binary for the list to form another full byte, 54; etc.; etc.; then there were 4 bits left over at the end of the binary, with the integer 3 in them--rendering our packet totally unreadable.  Or, is it?  
+Well, the output is totally incomprehensible because erlang took the 4 bits we used for the size of the Term, then erlang took 4 bits from the first byte of the binary for the Term to form a new byte 120; then erlang took the remaining 4 bits of the first byte and added them to 4 bits from the second byte of binary for the Term to form another full byte, 54; etc.; etc.; then there were 4 bits left over at the end of the binary, with the integer 3 in them.  All in all, term_to_packet()'s output is incomprehensible.  
 
-Let's remove the first 4 bits of the result, then see what we have:
+Now, let's remove the the first 4 bits of the result, then see what we have:
 
 ```erlang
 54> <<N:4, Rest/binary>> = Result.
@@ -45,4 +45,4 @@ Let's remove the first 4 bits of the result, then see what we have:
 <<131,107,0,3,1,2,3>>
 ```
 
-...and that's the data from term_to_binary() that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is our data.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read from the binary to get the data for one Term.
+...and that's the data from term_to_binary() that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is our data.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read from the binary to get the data for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
