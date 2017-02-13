@@ -1,4 +1,4 @@
-Wow, it took me a long time to figure out what this exercise was asking us to do. Suppose the Term argument is a list, look at the output here:
+Wow, it took me many readings to figure out what this exercise was asking us to do. Suppose the Term argument is a list, look at the output here:
 
 ```erlang
 35> term_to_binary([1, 2, 3]).
