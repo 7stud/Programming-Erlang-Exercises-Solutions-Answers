@@ -6,7 +6,7 @@ Constructing a binary is much like constructing a list, but instead of using con
     
 is: 
  
-     <<X, Rest/binary>>
+     <<H, T/binary>>
 
 Here's an example in the shell:
 ```erlang
