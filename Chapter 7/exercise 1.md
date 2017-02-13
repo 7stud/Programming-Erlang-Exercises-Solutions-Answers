@@ -45,12 +45,13 @@ Now, for the exercise:
 -module(bin).
 -compile(export_all).
 
-reverse(Bin) ->
-    reverse(Bin, <<>>).
-reverse(<<X, Rest/binary>>, Acc) ->
-    reverse(Rest, <<X, Acc/binary>>);
-reverse(<<>>, Acc) ->
+reverse_bytes(Bin) ->
+    reverse_bytes(Bin, <<>>).
+reverse_bytes(<<X:8/integer, Rest/binary>>, Acc) ->
+    reverse_bytes(Rest, <<X:8/integer, Acc/binary>>);
+reverse_bytes(<<>>, Acc) ->
     Acc.
+
 ```
 
 Compare that to reversing a list:
@@ -65,22 +66,22 @@ reverse_list([], Acc) ->
 
 The default Type for a segment in a binary is `integer`, so the example above is equivalent to:
 ```erlang
-reverse(Bin) ->
-    reverse(Bin, <<>>).
-reverse(<<X/integer, Rest/binary>>, Acc) ->      %The default Size of the integer Type is 8 bits, and
-    reverse(Rest, <<X/integer, Acc/binary>>);    %when matching, if a binary Type is the last segment
-reverse(<<>>, Acc) ->                            %its Size can be omitted, and its default Size will
-    Acc.                                         %be the rest of the binary that you are matching against.
+reverse_bytes(Bin) ->
+    reverse_bytes(Bin, <<>>).
+reverse_bytes(<<X/integer, Rest/binary>>, Acc) ->    %The default Size of the integer Type is 8 bits, and
+    reverse_bytes(Rest, <<X/integer, Acc/binary>>);  %when matching, if a binary Type is the last segment
+reverse_bytes(<<>>, Acc) ->                          %its Size can be omitted, and its default Size will
+    Acc.                                             %be the rest of the binary that you are matching against.
 ```
 
 Or, if you want to be explicit about the Size *and* the Type:
 
 ```erlang
-reverse(Bin) ->
-    reverse(Bin, <<>>).
-reverse(<<X:8/integer, Rest/binary>>, Acc) ->
-    reverse(Rest, <<X:8/integer, Acc/binary>>);
-reverse(<<>>, Acc) ->
+reverse_bytes(Bin) ->
+    reverse_bytes(Bin, <<>>).
+reverse_bytes(<<X:8/integer, Rest/binary>>, Acc) ->
+    reverse_bytes(Rest, <<X:8/integer, Acc/binary>>);
+reverse_bytes(<<>>, Acc) ->
     Acc.
 ```
 
@@ -89,13 +90,13 @@ In the shell:
 10> c(bin).
 {ok,bin}
 
-11> bin:reverse(<<1, 2, 3, 4>>).
+11> bin:reverse_bytes(<<1, 2, 3, 4>>).
 <<4,3,2,1>>
 
-12> bin:reverse(<<>>).
+12> bin:reverse_bytes(<<>>).
 <<>>
 
-13> bin:reverse(<<97, 98, 99>>).
+13> bin:reverse_bytes(<<97, 98, 99>>).
 <<"cba">>
 ```
 
