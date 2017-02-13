@@ -30,7 +30,7 @@ In the shell:
 51> bin:term_to_packet([1, 2, 3]).
 <<120,54,176,0,48,16,32,3:4>>
 ```
-Well, the output is totally incomprehensible because erlang took the 4 bits we used for the size of the Term, then erlang took 4 bits from the first byte of the binary for the Term to form a new byte 120; then erlang took the remaining 4 bits of the first byte and added them to 4 bits from the second byte of binary for the Term to form another full byte, 54; etc.; etc.; then there were 4 bits left over at the end of the binary, with the integer 3 in them.  All in all, `term_to_packet()`'s output is incomprehensible.
+Well, the output is totally incomprehensible because erlang took the 4 bits we used for the size of the Term, then erlang took 4 bits from the first byte of the binary representing the Term to form a new byte 120; then erlang took the remaining 4 bits of the first byte and added them to 4 bits from the second byte of the binary representing the Term to form another full byte, 54; etc.; etc.; then there were 4 bits left over at the end of the binary, with the integer 3 in them.  All in all, `term_to_packet()`'s output is incomprehensible.
 
 Let's remove the the first 4 bits of the result, then see what we have:
 
