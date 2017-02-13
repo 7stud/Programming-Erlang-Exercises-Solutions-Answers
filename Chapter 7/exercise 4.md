@@ -19,5 +19,4 @@ tests() ->
     Term2 = packet_to_term(term_to_packet(<<97, 98, 99>>)),
 
     tests_passed.
-
 ```
