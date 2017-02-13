@@ -41,7 +41,7 @@ ok
 23> Rest.
 <<"bcd">>
 ```
-Note that the Size is specified in bits, but the total size of a segment is actually `Size * units`, and for the binary Type the default for units is 8, so the total size of X is `1*8 = 8 bits` (the default for units for the other Types is 1).  In other words, for the binary type the Size is the number of *bytes* for the segment, and for the other types the Size is the number of *bits*.
+Note that the Size is specified in bits, but the total size of a segment is actually `Size * unit`, and for the binary Type the default for `unit` is 8, so the total size of X is `1*8 = 8 bits` (the default for `unit` for the other Types is 1).  In other words, for the binary type the Size is the number of *bytes* for the segment, and for the other types the Size is the number of *bits*.
 
 Now, for the exercise:
 
@@ -68,7 +68,7 @@ reverse_list([], Acc) ->
     Acc.
 ```
 
-The default Type for a segment in a binary is `integer`, and the default Size for integer is 8 bits, so the example above is equivalent to:
+The default Type for a segment is `integer`, and the default Size for `integer` is 8 bits, so the example above is equivalent to:
 
 ```erlang
 reverse_bytes(Bin) ->
