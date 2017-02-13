@@ -55,4 +55,4 @@ ok
 <<131,107,0,3,1,2,3>>
 ```
 
-Rest is the return value of `term_to_binary()` that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove the first 4 bytes, and the rest of the binary is the binary representing the Term.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the binary for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
+Rest is the return value of `term_to_binary()` that we stored in our *packet*.  In this case, it doesn't even matter what the number N is: we can just remove the first 4 bytes, and the rest of the binary is the binary representing the Term.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the binary for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
