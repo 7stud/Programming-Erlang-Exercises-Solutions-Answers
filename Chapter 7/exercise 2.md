@@ -8,11 +8,13 @@ It took me many rereadings to figure out what this exercise was asking us to do.
 <<131,107,0,6,1,2,3,4,5,6>>
 ```
 
-The return value of `term_to binary()` is longer when there are more items in the list.  I originally interpreted the exercise to mean that we should store 4 in a header, then add 4 bytes to binary from the return value of `term_to_binary()`, which would effectively chop off some of the return value for a long enough list.  But the exercise description really means:
+The return value of `term_to binary()` is longer when there are more items in the list.  I originally interpreted the exercise to mean that we should store 4 in the first part of the binary, then add 4 bytes to the binary from the return value of `term_to_binary()`, which would effectively chop off some of the return value for a long enough list.  
+
+But the exercise description really means:
 
 > ...return a binary consisting of a 4-byte header *containing a number N*, followed by N bytes of data...
 
-In other words, get the number of bytes in the binary returned by `term_to_binary()`, put that size into 4 bits of a binary, then add the return value of `term_to_binary()` to the binary.  Effectively, the first 4 bits will tell you how many bytes contain the data.
+In other words, get the number of bytes of the binary returned by `term_to_binary()`, put that size into 4 bits of a result binary, then add the return value of `term_to_binary()` to the result binary.  Effectively, the first 4 bits will tell you how many bytes contain the data that follows.
 
 Here's my solution:
 ```
@@ -48,4 +50,4 @@ Let's remove the the first 4 bits of the result, then see what we have:
 <<131,107,0,3,1,2,3>>
 ```
 
-...and Rest is the data from `term_to_binary()` that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is our data.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the data for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
+...and Rest is the return value of `term_to_binary()` that we stored in our binary.  In this case, it doesn't even matter what the number N is: we can just remove it, and the rest of the binary is the binary representing the Term.  But, imagine if several packets were combined into one binary.  In that case, you would need to know how many bytes to read in order to get the data for one Term.  Note that the size N, which is 7, matches the number of the bytes in the binary Rest--as the exercise calls for.
