@@ -12,7 +12,7 @@ The return value of `term_to binary()` is longer when there are more items in th
 
 > ...return a binary consisting of a 4-byte header *containing a number N*, followed by N bytes of data...
 
-In other words, get the number of bytes in the binary returned by `term_to_binary()`, put that size into 4 bytes of a binary, then add the return value of `term_to_binary()` to the binary.  Effectively, the first 4 bytes tell you how many bytes contain the data.
+In other words, get the number of bytes in the binary returned by `term_to_binary()`, put that size into 4 bits of a binary, then add the return value of `term_to_binary()` to the binary.  Effectively, the first 4 bits tell you how many bytes contain the data.
 
 Here's my solution:
 ```
