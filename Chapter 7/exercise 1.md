@@ -53,6 +53,16 @@ reverse(<<>>, Acc) ->
     Acc.
 ```
 
+Compare that to reversing a list:
+```erlang
+reverse_list(List) ->
+    reverse_list(List, []).
+reverse_list([X|Rest], Acc) ->
+    reverse_list(Rest, [X|Acc]);
+reverse_list([], Acc) ->
+    Acc.
+```
+
 The default Type for a segment in a binary is `integer`, so the example above is equivalent to:
 ```erlang
 reverse(Bin) ->
