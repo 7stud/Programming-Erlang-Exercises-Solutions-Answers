@@ -2,6 +2,7 @@
 
 reverse_bits(Bin) ->
     reverse_bits(Bin, <<>>).
+    
 reverse_bits(<<X:1, Rest/bitstring>>, Acc) ->
     reverse_bits(Rest, << X:1, Acc/bitstring >>);
 reverse_bits(<<>>, Acc) ->
