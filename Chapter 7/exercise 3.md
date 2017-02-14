@@ -1,6 +1,6 @@
 ```erlang
 packet_to_term(Bin) ->
-    <<Len:4/unit:8, TermBin:Len/binary, _Rest/binary>> = Bin,
+    <<Size:4/unit:8, TermBin:Size/binary, _Rest/binary>> = Bin,
     binary_to_term(TermBin).
 ```
 
