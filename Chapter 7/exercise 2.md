@@ -25,7 +25,7 @@ term_to_packet(Term) ->
                                  %and unit is 8, so the total size is: 4 * 8 = 32 bits. The pattern 
                                  %also could have been written as <<N:32, Bin/binary>> because
                                  %the default type of a segment is integer, and the default unit 
-                                 %for the integer Type is 1.
+                                 %for the integer Type is 1, so total size is: 32 * 1 = 32 bits.
 ```
 
 In the shell:
