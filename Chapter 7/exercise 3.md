@@ -4,7 +4,7 @@ packet_to_term(Bin) ->
     binary_to_term(TermBin).
 ```
 
-This exercise demonstrates the important point that we can match a value (Len), then use the value as a Size later in the pattern (Ahem!  What happened to maps in this regard?)
+This exercise demonstrates the important point that we can match a value (Len), then use that value as a Size later in the pattern (Ahem!  What happened to maps in this regard?)
 
 In the shell:
 ```erlang
