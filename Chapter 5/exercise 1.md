@@ -45,7 +45,7 @@ In the shell:
 
 Oh boy, dealing with binaries without them having been introduced in the book yet.  Well, they look like strings with `<<` and `>>` around them, e.g. `<<"hello">>`.
 
-Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start out with an easier configuration file:
+Figuring out how to do a sanity check on nested json seemed too difficult to me, so I thought I would start with an easier configuration file:
 
 ```javascript
 {
