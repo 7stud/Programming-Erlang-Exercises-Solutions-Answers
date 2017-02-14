@@ -23,11 +23,11 @@ term_to_packet(Term) ->
     N = byte_size(Bin),
     <<N:4/unit:8, Bin/binary>>.  
 ```
-The total size of a segment is: Size * unit.  Here Size is 4, and unit is 8, so the total size is: 4 * 8 = 32 bits. The pattern also could have been written as:
+The total size of a segment is: `Size * unit`.  Here Size is 4, and unit is 8, so the total size is: `4 * 8 = 32 bits`. The pattern also could have been written as:
 
     <<N:32, Bin/binary>> 
     
-because the default type of a segment is integer, and the default unit for the integer Type is 1, so total size is: 32 * 1 = 32 bits.
+because the default type of a segment is integer, and the default unit for the integer Type is 1, so total size is: `32 * 1 = 32 bits`.
 
 In the shell:
 ```erlang
