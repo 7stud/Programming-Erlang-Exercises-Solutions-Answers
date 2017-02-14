@@ -14,34 +14,34 @@ is:
 
 Here's an example in the shell:
 ```erlang
-15> f().                                     
+73> f().
 ok
 
-16> <<X, Rest/binary>> = <<97, 98, 99, 100>>.
-<<"abcd">>
+74> <<X, Rest/binary>> = <<6, 3, 9, 2>>.     
+<<6,3,9,2>>
 
-17> X.
-97
+75> X.
+6
 
-18> Rest.
-<<"bcd">>
+76> Rest.
+<<3,9,2>>
 ```
 
 Or, you could do this:
 ```erlang
-20> f().
+77> f().
 ok
 
-21> <<X:1/binary, Rest/binary>> = <<97, 98, 99, 100>>.
-<<"abcd">>
+78> <<X:1/binary, Rest/binary>> = <<6, 3, 9, 2>>.     
+<<6,3,9,2>>
 
-22> X.
-<<"a">>
+79> X.
+<<6>>
 
-23> Rest.
-<<"bcd">>
+80> Rest.
+<<3,9,2>>
 ```
-Note that the Size is specified in bits, but the total size of a segment is actually `Size * unit`, and for the binary Type the default for `unit` is 8, so the total size of X is `1*8 = 8 bits` (the default value for `unit` for the other Types is 1).  In other words, for the binary type the Size is the number of *bytes* for the segment, and for the other types the Size is the number of *bits*.
+Note that Size is specified in bits, but the total size of a segment is actually `Size * unit`, and for the binary Type the default for `unit` is 8, so the total size of X is `1*8 = 8 bits` (the default value for `unit` for the other Types is 1).  In other words, for the binary type the Size is the number of *bytes* for the segment, and for the other types the Size is the number of *bits*.
 
 Now, for the exercise:
 
