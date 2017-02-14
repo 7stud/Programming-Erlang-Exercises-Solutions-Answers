@@ -101,4 +101,4 @@ In the shell:
 "There was an error: a"
 ```
 
-See the top of the page for the output to the log file.
+See the top of this page for the output to the log file.
