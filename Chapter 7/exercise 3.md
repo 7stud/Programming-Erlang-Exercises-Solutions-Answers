@@ -1,10 +1,10 @@
 ```erlang
 packet_to_term(Bin) ->
-    <<Size:4/unit:8, TermBin:Size/binary, _Rest/binary>> = Bin,
+    <<Len:4/unit:8, TermBin:Len/binary, _Rest/binary>> = Bin,
     binary_to_term(TermBin).
 ```
 
-This exercise demonstrates the important point that we can match a Size, then use the match later in the pattern (Ahem!  What happened to maps in this regard?)
+This exercise demonstrates the important point that we can match a value (Len), then use the value as a Size later in the pattern (Ahem!  What happened to maps in this regard?)
 
 In the shell:
 ```erlang
