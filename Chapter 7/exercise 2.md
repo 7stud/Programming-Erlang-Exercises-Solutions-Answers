@@ -21,7 +21,9 @@ Here's my solution:
 term_to_packet(Term) ->
     Bin = term_to_binary(Term),
     N = byte_size(Bin),
-    <<N:4/unit:8, Bin/binary>>.  
+    <<N:4/unit:8, Bin/binary>>.  %The total size of a segment is: Size * unit.  Here Size is 4, and unit is 8.
+                                 %The pattern also could have been written as to <<N:32, Bin/binary>>. The default
+                                 %type of a segment is integer and the default unit for the integer Type is 1.
 ```
 
 In the shell:
