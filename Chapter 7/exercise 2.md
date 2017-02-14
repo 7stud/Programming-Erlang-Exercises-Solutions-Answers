@@ -14,7 +14,7 @@ But the exercise description really means:
 
 > ...return a binary consisting of a 4-byte header *containing a number N*, followed by N bytes of data...
 
-In other words, the exercise wants us to get the number of bytes of the binary returned by `term_to_binary()`, put that number into 4 bytes of a result binary, then add the return value of `term_to_binary()` to the result binary.  That way, the first 4 bytes will tell you how many bytes contain the Term that follows.
+In other words, the exercise wants us to get the number of bytes of the binary returned by `term_to_binary()`, put that number into 4 bytes of a result binary, then add the return value of `term_to_binary()` to the result binary.  That way, the first 4 bytes will tell you how many bytes contain the data that follows.
 
 Here's my solution:
 ```erlang
