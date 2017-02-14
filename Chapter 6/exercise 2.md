@@ -100,3 +100,5 @@ In the shell:
 88> e:demo3().
 "There was an error: a"
 ```
+
+See the top of the page for the output to the log file.
