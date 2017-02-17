@@ -28,6 +28,8 @@ most_exports([], MaxMap) ->
     {Max, Module}.
 
   ```
+In case there's a tie, I used a list for the module name in the MaxMap.  The middle if-clause handles a tie.
+
 
 In the shell:
 ```erlang
