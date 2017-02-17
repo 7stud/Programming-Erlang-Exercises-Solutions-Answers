@@ -11,11 +11,11 @@ most_exports([{Module, _} | Modules], MaxMap) ->
     ExportCount = length( Module:module_info(exports) ),
 
     if 
-        ExportCount > Max ->    %then replace count and name list in the map...
+        ExportCount > Max ->    %then replace func_count and module list in the map...
             NewMaxMap = MaxMap#{func_count := ExportCount, module := [Module]},
             most_exports(Modules, NewMaxMap);
 
-        ExportCount =:= Max ->  %then add the Module to the name list in the map...
+        ExportCount =:= Max ->  %then add the Module to the module list in the map...
             ModuleList = maps:get(module, MaxMap),
             NewMaxMap = MaxMap#{module := [Module|ModuleList]},
             most_exports(Modules, NewMaxMap);
