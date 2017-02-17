@@ -4,29 +4,29 @@ I'm still hooked on maps! Which module exports the most functions:
 -compile(export_all).
 
 most_exports(Modules) ->
-    count_exports(Modules, #{count => 0, name => []} ).
+    most_exports(Modules, #{count => 0, name => []} ).
 
-count_exports([{Module, _} | Modules], MaxCount) ->
+most_exports([{Module, _} | Modules], MaxCount) ->
     #{count := Max} = MaxCount,  %I wonder which is faster: maps:get() or pattern matching?  You should be able to write: MaxCount#{count}
     ModCount = length( Module:module_info(exports) ),
 
     if 
-        ModCount > Max ->  %then replace count and name list in the map...
+        ModCount > Max ->    %then replace count and name list in the map...
             NewMaxCount = MaxCount#{count := ModCount, name := [Module]},
-            count_exports(Modules, NewMaxCount);
+            most_exports(Modules, NewMaxCount);
         ModCount =:= Max ->  %then add the Module to the name list in the map...
             NameList = maps:get(name, MaxCount),
             NewMaxCount = MaxCount#{
                 name := [Module|NameList]
             },
-            count_exports(Modules, NewMaxCount);
-        ModCount < Max ->  %then do nothing to the map...
-            count_exports(Modules, MaxCount)
+            most_exports(Modules, NewMaxCount);
+        ModCount < Max ->    %then do nothing to the map...
+            most_exports(Modules, MaxCount)
     end;
-count_exports([], MaxCount) ->
+most_exports([], MaxCount) ->
     #{count := Max, name := Names} = MaxCount,
     {Max, Names}.
-```
+  ```
 
 In the shell:
 ```erlang
