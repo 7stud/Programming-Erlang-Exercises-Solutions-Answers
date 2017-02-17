@@ -1,4 +1,4 @@
-Which module exports the most functions?
+--Which module exports the most functions?
 ```erlang
 -module(my).
 -compile(export_all).
@@ -62,7 +62,7 @@ In the shell:
 {310,[erlang]}
 ```
 
-What is the most common function name that is exported?
+--What is the most common function name that is exported?
 ```erlang
 -module(my).
 -compile(export_all).
@@ -114,3 +114,43 @@ most_cmn_export([], CountMap) ->
     )).
 ```
 Sorting seems like it would be less efficient, so I avoided it in my original answer.
+
+--Which functions are unique?
+
+I need the same CountMap produced by the previous code.  Rather then repeating the code to construct the CountMap, I decided to refactor the previous solution, so that I could use the part that constructs the CountMap in this solution:
+
+```erlang
+most_cmn_export(Modules) ->
+    CountMap = get_count_map(Modules, #{}),
+    CountList = maps:to_list(CountMap),
+    get_max(CountList, #{count => 0, name => []}).
+
+get_count_map([ {Module, _} | Modules ], CountMap) ->
+    Exports = Module:module_info(exports),
+    NewCountMap = add_names(Exports, CountMap),
+    get_count_map(Modules, NewCountMap);
+get_count_map([], CountMap) ->
+    %io:format("~p~n", [CountMap]),
+    %get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
+    CountMap.
+
+...
+...
+...
+```
+
+Now, here's the solution for getting the uniques:
+```erlang
+unique(Modules) ->
+    CountMap = get_count_map(Modules, #{}),
+    Uniques = maps:filter(
+      fun(_Name, Count) -> Count =:= 1 end,
+      CountMap
+    ),
+    maps:keys(Uniques).
+ ```
+
+
+
+
+
