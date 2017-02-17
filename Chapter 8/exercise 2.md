@@ -62,7 +62,7 @@ In the shell:
 {310,[erlang]}
 ```
 
-What is the most commone function name that is exported?
+What is the most common function name that is exported?
 ```erlang
 -module(my).
 -compile(export_all).
