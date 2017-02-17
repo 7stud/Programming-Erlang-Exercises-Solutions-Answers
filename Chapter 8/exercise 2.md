@@ -7,7 +7,7 @@ most_exports(Modules) ->
     count_exports(Modules, #{count => 0, name => []} ).
 
 count_exports([{Module, _} | Modules], MaxCount) ->
-    #{count := Max} = MaxCount,  %I wonder which is faster: maps:get() or pattern matching?  You should be able to write MaxCount#{count}
+    #{count := Max} = MaxCount,  %I wonder which is faster: maps:get() or pattern matching?  You should be able to write: MaxCount#{count}
     ModCount = length( Module:module_info(exports) ),
 
     if 
