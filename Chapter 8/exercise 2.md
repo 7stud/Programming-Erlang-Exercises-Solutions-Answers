@@ -113,4 +113,4 @@ most_cmn_export([], CountMap) ->
       maps:to_list(CountMap)
     )).
 ```
-Sorting seems like it would be less efficient, so I avoided sorting.
+Sorting seems like it would be less efficient, so I avoided it in my original answer.
