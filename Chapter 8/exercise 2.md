@@ -11,16 +11,16 @@ count_exports([{Module, _} | Modules], MaxCount) ->
     ModCount = length( Module:module_info(exports) ),
 
     if 
-        ModCount > Max ->  %then replace count and name list...
+        ModCount > Max ->  %then replace count and name list in the map...
             NewMaxCount = MaxCount#{count := ModCount, name := [Module]},
             count_exports(Modules, NewMaxCount);
-        ModCount =:= Max ->  %then add the Module to the name list...
+        ModCount =:= Max ->  %then add the Module to the name list in the map...
             NameList = maps:get(name, MaxCount),
             NewMaxCount = MaxCount#{
                 name := [Module|NameList]
             },
             count_exports(Modules, NewMaxCount);
-        ModCount < Max ->  %then do nothing...
+        ModCount < Max ->  %then do nothing to the map...
             count_exports(Modules, MaxCount)
     end;
 count_exports([], MaxCount) ->
