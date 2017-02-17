@@ -1,4 +1,4 @@
-I'm still hooked on maps! Which module exports the most functions?
+Which module exports the most functions?
 ```erlang
 -module(my).
 -compile(export_all).
