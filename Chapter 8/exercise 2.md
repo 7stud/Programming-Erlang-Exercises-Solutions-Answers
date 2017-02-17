@@ -61,3 +61,47 @@ In the shell:
 158> my:most_exports(code:all_loaded()).
 {310,[erlang]}
 ```
+
+What is the most commone function name that is exported?
+```erlang
+-module(my).
+-compile(export_all).
+
+most_cmn_export(Modules) ->
+    most_cmn_export(Modules, #{}).
+
+most_cmn_export([ {Module, _} | Modules ], CountMap) ->
+    Exports = Module:module_info(exports),
+    NewCountMap = add_names(Exports, CountMap),
+    most_cmn_export(Modules, NewCountMap);
+most_cmn_export([], CountMap) ->
+    %io:format("~p~n", [CountMap]),
+    get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
+    
+add_names([{Func, _}|Funcs], CountMap) ->
+    Count = maps:get(Func, CountMap, 0),
+    NewCountMap = CountMap#{Func => Count+1},
+    add_names(Funcs, NewCountMap);
+add_names([], CountMap) ->
+    CountMap.
+
+
+get_max([ {Name, Count} | Tuples ], CountMap) ->
+    Max = maps:get(count, CountMap),
+
+    if
+        Count > Max -> 
+            get_max(Tuples, CountMap#{count := Count, name := Name} );
+
+        Count =:= Max ->
+            Name = maps:get(name, CountMap),
+            get_max(Tuples, CountMap#{name := [Name|name]} );
+
+        Count < Max ->
+            get_max(Tuples, CountMap)
+    end;
+get_max([], CountMap) ->
+    #{count := Max, name := Name} = CountMap,
+    {Max, Name}.
+```
+
