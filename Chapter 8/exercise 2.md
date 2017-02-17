@@ -117,7 +117,7 @@ Sorting seems like it would be less efficient, so I avoided it in my original an
 
 --**Which functions are unique?**
 
-I need the same CountMap produced by the previous code.  Rather then repeating the code to construct the CountMap, I decided to refactor the previous solution, so that I could use the part that constructs the CountMap in this solution:
+I needed the same CountMap produced by the previous code.  Rather then repeating the code to construct the CountMap in this solution, I decided to refactor the previous solution, so that I could use the part that constructs the CountMap in this solution:
 
 ```erlang
 most_cmn_export(Modules) ->
