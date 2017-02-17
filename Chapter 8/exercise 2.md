@@ -150,6 +150,16 @@ unique_funcs(Modules) ->
     maps:keys(Uniques).
 
  ```
+ 
+ Or, with a list comprehension:
+ ```erlang
+ unique_funcs(Modules) ->
+    [
+      Name || {Name, Count} <- maps:to_list( get_count_map(Modules, #{}) ),
+      Count =:= 1
+    ].
+ ``
+
 
 
 
