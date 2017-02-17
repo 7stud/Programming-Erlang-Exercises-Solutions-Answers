@@ -17,9 +17,7 @@ most_exports([{Module, _} | Modules], MaxCount) ->
 
         ExportCount =:= Max ->  %then add the Module to the name list in the map...
             NameList = maps:get(name, MaxCount),
-            NewMaxCount = MaxCount#{
-                name := [Module|NameList]
-            },
+            NewMaxCount = MaxCount#{name := [Module|NameList]},
             most_exports(Modules, NewMaxCount);
 
         ExportCount < Max ->    %then do nothing to the map...
