@@ -11,4 +11,4 @@ info(ModName) ->
     length(Exports).
 ```
 
-What's a dict?  Apparently, maps are supposed to replace dicts, with the benefit of the option to use native syntax instead of function calls, e.g. `M1#{key := 10}` v. `dict:store(key, 10, M1)`.
+What's a dict?  Apparently, maps are supposed to replace dicts, with the benefit of native syntax instead of function calls, e.g. `M1#{key := 10}` v. `dict:store(key, 10, M1)`.
