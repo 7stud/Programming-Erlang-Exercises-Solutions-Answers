@@ -139,15 +139,16 @@ get_count_map([], CountMap) ->
 ...
 ```
 
-Now, here's the solution for getting the uniques:
+Now, here's the solution for getting the unique functions in the specified modules:
 ```erlang
-unique(Modules) ->
+unique_funcs(Modules) ->
     CountMap = get_count_map(Modules, #{}),
     Uniques = maps:filter(
       fun(_Name, Count) -> Count =:= 1 end,
       CountMap
     ),
     maps:keys(Uniques).
+
  ```
 
 
