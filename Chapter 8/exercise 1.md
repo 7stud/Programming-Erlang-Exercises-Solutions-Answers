@@ -11,4 +11,4 @@ export_count(ModName) ->
 
 ```
 
-What's a dict?  Apparently, maps are supposed to replace dicts, with the benefit of being able to use native syntax instead of function calls, e.g. `M1#{key := 10}` v. `dict:store(key, 10, M1)`.
+What's a dict?  Apparently, maps are supposed to replace dicts, with the benefit of being able to use native syntax instead of function calls, e.g. `M2 = M1#{key := 10}` v. `D2 = dict:store(key, 10, D1)`.
