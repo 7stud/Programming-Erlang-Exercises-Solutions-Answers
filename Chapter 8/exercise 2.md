@@ -151,14 +151,14 @@ unique_funcs(Modules) ->
 
  ```
  
- Or, with a list comprehension:
+ Or, using a list comprehension:
  ```erlang
  unique_funcs(Modules) ->
     [
       Name || {Name, Count} <- maps:to_list( get_count_map(Modules, #{}) ),
       Count =:= 1
     ].
- ``
+ ```
 
 
 
