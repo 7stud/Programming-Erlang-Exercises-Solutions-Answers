@@ -59,7 +59,6 @@ In the shell:
 157> mod1:module_info(exports).
 [{t1,0},{t2,0},{t3,0},{module_info,0},{module_info,1}]   %Ah, I remember the chapter mentioning this-- 
                                                          %it's at the top of p. 120.
-
 158> my:most_exports(code:all_loaded()).
 {310,[erlang]}
 ```
