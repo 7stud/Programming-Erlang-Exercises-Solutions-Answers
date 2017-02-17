@@ -4,29 +4,28 @@
 -compile(export_all).
 
 most_exports(Modules) ->
-    most_exports(Modules, #{count => 0, name => []} ).
+    most_exports(Modules, #{func_count => 0, module => []} ).
 
 most_exports([{Module, _} | Modules], MaxMap) ->
-    #{count := Max} = MaxMap,  %I wonder which is faster: maps:get() or pattern matching?  You should be able to write: MaxMap#{count}
+    #{func_count := Max} = MaxMap,  %I wonder which is faster: maps:get() or pattern matching?  You should be able to write: MaxMap#{count}
     ExportCount = length( Module:module_info(exports) ),
 
     if 
         ExportCount > Max ->    %then replace count and name list in the map...
-            NewMaxMap = MaxMap#{count := ExportCount, name := [Module]},
+            NewMaxMap = MaxMap#{func_count := ExportCount, module := [Module]},
             most_exports(Modules, NewMaxMap);
 
         ExportCount =:= Max ->  %then add the Module to the name list in the map...
-            NameList = maps:get(name, MaxMap),
-            NewMaxMap = MaxMap#{name := [Module|NameList]},
+            ModuleList = maps:get(module, MaxMap),
+            NewMaxMap = MaxMap#{module := [Module|ModuleList]},
             most_exports(Modules, NewMaxMap);
 
         ExportCount < Max ->    %then do nothing to the map...
             most_exports(Modules, MaxMap)
     end;
 most_exports([], MaxMap) ->
-    #{count := Max, name := Names} = MaxMap,
-    {Max, Names}.
-            
+    #{func_count := Max, module := Module} = MaxMap,
+    {Max, Module}.
 
   ```
 
@@ -59,7 +58,7 @@ In the shell:
 [{t1,0},{t2,0},{t3,0},{module_info,0},{module_info,1}]   %Ah, I remember the chapter mentioning this-- 
                                                          %it's at the top of p. 120.
 158> my:most_exports(code:all_loaded()).
-{310,[erlang]}
+{325,[erlang]}
 ```
 
 --**What is the most common function name that is exported?**
