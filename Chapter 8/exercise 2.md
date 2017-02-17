@@ -1,4 +1,4 @@
---Which module exports the most functions?
+--**Which module exports the most functions?**
 ```erlang
 -module(my).
 -compile(export_all).
@@ -62,7 +62,7 @@ In the shell:
 {310,[erlang]}
 ```
 
---What is the most common function name that is exported?
+--**What is the most common function name that is exported?**
 ```erlang
 -module(my).
 -compile(export_all).
@@ -115,7 +115,7 @@ most_cmn_export([], CountMap) ->
 ```
 Sorting seems like it would be less efficient, so I avoided it in my original answer.
 
---Which functions are unique?
+--**Which functions are unique?**
 
 I need the same CountMap produced by the previous code.  Rather then repeating the code to construct the CountMap, I decided to refactor the previous solution, so that I could use the part that constructs the CountMap in this solution:
 
