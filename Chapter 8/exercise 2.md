@@ -50,7 +50,7 @@ In the shell:
 %t2() -> b.
 %t3() -> c.
 
-156> my:most_exports([{mod1, blah}, {mod2, blah}]).
+156> my:most_exports([{mod1, blah}, {mod2, bleh}]).
 {5,[mod2,mod1]}   % Five?
 
 157> mod1:module_info(exports).
