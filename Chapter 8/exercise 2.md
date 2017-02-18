@@ -106,7 +106,7 @@ get_max([], CountMap) ->
     {Max, Name}.
 ```
 
-That if-expression is very similar to the if-expression that I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I can call that function again in this solution. Here's what I came up with:
+That if-expression is very similar to the if-expression that I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
 
 ```erlang
 update(MaxMap, NewItem, NewItemCount) ->
@@ -159,6 +159,7 @@ update(MaxMap, NewItem, NewItemCount) ->
 ```    
 
 Now, I can employ the `update()` function in this solution:
+
 ```erlang
 -module(my).
 -compile(export_all).
