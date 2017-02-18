@@ -225,7 +225,7 @@ get_max([], MaxMap) ->
 
 ```
 
-Here's an alternative implementation of the base case:
+Here's an alternative implementation for the base case:
 ```erlang
 most_cmn_export([], CountMap) ->
     lists:nth(1, lists:sort(
