@@ -65,48 +65,80 @@ In the shell:
 
 --**What is the most common function name that is exported?**
 ```erlang
--module(my).
+-module(test).
 -compile(export_all).
 
 most_cmn_export(Modules) ->
     most_cmn_export(Modules, #{}).
 
-most_cmn_export([ {Module, _} | Modules ], CountMap) ->
-    Exports = Module:module_info(exports),
-    NewCountMap = add_names(Exports, CountMap),
-    most_cmn_export(Modules, NewCountMap);
-most_cmn_export([], CountMap) ->
+most_cmn_export([ {Module, _} | Modules ], FuncCountMap) ->
+    FuncNames = Module:module_info(exports),
+    NewFuncCountMap = add_names(FuncNames, FuncCountMap),
+    most_cmn_export(Modules, NewFuncCountMap);
+most_cmn_export([], FuncCountMap) ->
     %io:format("~p~n", [CountMap]),
-    get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
-    
-add_names([{Func, _}|Funcs], CountMap) ->
-    Count = maps:get(Func, CountMap, 0),
-    NewCountMap = CountMap#{Func => Count+1},
-    add_names(Funcs, NewCountMap);
-add_names([], CountMap) ->
-    CountMap.
+    get_max(maps:to_list(FuncCountMap), #{count => 0, func_name => []} ).
+
+add_names([FuncName|FuncNames], FuncCountMap) ->
+    Count = maps:get(FuncName, FuncCountMap, 0),
+    NewFuncCountMap = FuncCountMap#{FuncName => Count+1},
+    add_names(FuncNames, NewFuncCountMap);
+add_names([], FuncCountMap) ->
+    FuncCountMap.
 
 
-get_max([ {Name, Count} | Tuples ], CountMap) ->
-    Max = maps:get(count, CountMap),
+get_max([ {FuncName, FuncCount} | Tail ], MaxMap) ->
+    Max = maps:get(count, MaxMap),
 
     if
-        Count > Max -> 
-            get_max(Tuples, CountMap#{count := Count, name := Name} );
+        FuncCount > Max -> 
+            get_max(Tail, MaxMap#{count := FuncCount, func_name := [FuncName]} );
 
-        Count =:= Max ->
-            Name = maps:get(name, CountMap),
-            get_max(Tuples, CountMap#{name := [Name|name]} );
+        FuncCount =:= Max ->
+            FuncNameList = maps:get(func_name, MaxMap),
+            get_max(Tail, MaxMap#{func_name := [FuncName|FuncNameList]} );
 
-        Count < Max ->
-            get_max(Tuples, CountMap)
+        FuncCount < Max ->
+            get_max(Tail, MaxMap)
     end;
-get_max([], CountMap) ->
-    #{count := Max, name := Name} = CountMap,
-    {Max, Name}.
+get_max([], MaxMap) ->
+    #{count := Max, func_name := FuncName} = MaxMap,
+    {Max, FuncName}.
 ```
 
-That if-expression is very similar to the if-expression that I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
+In the shell:
+```erlang
+1> c(test).
+{ok,test}
+
+2> c(mod1).
+{ok,mod1}
+
+%-module(mod1).
+%-compile(export_all).
+%
+%t1() -> hello.
+%t2() -> goodbye.
+%t3() -> world.
+
+3> c(mod2).
+{ok,mod2}
+
+%-module(mod2).
+%-compile(export_all).
+%
+%t1() -> a.
+%t2() -> b.
+%t3() -> c.
+
+4> test:most_cmn_export([{mod1, blah}, {mod2, bleh}]).
+{2,[{t3,0},{t2,0},{t1,0},{module_info,1},{module_info,0}]}
+
+5> test:most_cmn_export(code:all_loaded()). 
+{122,[{module_info,1},{module_info,0}]}
+```
+
+The if-expression in this solution is very similar to the if-expression in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
 
 ```erlang
 update(MaxMap, NewItem, NewItemCount) ->
@@ -124,7 +156,7 @@ update(MaxMap, NewItem, NewItemCount) ->
             MaxMap
     end.
 ```
-The ```update()``` function requires that my MaxMap's use the same generic keys: count and item.  Here's the previous solution refactored to use the ```update()``` function:
+The ```update()``` function requires that a MaxMap use the generic keys: count and item.  Here's the previous solution refactored to use the ```update()``` function:
 
 ```erlang
 -module(my).
