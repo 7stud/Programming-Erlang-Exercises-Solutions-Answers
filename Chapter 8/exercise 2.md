@@ -40,8 +40,8 @@ In the shell:
 %-compile(export_all).
 %
 %t1() -> hello.
-%t2() -> goodbye.
-%t3() -> world.
+%t2() -> world.
+%t3() -> goodbye.
 
 155> c(mod2).
 {ok,mod2}
@@ -127,12 +127,11 @@ In the shell:
 %-module(mod2).
 %-compile(export_all).
 %
-%t1() -> a.
 %t2() -> b.
 %t3() -> c.
 
 4> test:most_cmn_export([{mod1, blah}, {mod2, bleh}]).
-{2,[{t3,0},{t2,0},{t1,0},{module_info,1},{module_info,0}]}
+{2,[{t3,0},{t2,0},{module_info,1},{module_info,0}]}
 
 5> test:most_cmn_export(code:all_loaded()). 
 {122,[{module_info,1},{module_info,0}]}
@@ -253,7 +252,8 @@ In the shell:
 -compile(export_all).
 
 %t1() -> hello.
-%t3() -> world.
+%t2() -> world.
+%t3() -> goodbye.
 
 31> c(mod2).
 {ok,mod2}
@@ -261,12 +261,11 @@ In the shell:
 %-module(mod2).
 %-compile(export_all).
 
-%t1() -> a.
 %t2() -> b.
 %t3() -> c.
 
 32> my:unique_funcs([{mod1, blah}, {mod2, bleh}]).
-[{t2,0}]
+[{t1,0}]
 
 33> my:unique_funcs(code:all_loaded()).           
 [{prim_init,0},
