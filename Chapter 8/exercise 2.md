@@ -208,11 +208,11 @@ create_func_count_map([ {Module, _} | Modules ], FuncCountMap) ->
 create_func_count_map([], FuncCountMap) ->
     %io:format("~p~n", [FuncCountMap]),
     FuncCountMap.
- 
-add_names([{Func, _}|Funcs], FuncCountMap) ->
-    FuncCount = maps:get(Func, FuncCountMap, 0),
-    NewFuncCountMap = FuncCountMap#{Func => FuncCount+1},
-    add_names(Funcs, NewFuncCountMap);
+
+add_names([FuncName|FuncNames], FuncCountMap) ->
+    FuncCount = maps:get(FuncName, FuncCountMap, 0),
+    NewFuncCountMap = FuncCountMap#{FuncName => FuncCount+1},
+    add_names(FuncNames, NewFuncCountMap);
 add_names([], FuncCountMap) ->
     FuncCountMap.
 
@@ -222,6 +222,7 @@ get_max([ {FuncName, FuncCount} | Tuples ], MaxMap) ->
 get_max([], MaxMap) ->
     #{count := Max, item := FuncName} = MaxMap,
     {Max, FuncName}.
+
 
 ```
 
