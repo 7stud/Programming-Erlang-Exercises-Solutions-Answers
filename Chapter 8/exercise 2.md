@@ -225,16 +225,6 @@ get_max([], MaxMap) ->
 
 ```
 
-Here's an alternative implementation for the base case:
-```erlang
-most_cmn_export([], CountMap) ->
-    lists:nth(1, lists:sort(
-      fun(T1, T2) -> element(2, T1) >= element(2, T2) end,
-      maps:to_list(CountMap)
-    )).
-```
-Sorting seems like it would be less efficient--instead of accessing each element one time, sorting requires that you acesss each element many times--so I avoided it in my original answer.
-
 --**Which functions are unique?**
 
 I needed the same CountMap produced by the previous solution.  Rather then repeating the code to construct a CountMap in this solution, I decided to refactor the previous solution so that I could call a function to get the CountMap:
