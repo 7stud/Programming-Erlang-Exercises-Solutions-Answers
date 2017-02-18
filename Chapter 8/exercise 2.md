@@ -106,6 +106,95 @@ get_max([], CountMap) ->
     {Max, Name}.
 ```
 
+That if expression is very similar to the if expression I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
+
+```erlang
+update(MaxMap, NewItem, NewItemCount) ->
+    #{count := CurrentMax} = MaxMap,
+
+    if 
+        NewItemCount > CurrentMax ->    %then replace the count and the item list in the map...
+            MaxMap#{count := NewItemCount, item := [NewItem]};
+
+        NewItemCount =:= CurrentMax ->  %then add the item to the item list in the map...
+            ItemList = maps:get(item, MaxMap),
+            MaxMap#{item := [NewItem|ItemList]};
+
+        NewItemCount < CurrentMax ->    %then do nothing to the map...
+            MaxMap
+    end.
+```
+The ```update()``` function requires that my MaxMap's use the same generic keys: count and item.  Here's the previous solution refactored to use the ```update()``` function:
+
+```erlang
+-module(my).
+-compile(export_all).
+
+most_exports(Modules) ->
+    most_exports(Modules, #{count => 0, item => []} ).
+
+most_exports([{Module, _} | Modules], MaxMap) ->
+    ExportCount = length( Module:module_info(exports) ),
+    NewMaxMap = update(MaxMap, Module, ExportCount),
+    most_exports(Modules, NewMaxMap);
+most_exports([], MaxMap) ->
+    #{count := Max, item := Module} = MaxMap,
+    {Max, Module}.
+
+
+update(MaxMap, NewItem, NewItemCount) ->
+    #{count := CurrentMax} = MaxMap,
+
+    if 
+        NewItemCount > CurrentMax ->    %then replace the count and the item list in the map...
+            MaxMap#{count := NewItemCount, item := [NewItem]};
+
+        NewItemCount =:= CurrentMax ->  %then add the item to the item list in the map...
+            ItemList = maps:get(item, MaxMap),
+            MaxMap#{item := [NewItem|ItemList]};
+
+        NewItemCount < CurrentMax ->    %then do nothing to the map...
+            MaxMap
+    end.
+```    
+
+Now, I can employ the `update()` function in this solution:
+```erlang
+most_cmn_export(Modules) ->
+    FuncCountMap = create_func_count_map(Modules, #{}),
+    FuncCountList = maps:to_list(FuncCountMap),
+    get_max(FuncCountList, #{count => 0, item => []}).
+
+create_func_count_map([ {Module, _} | Modules ], FuncCountMap) ->
+    FuncNames = Module:module_info(exports),
+    NewFuncCountMap = add_names(FuncNames, FuncCountMap),
+    create_func_count_map(Modules, NewFuncCountMap);
+create_func_count_map([], FuncCountMap) ->
+    %io:format("~p~n", [CountMap]),
+    %get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
+    FuncCountMap.
+    
+    %lists:nth(1, lists:sort(
+    %  fun(T1, T2) -> element(2, T1) >= element(2, T2) end,
+    %  maps:to_list(CountMap)
+    %)).
+
+add_names([{Func, _}|Funcs], FuncCountMap) ->
+    FuncCount = maps:get(Func, FuncCountMap, 0),
+    NewFuncCountMap = FuncCountMap#{Func => FuncCount+1},
+    add_names(Funcs, NewFuncCountMap);
+add_names([], FuncCountMap) ->
+    FuncCountMap.
+
+
+get_max([ {FuncName, FuncCount} | Tuples ], MaxMap) ->
+    NewMaxMap = update(MaxMap, FuncName, FuncCount),
+    get_max(Tuples, NewMaxMap);
+get_max([], MaxMap) ->
+    #{count := Max, item := FuncName} = MaxMap,
+    {Max, FuncName}.
+```
+
 Here's an alternative implementation of the base case:
 ```erlang
 most_cmn_export([], CountMap) ->
