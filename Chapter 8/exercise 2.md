@@ -65,7 +65,7 @@ In the shell:
 
 --**What is the most common function name that is exported?**
 ```erlang
--module(test).
+-module(my).
 -compile(export_all).
 
 most_cmn_export(Modules) ->
@@ -104,14 +104,15 @@ get_max([ {FuncName, FuncCount} | Tail ], MaxMap) ->
 get_max([], MaxMap) ->
     #{count := Max, func_name := FuncName} = MaxMap,
     {Max, FuncName}.
+
 ```
 
 In the shell:
 ```erlang
-1> c(test).
-{ok,test}
+54> c(my).
+{ok,my}
 
-2> c(mod1).
+55> c(mod1).
 {ok,mod1}
 
 %-module(mod1).
@@ -121,7 +122,7 @@ In the shell:
 %t2() -> goodbye.
 %t3() -> world.
 
-3> c(mod2).
+56> c(mod2).
 {ok,mod2}
 
 %-module(mod2).
@@ -130,11 +131,11 @@ In the shell:
 %t2() -> b.
 %t3() -> c.
 
-4> test:most_cmn_export([{mod1, blah}, {mod2, bleh}]).
+57> my:most_cmn_export([{mod1, blah}, {mod2, bleh}]).
 {2,[{t3,0},{t2,0},{module_info,1},{module_info,0}]}
 
-5> test:most_cmn_export(code:all_loaded()). 
-{122,[{module_info,1},{module_info,0}]}
+58> my:most_cmn_export(code:all_loaded()).
+{125,[{module_info,1},{module_info,0}]}
 ```
 
 The if-expression in this solution is very similar to the if-expression in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I would be able to call that function again in this solution instead of having to duplicate the code. Here's what I came up with:
