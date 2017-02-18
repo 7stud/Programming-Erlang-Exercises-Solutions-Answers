@@ -227,45 +227,64 @@ get_max([], MaxMap) ->
 
 --**Which functions are unique?**
 
-I needed the same CountMap produced by the previous solution.  Rather then repeating the code to construct a CountMap in this solution, I decided to refactor the previous solution so that I could call a function to get the CountMap:
-
 ```erlang
-most_cmn_export(Modules) ->
-    CountMap = get_count_map(Modules, #{}),
-    CountList = maps:to_list(CountMap),
-    get_max(CountList, #{count => 0, name => []}).
+-module(my).
+-compile(export_all).
 
-get_count_map([ {Module, _} | Modules ], CountMap) ->
-    Exports = Module:module_info(exports),
-    NewCountMap = add_names(Exports, CountMap),
-    get_count_map(Modules, NewCountMap);
-get_count_map([], CountMap) ->
-    %io:format("~p~n", [CountMap]),
-    %get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
-    CountMap.
-
-...
-...
-...
-```
-
-Now, here's the solution for getting the unique functions in the specified modules:
-```erlang
 unique_funcs(Modules) ->
-    CountMap = get_count_map(Modules, #{}),
+    FuncCountMap = create_func_count_map(Modules, #{}),
     Uniques = maps:filter(
-      fun(_Name, Count) -> Count =:= 1 end,
-      CountMap
+      fun(_FuncName, Count) -> Count =:= 1 end,
+      FuncCountMap
     ),
     maps:keys(Uniques).
 
  ```
  
- Or, using a list comprehension:
+In the shell:
+```erlang
+29> c(my).
+{ok,my}
+
+30> c(mod1).
+{ok,mod1}
+
+%-module(mod1).
+-compile(export_all).
+
+%t1() -> hello.
+%t3() -> world.
+
+31> c(mod2).
+{ok,mod2}
+
+%-module(mod2).
+%-compile(export_all).
+
+%t1() -> a.
+%t2() -> b.
+%t3() -> c.
+
+32> my:unique_funcs([{mod1, blah}, {mod2, bleh}]).
+[{t2,0}]
+
+33> my:unique_funcs(code:all_loaded()).           
+[{prim_init,0},
+ {controlling_process,2},
+ {c_map_pair_exact,2},
+ {ann_c_seq,3},
+ {parse_address,1},
+ ...
+ ...
+ {...}|...]
+```
+ 
+Or, using a list comprehension:
  ```erlang
- unique_funcs(Modules) ->
+unique_funcs(Modules) ->
+    FuncCountMap = create_func_count_map(Modules, #{}),
     [
-      Name || {Name, Count} <- maps:to_list( get_count_map(Modules, #{}) ),
+      FuncName || {FuncName, Count} <- maps:to_list(FuncCountMap),
       Count =:= 1
     ].
  ```
