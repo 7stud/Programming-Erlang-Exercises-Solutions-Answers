@@ -106,7 +106,7 @@ get_max([], CountMap) ->
     {Max, Name}.
 ```
 
-That if expression is very similar to the if expression I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
+That if-expression is very similar to the if-expression that I used in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I can call that function again in this solution. Here's what I came up with:
 
 ```erlang
 update(MaxMap, NewItem, NewItemCount) ->
@@ -160,6 +160,9 @@ update(MaxMap, NewItem, NewItemCount) ->
 
 Now, I can employ the `update()` function in this solution:
 ```erlang
+-module(my).
+-compile(export_all).
+
 most_cmn_export(Modules) ->
     FuncCountMap = create_func_count_map(Modules, #{}),
     FuncCountList = maps:to_list(FuncCountMap),
@@ -170,15 +173,9 @@ create_func_count_map([ {Module, _} | Modules ], FuncCountMap) ->
     NewFuncCountMap = add_names(FuncNames, FuncCountMap),
     create_func_count_map(Modules, NewFuncCountMap);
 create_func_count_map([], FuncCountMap) ->
-    %io:format("~p~n", [CountMap]),
-    %get_max(maps:to_list(CountMap), #{count => 0, name => []} ).
+    %io:format("~p~n", [FuncCountMap]),
     FuncCountMap.
-    
-    %lists:nth(1, lists:sort(
-    %  fun(T1, T2) -> element(2, T1) >= element(2, T2) end,
-    %  maps:to_list(CountMap)
-    %)).
-
+ 
 add_names([{Func, _}|Funcs], FuncCountMap) ->
     FuncCount = maps:get(Func, FuncCountMap, 0),
     NewFuncCountMap = FuncCountMap#{Func => FuncCount+1},
@@ -186,13 +183,13 @@ add_names([{Func, _}|Funcs], FuncCountMap) ->
 add_names([], FuncCountMap) ->
     FuncCountMap.
 
-
 get_max([ {FuncName, FuncCount} | Tuples ], MaxMap) ->
     NewMaxMap = update(MaxMap, FuncName, FuncCount),
     get_max(Tuples, NewMaxMap);
 get_max([], MaxMap) ->
     #{count := Max, item := FuncName} = MaxMap,
     {Max, FuncName}.
+
 ```
 
 Here's an alternative implementation of the base case:
