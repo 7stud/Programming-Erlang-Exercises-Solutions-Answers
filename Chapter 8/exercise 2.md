@@ -138,7 +138,7 @@ In the shell:
 {122,[{module_info,1},{module_info,0}]}
 ```
 
-The if-expression in this solution is very similar to the if-expression in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I could call that function again in this solution. Here's what I came up with:
+The if-expression in this solution is very similar to the if-expression in the previous solution.  Therefore, I endeavored to refactor the previous solution to create a generic function that encapsulated the if-expression, then I would be able to call that function again in this solution instead of having to duplicate the code. Here's what I came up with:
 
 ```erlang
 update(MaxMap, NewItem, NewItemCount) ->
