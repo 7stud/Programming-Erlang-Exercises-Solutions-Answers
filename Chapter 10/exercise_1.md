@@ -43,7 +43,7 @@ All you have to do to enable **eunit** is add the following line to the top of y
     
 and make sure the names of your test functions end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
 
-The book uses the old "suffix rules" in the makefile, which have been replaced by pattern rules.  Here is a modern interpretation:
+The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  Here is a modern interpretation:
 
 ```makefile
 modules = a b
@@ -64,6 +64,20 @@ clean:
 	rm $(modules:%=%.beam) erl_crash.dump
 .PHONY: clean
 ```
+
+I learned about makefiles while reading this chapter:
+
+If you are familiar with C/C++:
+
+http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
+
+Some excellent make resources:
+
+http://www.oreilly.com/openbook/make3/book/ch02.pdf
+
+https://www.gnu.org/software/make/manual/make.html#Overview
+
+(Oh yeah, use gmake instead of make.)
 
 
 
