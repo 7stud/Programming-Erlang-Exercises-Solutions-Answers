@@ -27,7 +27,7 @@ You can run a specific test function just like any other function:
 2> a:do_test().
 dummy
 ```
-**eunit** will enable you to run both `do_test()` and `go_test()` with one command:
+With **eunit**, you can run both `do_test()` and `go_test()` with one command:
 
 ```erlang
 4> c(a).
@@ -37,7 +37,7 @@ dummy
   All 2 tests passed.
 ok
 ```
-And, all you have to do is include this line in your file:
+All you have to do to enable eunit is include this line in your file:
 
     -include_lib("eunit/include/eunit.hrl").
     
