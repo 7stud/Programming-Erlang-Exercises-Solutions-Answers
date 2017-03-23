@@ -71,7 +71,7 @@ If you are familiar with C/C++:
 
 http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
-Some excellent make resources:
+Some really excellent make resources:
 
 http://www.oreilly.com/openbook/make3/book/ch02.pdf
 
