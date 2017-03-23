@@ -65,19 +65,17 @@ clean:
 .PHONY: clean
 ```
 
-I learned about makefiles while reading this chapter:
-
-If you are familiar with C/C++:
+I learned about makefiles while reading Chapter 10. If you are familiar with C/C++:
 
 http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
-Some really excellent make resources:
+Other really excellent makefile resources:
 
 http://www.oreilly.com/openbook/make3/book/ch02.pdf
 
 https://www.gnu.org/software/make/manual/make.html#Overview
 
-(Oh yeah, use gmake instead of make.)
+(Oh yeah, use gmake instead of make!)
 
 
 
