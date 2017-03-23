@@ -1,4 +1,4 @@
-If you haven't tried **eunit** for testing yet, the simplest way to use **eunit** is to run all the functions named \*_test in a file.  For example, suppose you have a file like this:
+If you haven't tried **eunit** for testing yet, the simplest way to use **eunit** is to use **eunit** to run all the functions named \*_test in a file.  For example, suppose you have a file like this:
 
 ```erlang
 -moduel(a).
