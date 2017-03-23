@@ -57,7 +57,8 @@ Running dialyzer:
 
   Checking whether the PLT /Users/7stud/.dialyzer_plt is up-to-date... yes
   Proceeding with analysis...
-dia4.erl:5: Invalid type specification for function dia4:f/2. The success typing is (number(),number()) -> number()
+dia4.erl:5: Invalid type specification for function dia4:f/2. 
+The success typing is (number(),number()) -> number()
  done in 0m0.52s
 done (warnings were emitted)
 
