@@ -1,4 +1,4 @@
-### Opaque types:
+#### *Opaque types:*
 
 ```erlang
 
