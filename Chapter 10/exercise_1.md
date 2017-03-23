@@ -58,7 +58,7 @@ test: $(modules:%=%_test)
 .PHONY: test
 
 %_test: %.erl
-	erl -noshell -s $* test -s init stop
+	erl -noshell -s $* test -s init stop  # $* is the part of the file name matched by the % wildcard
 
 clean:
 	rm $(modules:%=%.beam) erl_crash.dump
