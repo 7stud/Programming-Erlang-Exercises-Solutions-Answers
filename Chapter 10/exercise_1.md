@@ -41,7 +41,7 @@ All you have to do to enable eunit is include this line in your file:
 
     -include_lib("eunit/include/eunit.hrl").
     
-and make sure your test function names end in `_test`.  That feature of eunit comes in handy in this exercise.
+and make sure your test function names end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
 
 
 
