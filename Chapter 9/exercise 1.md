@@ -44,7 +44,6 @@ done (warnings were emitted)
       Result      :: pos_integer().
 
 f(X, Y) ->
-    io:format("~w: ~w~n", [X,Y]),
     %lists:length(X) + lists:length(Y).
     X+Y.
 ```
@@ -63,3 +62,29 @@ The success typing is (number(),number()) -> number()
 done (warnings were emitted)
 
 ```
+
+dialyzer misses a type error here:
+```erlang
+-module(dia4).
+-export([f/2]).
+
+-spec f(String1, String2) -> Result when
+      String1     :: string(),
+      String2     :: string(),
+      Result      :: pos_integer().
+
+f(X, Y) ->
+    length(X) + length(Y).
+```
+
+Running dialyzer:
+```
+~/erlang_programs$ dialyzer dia4.erl
+-----Now, do some Erlang for great Good!------
+
+  Checking whether the PLT /Users/7stud/.dialyzer_plt is up-to-date... yes
+  Proceeding with analysis... done in 0m0.53s
+done (passed successfully)
+```
+
+Because empty lists have a length of 0, it's possible for `f()` to return 0, which is not a `pos_integer()`.
