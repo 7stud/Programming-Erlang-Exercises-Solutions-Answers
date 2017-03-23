@@ -27,7 +27,7 @@ get_names([ {person, Name} | Ps ], Names) ->
 get_names([], Names) ->
     lists:reverse(Names).
 ```
-
+-----------
 ```erlang
 -module(b).
 -export([do/0]).
