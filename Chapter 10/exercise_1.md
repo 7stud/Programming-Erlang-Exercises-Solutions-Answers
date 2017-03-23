@@ -37,11 +37,13 @@ With **eunit**, you can run both `do_test()` and `go_test()` with one command:
   All 2 tests passed.
 ok
 ```
-All you have to do to enable eunit is include this line in your file:
+All you have to do to enable **eunit** is add the following line to the top of your file:
 
     -include_lib("eunit/include/eunit.hrl").
     
-and make sure your test function names end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
+and make sure the names of your test functions end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
+
+
 
 
 
