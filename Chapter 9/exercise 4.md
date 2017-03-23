@@ -40,7 +40,7 @@ do() ->
     Name.
 ```
 
-dialyzer:
+#### *dialyzer:*
 
 ```
 ~/erlang_programs$ dialyzer a.erl b.erl
