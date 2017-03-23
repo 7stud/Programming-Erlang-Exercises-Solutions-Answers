@@ -43,7 +43,27 @@ All you have to do to enable **eunit** is add the following line to the top of y
     
 and make sure the names of your test functions end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
 
+The book uses the old "suffix rules" in the makefile, which have been replaced by pattern rules.  Here is a modern interpretation:
 
+```makefile
+modules = a b
+
+all: $(modules:%=%.beam) test
+.PHONY: all
+
+%.beam: %.erl
+	erlc -W $< 
+	
+test: $(modules:%=%_test)
+.PHONY: test
+
+%_test: %.erl
+	erl -noshell -s $* test -s init stop
+
+clean:
+	rm $(modules:%=%.beam) erl_crash.dump
+.PHONY: clean
+```
 
 
 
