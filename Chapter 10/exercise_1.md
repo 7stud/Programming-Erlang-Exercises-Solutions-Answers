@@ -65,6 +65,19 @@ clean:
 .PHONY: clean
 ```
 
+On the command line:
+```
+~/erlang_programs/ex10_1$ gmake
+erl -noshell -s a test -s init stop
+-----Now, do some Erlang for great Good!------
+
+  All 2 tests passed.
+erl -noshell -s b test -s init stop
+-----Now, do some Erlang for great Good!------
+
+  All 2 tests passed.
+```
+
 I learned about makefiles while reading Chapter 10. If you are familiar with C/C++:
 
 http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
