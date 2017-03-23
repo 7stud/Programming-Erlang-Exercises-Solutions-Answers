@@ -24,7 +24,8 @@ Running dialyzer:
 
   Checking whether the PLT /Users/7stud/.dialyzer_plt is up-to-date... yes
   Proceeding with analysis...
-dia3.erl:6: Invalid type specification for function dia3:add/2. The success typing is (number(),number()) -> float()
+dia3.erl:6: Invalid type specification for function dia3:add/2. 
+The success typing is (number(),number()) -> float()
 Unknown functions:
   eunit:test/1
  done in 0m0.50s
