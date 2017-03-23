@@ -31,3 +31,33 @@ Unknown functions:
  done in 0m0.50s
 done (warnings were emitted)
 ```
+
+------------
+```erlang
+-module(dia4).
+-export([f/2]).
+
+
+-spec f(String1, String2) -> Result when
+      String1     :: string(),
+      String2     :: string(),
+      Result      :: pos_integer().
+
+f(X, Y) ->
+    io:format("~s: ~w~n", [X,Y]),
+    -1.
+```
+
+Running dialyzer:
+
+```
+~/erlang_programs$ dialyzer dia4.erl 
+-----Now, do some Erlang for great Good!------
+
+  Checking whether the PLT /Users/7stud/.dialyzer_plt is up-to-date... yes
+  Proceeding with analysis...
+dia4.erl:5: Invalid type specification for function dia4:f/2. 
+The success typing is (_,_) -> -1
+ done in 0m0.55s
+done (warnings were emitted)
+```
