@@ -1,0 +1,98 @@
+#------------!WARNING!------------------
+#makefiles require an actual tab character for the indenting.
+#I use macvim as my text editor, and I have it configured
+#to convert tabs to spaces for all file types.  To make sure
+#that doesn't happen to a makefile, I added the following to 
+# ~/.vimrc:
+#
+#   au FileType make setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=0
+#
+#---------------------------------------
+#
+#First the makefile without comments:
+
+
+modules = aw2 runs index w2
+
+all: $(modules:%=%.beam) 
+.PHONY: all
+
+%.beam: %.erl
+	erlc -W $< 
+	
+clean:
+	rm $(modules:%=%.beam) erl_crash.dump
+.PHONY: clean
+
+
+#Now, with comments:
+
+#Assign all the modules in your project to a variable:
+modules = aw2 runs index w2
+#For the week2 assignment, I used some previously defined functions in w2.erl,
+#and index.erl was provided for us, then after I wrote the indexing code 
+#in aw2.erl, I created a separate module, runs.erl, for the solution
+#that prettifies the line numbers.
+
+#The following is the first "target" in this makefile, which
+#means that make will try to create the file "all" (and only
+#the minimum necessary to creat the file "all) by
+#first creating the "prerequisite" files, which are listed to
+#the right of the colon after "all".  The syntax used to the right
+#of the colon converts the names in the modules variable
+#above to names with a .beam extension.  $() is used to
+#interpolate variables, and % is a wild card character.
+#In this case, 
+#     $(modules:%=%.beam) 
+#is equivalent to:
+#     aw2.beam runs.beam index.beam w2.beam
+#
+all: $(modules:%=%.beam) 
+.PHONY: all
+
+#In order for make to create the file "all",
+#make must figure out how to create the prerequisites,
+#so make looks further down the makefile to figure
+#out how to create the files aw2.beam, runs.beam,
+#index.beam, and w2.beam.
+
+#Ah, below is a target which instructs make on how it
+#can create any .beam file: make should take the
+#correspondingly named .erl file. and apply the 
+#"recipe" on the second line to the .erl file to create
+#the .beam file.  In the recipe, the .erl file is referred
+#to with the variable name:
+#           $< 
+#It represents the full file name of the file that matched 
+#the pattern on the right side of the colon.
+#Yep, it's scary looking syntax. Welcome to perl!
+#The -W options is for warnings.
+%.beam: %.erl
+	erlc -W $< 
+	
+#To execute the "clean" target below, you need to use
+#this command:
+#
+#    $ gmake clean
+#
+#Because creating the "clean" target is not required
+#to create the first target in the file, which is "all" 
+#in this makefile, gmake/make skips "clean" when you do:
+#
+#      $ gmake
+#
+#To create the "clean" target, you need to specify "clean" 
+#when you call gmake/make, then gmake/make tries to create
+#only the "clean" target and its prerequisites.  The 
+#clean target lacks any prerequisites, so make just
+#executes the recipe.
+
+clean:
+	rm $(modules:%=%.beam) erl_crash.dump
+.PHONY: clean
+
+#Note that both "all" and "clean" are phony targets because
+#none of the recipes will actually create a file called "all"
+#or "clean" (which means that make really feels like it failed
+#you!).  It's considered good practice to declare your phony
+#targets with .PHONY: -- for reasons I won't go into.
