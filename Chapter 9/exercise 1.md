@@ -87,4 +87,13 @@ Running dialyzer:
 done (passed successfully)
 ```
 
-Because empty lists have a length of 0, it's possible for `f()` to return 0, which is not a `pos_integer()`.
+Because empty lists have a length of 0, it's possible for `f()` to return 0, which is not a `pos_integer()`.  If I comment out the type specification, then run typer, typer will correctly deduce the type of f():
+```
+~/erlang_programs$ typer dia4.erl 
+-----Now, do some Erlang for great Good!------
+
+
+%% File: "dia4.erl"
+%% ----------------
+-spec f([any()],[any()]) -> non_neg_integer().
+```
