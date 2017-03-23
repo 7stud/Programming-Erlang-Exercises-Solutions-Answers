@@ -77,6 +77,7 @@ erl -noshell -s b test -s init stop
 
   All 2 tests passed.
 ```
+Note that make shows you the commands it's executing as well as the output of those commands.
 
 I learned about makefiles while reading Chapter 10. If you are familiar with C/C++:
 
