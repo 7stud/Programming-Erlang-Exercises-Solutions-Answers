@@ -12,7 +12,7 @@
 #First the makefile without comments:
 
 
-modules = aw2 runs index w2
+modules = a w2 b 
 
 all: $(modules:%=%.beam) 
 .PHONY: all
@@ -28,11 +28,7 @@ clean:
 #Now, with comments:
 
 #Assign all the modules in your project to a variable:
-modules = aw2 runs index w2
-#For the week2 assignment, I used some previously defined functions in w2.erl,
-#and index.erl was provided for us, then after I wrote the indexing code 
-#in aw2.erl, I created a separate module, runs.erl, for the solution
-#that prettifies the line numbers.
+modules = a w2 b
 
 #The following is the first "target" in this makefile, which
 #means that make will try to create the file "all" (and only
@@ -45,7 +41,7 @@ modules = aw2 runs index w2
 #In this case, 
 #     $(modules:%=%.beam) 
 #is equivalent to:
-#     aw2.beam runs.beam index.beam w2.beam
+#     a.beam w2.beam b.beam
 #
 all: $(modules:%=%.beam) 
 .PHONY: all
@@ -53,8 +49,8 @@ all: $(modules:%=%.beam)
 #In order for make to create the file "all",
 #make must figure out how to create the prerequisites,
 #so make looks further down the makefile to figure
-#out how to create the files aw2.beam, runs.beam,
-#index.beam, and w2.beam.
+#out how to create the files a.beam, w2.beam,
+#and b.beam.
 
 #Ah, below is a target which instructs make on how it
 #can create any .beam file: make should take the
