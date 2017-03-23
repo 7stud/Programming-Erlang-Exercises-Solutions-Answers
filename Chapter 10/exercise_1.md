@@ -37,13 +37,13 @@ With **eunit**, you can run both `do_test()` and `go_test()` with one command:
   All 2 tests passed.
 ok
 ```
-All you have to do is enable **eunit** by adding the following line to the top of your file:
+You can enable **eunit** by adding the following line to the top of your file:
 
     -include_lib("eunit/include/eunit.hrl").
     
-and make sure the names of your test functions end in `_test` (eunit automatically exports the test functions for you). That feature of eunit comes in handy in this exercise.
+Then make sure the names of your test functions end in `_test` (eunit automatically exports the test functions for you). The ability of eunit to run all the test functions in a file is handy for solving this exercise.
 
-The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  I put a modern interpretation of a basic makefile with explanations in the Chapter 10 directory.  Here is that makefile modified to run tests:
+The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  I put a modern interpretation of a basic makefile with explanations along side this file in the Chapter 10 directory.  Here is that makefile modified to run tests:
 
 ```makefile
 modules = a b
