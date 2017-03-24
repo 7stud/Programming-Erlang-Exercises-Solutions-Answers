@@ -43,7 +43,7 @@ You can enable **eunit** by adding the following line to the top of your file:
     
 Then make sure that the names of your test functions end in `_test` (eunit automatically exports the test functions for you). The ability of eunit to run all the test functions in a file with one command is handy for solving this exercise.
 
-The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  I put a modern interpretation of a basic makefile alongside this file in the Chapter 10 directory. It is heavily commented with explanations. Here is that makefile modified to run tests:
+The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  I put a modern interpretation of a basic makefile alongside this file in the Chapter 10 directory. It is heavily commented with explanations. Here is that makefile modified to run all the test functions in all the modules in your project: 
 
 ```makefile
 modules = a b
