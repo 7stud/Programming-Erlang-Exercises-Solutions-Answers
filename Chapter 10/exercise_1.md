@@ -46,7 +46,7 @@ Then make sure that the names of your test functions end in `_test` (eunit autom
 The book uses the old "suffix rules" in the makefile, which have been replaced by "pattern rules".  I put a modern interpretation of a basic makefile alongside this file in the Chapter 10 directory. It is heavily commented with explanations. Here is that makefile modified to run all the test functions in all the modules in your project: 
 
 ```makefile
-modules = a b
+modules = a b    #Assign all the names of your modules to a variable.
 
 all: $(modules:%=%.beam) test  #Added an additonal prerequisite file named test.
 .PHONY: all                    #make needs to look further down the makefile to 
