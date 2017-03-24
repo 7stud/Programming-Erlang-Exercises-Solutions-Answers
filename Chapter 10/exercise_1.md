@@ -48,7 +48,7 @@ The book uses the old "suffix rules" in the makefile, which have been replaced b
 ```makefile
 modules = a b
 
-all: $(modules:%=%.beam) test  #Added an additonal prerequesite file named test.
+all: $(modules:%=%.beam) test  #Added an additonal prerequisite file named test.
 .PHONY: all                    #make needs to look further down the makefile to 
                                #figure out how to create the test file.
 %.beam: %.erl
