@@ -79,7 +79,7 @@ erl -noshell -s b test -s init stop
 ```
 Note that make shows you the commands it's executing as well as the output of those commands.
 
-I learned about makefiles while reading Chapter 10. If you are familiar with C/C++:
+I just learned about makefiles while reading Chapter 10. If you are familiar with C/C++:
 
 http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
