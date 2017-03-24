@@ -67,15 +67,21 @@ clean:
 
 On the command line:
 ```
-~/erlang_programs/ex10_1$ gmake
-erl -noshell -s a test -s init stop
------Now, do some Erlang for great Good!------
+-module(b).
+-export([do/0, go/0]).
+-include_lib("eunit/include/eunit.hrl").
 
-  All 2 tests passed.
-erl -noshell -s b test -s init stop
------Now, do some Erlang for great Good!------
+do_test() ->
+    dummy.
 
-  All 2 tests passed.
+do() ->
+    dummy.
+
+go_test() ->
+    dummy.
+
+go() ->
+    dummy.
 ```
 Note that make shows you the commands it's executing as well as the output of those commands.
 
