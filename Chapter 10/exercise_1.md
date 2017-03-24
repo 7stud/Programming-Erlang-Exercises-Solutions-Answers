@@ -67,21 +67,22 @@ clean:
 
 On the command line:
 ```
--module(b).
--export([do/0, go/0]).
--include_lib("eunit/include/eunit.hrl").
+~/erlang_programs/ex10_1$ gmake
+erlc -W a.erl 
+-----Now, do some Erlang for great Good!------
 
-do_test() ->
-    dummy.
+erlc -W b.erl 
+-----Now, do some Erlang for great Good!------
 
-do() ->
-    dummy.
+erl -noshell -s a test -s init stop
+-----Now, do some Erlang for great Good!------
 
-go_test() ->
-    dummy.
+  All 2 tests passed.
+erl -noshell -s b test -s init stop
+-----Now, do some Erlang for great Good!------
 
-go() ->
-    dummy.
+  All 2 tests passed.
+
 ```
 Note that make shows you the commands it's executing as well as the output of those commands.
 
