@@ -1,3 +1,3 @@
-#### *Why should you write types first?  
+#### *Why should you write types first?* 
 
 I don't know.
