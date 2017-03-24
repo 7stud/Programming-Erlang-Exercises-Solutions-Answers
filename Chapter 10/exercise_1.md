@@ -48,16 +48,16 @@ The book uses the old "suffix rules" in the makefile, which have been replaced b
 ```makefile
 modules = a b
 
-all: $(modules:%=%.beam) test
-.PHONY: all
-
+all: $(modules:%=%.beam) test  #Added an additonal prerequesite file named test.
+.PHONY: all                    #make needs to look further down the makefile to 
+                               #figure out how to create the test file.
 %.beam: %.erl
 	erlc -W $< 
 	
-test: $(modules:%=%_test)
-.PHONY: test
+test: $(modules:%=%_test)      #This tells make how to create the test file: make needs
+.PHONY: test                   #to create the prerequisite files a_test and b_test.
 
-%_test: %.erl
+%_test: %.erl                  #This tells make how to create a *_test file.
 	erl -noshell -s $* test -s init stop  # $* is the part of the file name matched by the % wildcard
 
 clean:
