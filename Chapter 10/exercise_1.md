@@ -5,17 +5,17 @@ If you haven't tried **eunit** for testing yet, the simplest way to use **eunit*
 -export([do/0, go/0]).
 
 do_test() ->
-    ...
-    
-do() ->
-    ...
+    dummy.
 
+do() ->
+    dummy.
 
 go_test() ->
-    ...
-   
+    dummy.
+
 go() ->
-    ...
+    dummy.
+
     
 ```
 
