@@ -1,4 +1,4 @@
-#### *Why should you write types first?*
+#### *Why should you write types first?  (Who knows??!)*
 
 If you write the types first, it will create a blueprint for your code, and the types will help you think about edge cases and how you want to handle them.
 
