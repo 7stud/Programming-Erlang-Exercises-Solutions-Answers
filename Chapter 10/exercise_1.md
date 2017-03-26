@@ -72,20 +72,11 @@ On the command line:
 ```
 ~/erlang_programs/ex10_1$ gmake
 erlc -W a.erl 
------Now, do some Erlang for great Good!------
-
 erlc -W b.erl 
------Now, do some Erlang for great Good!------
-
 erl -noshell -s a test -s init stop
------Now, do some Erlang for great Good!------
-
   All 2 tests passed.
 erl -noshell -s b test -s init stop
------Now, do some Erlang for great Good!------
-
   All 2 tests passed.
-
 ```
 Note that make shows you the commands it's executing as well as the stdout of those commands.
 
