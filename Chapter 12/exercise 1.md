@@ -68,7 +68,7 @@ start(Atom, Fun) ->
             {error, {name_taken, Atom}}
     end.
 ```
-Secondly, I think the question is mistated because if two processes simultaneously call `start/2` one of them *will* fail.  Rather, the question should require that one process be guaranteed to *spawn* the Fun and the other process be guaranteed *not* to spawn the Fun.
+Secondly, I think the question is mistated because if two processes simultaneously call `start/2` one of them *will* fail.  Rather, the question should require that one process be guaranteed to *spawn* the Fun and the other process be guaranteed *not to spawn* the Fun.
 
 With my code, it's possible for two processes that simultaneously execute `start/2` to each spawn their Fun.  When two processes execute at the same time, it's possible for a line in one process to execute, then a line in the other process to execute.  So, what if this happens:
 
