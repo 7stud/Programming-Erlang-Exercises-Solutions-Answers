@@ -82,10 +82,10 @@ In the first line, `whereis()` will return `undefined`,  meaning that no process
             register(Atom, spawn(Fun) );
             
             
-    process1: register(Atom, spawn(Fun) );
-    process2: register(Atom, spawn(Fun) ); 
+    process1: register(hello, spawn(Fun) );
+    process2: register(hello, spawn(Fun) ); 
 
-Let's assume that process1 will win and `register()` the name hello.  Then when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute and return a pid.  Then `register()` will execute and throw an exception because process1 already took that name, which will kill process2.  But after process2 dies, the process spawned by process2 will still be alive and running.  As a result, both processes will spawn a new process--one of the spawned process will be named hello and the other spawned process will not have a name.
+Let's assume that process1 wins and `register()`'s the name hello.  Next, when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(Fun)` will execute and return a pid.  Then `register()` will execute and throw an exception because process1 already took the name hello, which will kill process2.  But after process2 dies, the process spawned by process2 will still be alive and running.  As a result, both processes will spawn a new process--one of the spawned process will be named hello and the other spawned process will not have a name.
 
 To guarantee that only one process is able to spawn a function, the fix is:
 
