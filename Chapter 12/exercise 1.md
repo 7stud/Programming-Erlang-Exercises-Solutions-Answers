@@ -75,7 +75,7 @@ With my code, it's possible for two processes to simultaneously execute `start/2
     process1:  case whereis(hello) of 
     process2:  case whereis(hello) of
 
-Both those lines will return `undefined`, meaning that no process has been registered with the name hello (that's assuming that some other process hasn't already registered the name hello).  Therefore, both processes will attempt to call register():
+In the first line, `whereis()` will return `undefined`,  meaning that no process has been registered with the name hello (that's assuming that some other process hasn't already registered the name hello).  Then execution could switch to process2 and `whereis()` will return `undefined` again. As a result, both processes will attempt to call register():
 
     case whereis(Atom) of 
         undefined ->
@@ -85,9 +85,9 @@ Both those lines will return `undefined`, meaning that no process has been regis
     process1: register(Atom, spawn(Fun) );
     process2: register(Atom, spawn(Fun) ); 
 
-Let's assume that process1 will win and `register()` the name hello.  Then when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute.  Then `register()` will throw an exception because process1 already took that name, which will kill process2.  But after process2 dies, the process spawned by process2  will still be alive and running.  As a result, both processes will spawn a new process, and one of the spawned process will be named hello and the other spawned process will not have a name.
+Let's assume that process1 will win and `register()` the name hello.  Then when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute and return a pid.  Then `register()` will execute and throw an exception because process1 already took that name, which will kill process2.  But after process2 dies, the process spawned by process2 will still be alive and running.  As a result, both processes will spawn a new process--one of the spawned process will be named hello and the other spawned process will not have a name.
 
-To guarantee that only one process is able to spawn a Fun, the fix is:
+To guarantee that only one process is able to spawn a function, the fix is:
 
 ```erlang
 start(Name, Fun) ->
