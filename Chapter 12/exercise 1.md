@@ -58,7 +58,7 @@ member(X, [_|Ys]) ->
     
 ```
 
-Okay, I did some searching and I found an explanation for why the above will ***not*** guarantee that one process will succeed and another process will fail.  First of all, I overlooked the `whereis()` function listed on p. 195 along with the register functions, so here is my code refactored to use `whereis()`:
+Okay, to settly my unease with the solution above, I did some searching around.  First of all, I overlooked the `whereis()` function listed on p. 195 alongside the register functions, so here is my code refactored to use `whereis()`:
 
 start(Atom, Fun) ->
     case whereis(Atom) of  %whereis() is listed on p. 195 along with register().
@@ -68,9 +68,9 @@ start(Atom, Fun) ->
             {error, {name_taken, Atom}}
     end.
 
-Secondly, I think the question is mistated because one of the two processes that is calling `start/2` *will* fail.  Rather, the question should require that one process is guaranteed to *spawn* the Fun, and the other process is guaranteed *not* to spawn the Fun.
+Secondly, I think the question is mistated because one of the two processes that is calling `start/2` *will* fail.  Rather, the question should require that one process be guaranteed to *spawn* the Fun, and the other process be guaranteed *not* to spawn the Fun.
 
-With my code, it's possible for two processes executing `start/2` at the same time to spawn a Fun.  When two processes execute at the same time, it's possible for one line in one process to execute, then one line in another process to execute.  So, what if this happens:
+With my code, it's possible for two processes executing `start/2` at the same time to each spawn their Fun.  When two processes execute at the same time, it's possible for a line in one process to execute, then a line in another process to execute.  So, what if this happens:
 
     process1:  case whereis(hello) of 
     process2:  case whereis(hello) of
@@ -80,9 +80,9 @@ Both those lines will return `undefined`, meaning that no process has been regis
     process1: register(Atom, spawn(hello) );
     process2: register(Atom, spawn(hello) ); 
 
-process1 will win and `register()` the name hello.  But when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute.  Then `register()` will throw an exception because process1 already took that name, which will kill process2.  That will leave the process2's spawned process still running.  As a result, both processes will spawn a new process, one spawned process will be named hello and the other spawned process will not have a name.
+Let's assume that process1 will win and `register()` the name hello.  But when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute.  Then `register()` will throw an exception because process1 already took that name, which will kill process2.  That will leave the process2's spawned process alive and running.  As a result, both processes will spawn a new process, and one spawned process will be named hello and the other spawned process will not have a name.
 
-To guarantee that only one process is able to spawn the Fun, the fix is:
+To guarantee that only one process is able to spawn a Fun, the fix is:
 
 ```erlang
 start(Name, Fun) ->
@@ -92,7 +92,7 @@ start(Name, Fun) ->
           end).
 ```
 
-With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).
+With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).  In summary, my start/2 function checks if the name is registered, then spawns the Fun, while the fix spawns a wrapper fun that checks if the name is registerered, then executes the Fun.
 
 I found the fix here:
 
