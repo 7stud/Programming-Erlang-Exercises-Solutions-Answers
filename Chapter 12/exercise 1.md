@@ -10,7 +10,7 @@ As a result, my solution uses the VM as the central process, and I find out what
 
 start_test() ->
     true = start(hello, fun() -> wait() end ),
-    {error, {not_available, hello}} = start(hello, fun() -> wait() end),
+    {error, {name_taken, hello}} = start(hello, fun() -> wait() end),
     
     %The following works:
     %unregister(hello),
@@ -28,7 +28,7 @@ start(Atom, Fun) ->
         false ->
             register(Atom, spawn(Fun) );
         true ->
-            {error, {not_available, Atom}}
+            {error, {name_taken, Atom}}
     end.
 
 %----------
