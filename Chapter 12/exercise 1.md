@@ -70,13 +70,18 @@ start(Atom, Fun) ->
 ```
 Secondly, I think the question is mistated because if two processes simultaneously call `start/2` one of them *will* fail.  Rather, the question should require that one process be guaranteed to *spawn* the Fun and the other process be guaranteed *not to spawn* the Fun.
 
-With my code, it's possible for two processes that simultaneously execute `start/2` to each spawn their Fun.  When two processes execute at the same time, it's possible for a line in one process to execute, then a line in the other process to execute.  So, what if this happens:
+With my code, it's possible for two processes to simultaneously execute `start/2` and each spawn their Fun.  When two processes execute at the same time, it's possible for a line in one process to execute, then a line in the other process to execute.  So, what if this happens:
 
     process1:  case whereis(hello) of 
     process2:  case whereis(hello) of
 
 Both those lines will return `undefined`, meaning that no process has been registered with the name hello (that's assuming that some other process hasn't already registered the name hello).  Therefore, both processes will attempt to call register():
 
+    case whereis(Atom) of 
+        undefined ->
+            register(Atom, spawn(Fun) );
+            
+            
     process1: register(Atom, spawn(Fun) );
     process2: register(Atom, spawn(Fun) ); 
 
