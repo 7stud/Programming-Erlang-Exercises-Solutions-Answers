@@ -80,7 +80,7 @@ Both those lines will return `undefined`, meaning that no process has been regis
     process1: register(Atom, spawn(Fun) );
     process2: register(Atom, spawn(Fun) ); 
 
-Let's assume that process1 will win and `register()` the name hello.  Then when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute.  Then `register()` will throw an exception because process1 already took that name, which will kill process2.  But after process2 dies, the process spawned by process2  will still be alive and running.  As a result, both processes will spawn a new process, and one spawned process will be named hello and the other spawned process will not have a name.
+Let's assume that process1 will win and `register()` the name hello.  Then when process2 calls `register()`, any expressions in the argument list have to be evaluated first, so `spawn(hello)` will execute.  Then `register()` will throw an exception because process1 already took that name, which will kill process2.  But after process2 dies, the process spawned by process2  will still be alive and running.  As a result, both processes will spawn a new process, and one of the spawned process will be named hello and the other spawned process will not have a name.
 
 To guarantee that only one process is able to spawn a Fun, the fix is:
 
@@ -92,7 +92,7 @@ start(Name, Fun) ->
           end).
 ```
 
-With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).  In summary, my start/2 function first checks if the name is registered, then spawns Fun, while the fix first spawns a wrapper fun that checks if the name is registerered, then executes Fun.
+With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).  In summary, my start/2 function first checks if the name is registered, then spawns Fun, while the fix first spawns a wrapper fun that checks if the name is registered, then executes Fun.
 
 I found the fix here:
 
