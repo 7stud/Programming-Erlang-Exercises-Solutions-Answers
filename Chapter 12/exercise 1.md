@@ -9,16 +9,18 @@ As a result, my solution uses the VM as the central process, and I find out what
 -include_lib("eunit/include/eunit.hrl").
 
 start_test() ->
-    true = start(hello, fun() -> wait() end ),
-    {error, {name_taken, hello}} = start(hello, fun() -> wait() end),
+    Fun = fun() -> wait() end,
+
+    true = start(hello, Fun),
+    {error, {name_taken, hello}} = start(hello, Fun),
     
     %The following works:
     %unregister(hello),
-    %true = start(hello, fun() -> wait() end ),
+    %true = start(hello, Fun),
     
     hello ! stop,
     receive after 10 -> true end, %Pause here required for next line to work 
-    true = start(hello, fun() -> wait() end ),
+    true = start(hello, Fun),
 
     all_tests_passed.
      
