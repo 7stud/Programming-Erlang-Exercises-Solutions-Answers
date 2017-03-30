@@ -1,6 +1,4 @@
-I feel like there should be a trickier solution than my solution, e.g. using a server like process to handle the `register()`'ing, which would allow that the first message in the mailbox to win when two processes try to register the same name.  But if `start()` is executing in two different processes, I don't know how to connect those function calls to a server process.  I guess I could register the name `server` and both process would send a request there, but that would require that the server process be started prior to calling `start/2`.
-
-
+I feel like there should be a trickier solution than my solution, e.g. using a server like process to handle the `register()`'ing.  start/2 would send a message to the server process to `register()` a name, which would allow the first message in the mailbox to win when two processes try to register the same name.  But if `start()` is executing in two different processes, I don't know how to connect those function calls to a server process.  I guess I could register the name `server` and both process could send a request to `server`, but that would require that the server process be started prior to calling `start/2`, which I don't think is a good solution.
 
 
 ```erlang
