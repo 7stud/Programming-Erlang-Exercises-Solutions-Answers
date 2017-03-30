@@ -94,8 +94,9 @@ start(Name, Fun) ->
 
 With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).
 
+I found the fix here:
 
-
+http://erlang.org/pipermail/erlang-questions/2007-July/028139.html
 
 
         
