@@ -59,7 +59,7 @@ member(X, [_|Ys]) ->
 ```
 
 Okay, to settly my unease with the solution above, I did some searching around.  First of all, I overlooked the `whereis()` function listed on p. 195 alongside the register functions, so here is my code refactored to use `whereis()`:
-
+```erlang
 start(Atom, Fun) ->
     case whereis(Atom) of  %whereis() is listed on p. 195 along with register().
         undefined ->
@@ -67,7 +67,7 @@ start(Atom, Fun) ->
         _ ->
             {error, {name_taken, Atom}}
     end.
-
+```
 Secondly, I think the question is mistated because one of the two processes that is calling `start/2` *will* fail.  Rather, the question should require that one process be guaranteed to *spawn* the Fun, and the other process be guaranteed *not* to spawn the Fun.
 
 With my code, it's possible for two processes executing `start/2` at the same time to each spawn their Fun.  When two processes execute at the same time, it's possible for a line in one process to execute, then a line in another process to execute.  So, what if this happens:
