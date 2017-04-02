@@ -251,7 +251,7 @@ In the shell:
 {ok,mod1}
 
 %-module(mod1).
--compile(export_all).
+%-compile(export_all).
 
 %t1() -> hello.
 %t2() -> world.
