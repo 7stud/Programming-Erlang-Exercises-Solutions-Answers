@@ -10,7 +10,7 @@ ring(NumProcs, NumLoops) ->
     NextPid ! {NumLoops, "hello"},
     start(NextPid).  %receive loop for the "start" process.
 
-create_ring(1, StartPid) ->  %Stop spawning processes.
+create_ring(1, StartPid) ->  %...then stop spawning processes.
     loop(StartPid);  %receive loop for the other processes.
 create_ring(NumProcs, StartPid) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
@@ -19,9 +19,9 @@ create_ring(NumProcs, StartPid) ->
 %receive loop for the "start" process:
 start(NextPid) ->
     receive 
-        {1, Msg} ->
+        {1, Msg} ->  %...then stop looping.
             io:format("*start* received message: ~s (~w)~n", [Msg, 1]),
-            NextPid ! stop;
+            NextPid ! stop;  %kill other processes; this processs will die because it stops looping.
         {NumLoops, Msg} ->
             io:format("*start* received message: ~s (~w)~n", [Msg, NumLoops]),
             NextPid ! {NumLoops-1, Msg},
@@ -36,7 +36,7 @@ loop(NextPid) ->
             NextPid ! {NumLoops, Msg},
             loop(NextPid);
         stop -> 
-            NextPid ! stop
+            NextPid ! stop  % When sent to non-existent "start" process, this still returns stop.
     end.
     
 ```
