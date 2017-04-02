@@ -212,4 +212,4 @@ Here's what happens when I look for the sync header in a text file with two line
      in function  mp3:get_header/2 (mp3.erl, line 30)
      in call from mp3:find_sync/2 (mp3.erl, line 9)
 ```
-A program employing my `mp3:sync_pos()` could catch the `syncHeaderNotFound` error, which I think would be useful for preventing the program from crashing if the sync header was never found in the file.
+Client code that calls `mp3:sync_pos()` could catch the `syncHeaderNotFound` error, which I think would be useful for preventing the program from crashing if the sync header was never found in the file.
