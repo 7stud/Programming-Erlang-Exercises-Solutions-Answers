@@ -10,7 +10,7 @@ ring(NumProcs, NumLoops) ->
     NextPid ! {NumLoops, "hello"},
     start(NextPid).  %receive loop for the "start" process
 
-create_ring(1, StartPid) ->
+create_ring(1, StartPid) ->  %Stop spawning processes
     loop(StartPid);  %receive loop for the other processes:
 create_ring(NumProcs, StartPid) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
