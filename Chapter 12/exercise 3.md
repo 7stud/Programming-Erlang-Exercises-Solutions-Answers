@@ -89,5 +89,45 @@ Total                                                      49206  1005265    8
                                                              219              
 ok
 
-18> 
+18> ring3:ring(3, 7).
+Process <0.146.0> received message: hello (7)
+Process <0.147.0> received message: hello (7)
+**start <0.32.0> received: hello (7)
+Process <0.146.0> received message: hello (6)
+Process <0.147.0> received message: hello (6)
+**start <0.32.0> received: hello (6)
+Process <0.146.0> received message: hello (5)
+Process <0.147.0> received message: hello (5)
+**start <0.32.0> received: hello (5)
+Process <0.146.0> received message: hello (4)
+Process <0.147.0> received message: hello (4)
+**start <0.32.0> received: hello (4)
+Process <0.146.0> received message: hello (3)
+Process <0.147.0> received message: hello (3)
+**start <0.32.0> received: hello (3)
+Process <0.146.0> received message: hello (2)
+Process <0.147.0> received message: hello (2)
+**start <0.32.0> received: hello (2)
+Process <0.146.0> received message: hello (1)
+Process <0.147.0> received message: hello (1)
+**start <0.32.0> received: hello (1)
+stop
+
+19> i().
+...
+...
+<0.25.0>              group:server/3                        2586    58135    0
+                      group:server_loop/3                      4              
+<0.26.0>              erlang:apply/2                       17731     6407    0
+                      shell:shell_rep/4                       17              
+<0.27.0>              kernel_config:init/1                   233     2322    0
+                      gen_server:loop/6                        9              
+<0.28.0>              supervisor:kernel/1                    233     2150    0
+kernel_safe_sup       gen_server:loop/6                        9              
+<0.32.0>              erlang:apply/2                        4185    51215    9
+                      c:pinfo/1                               50              
+Total                                                      51793  1046386    9
+                                                             219              
+ok
+
 ```
