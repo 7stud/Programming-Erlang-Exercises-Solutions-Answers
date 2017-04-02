@@ -40,3 +40,41 @@ loop(NextPid) ->
     end.
     
 ```
+
+In the shell:
+
+```
+21> c(ring2).
+{ok,ring2}
+        
+22> ring2:ring(3,4).
+Process <0.154.0> received message: hello (4)
+Process <0.155.0> received message: hello (4)
+*start* received message: hello (4)
+Process <0.154.0> received message: hello (3)
+Process <0.155.0> received message: hello (3)
+*start* received message: hello (3)
+Process <0.154.0> received message: hello (2)
+Process <0.155.0> received message: hello (2)
+*start* received message: hello (2)
+Process <0.154.0> received message: hello (1)
+Process <0.155.0> received message: hello (1)
+*start* received message: hello (1)
+stop
+
+23> i().
+...
+...
+<0.26.0>              erlang:apply/2                       17731     6847    0
+                      shell:shell_rep/4                       17              
+<0.27.0>              kernel_config:init/1                   233     1318    0
+                      gen_server:loop/6                        9              
+<0.28.0>              supervisor:kernel/1                    233     1984    0
+kernel_safe_sup       gen_server:loop/6                        9              
+<0.32.0>              erlang:apply/2                        4185    53027   15
+                      c:pinfo/1                               50              
+Total                                                      75921  1069020   15
+                                                             219              
+ok
+24> 
+```
