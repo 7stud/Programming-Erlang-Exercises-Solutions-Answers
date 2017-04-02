@@ -18,7 +18,7 @@ In the shell:
 [0,2,4,6,8,10]
 ```
 
-Or even:
+Or, like this:
 ```erlang
 math_functions:filter(fun math_functions:even1/1, L).
 [0,2,4,6,8,10]
