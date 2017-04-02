@@ -75,7 +75,7 @@ With my code, it's possible for two processes to simultaneously execute `start/2
     process1:  case whereis(hello) of 
     process2:  case whereis(hello) of
 
-In the first line, `whereis()` will return `undefined`,  meaning that no process has been registered with the name hello (that's assuming that some other process hasn't already registered the name hello).  Then execution could switch to process2 and `whereis()` will return `undefined` again. As a result, both processes will attempt to call register():
+In the first line, `whereis()` will return `undefined`,  meaning that no process has been registered with the name hello (that's assuming that some other process hasn't already registered the name hello).  Thereafter, execution could switch to process2 and `whereis()` will return `undefined` again. As a result, both processes will attempt to call register():
 
     case whereis(Atom) of 
         undefined ->
