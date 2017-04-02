@@ -13,7 +13,7 @@ ring(NumProcs, NumLoops) ->
     start(NextPid).  %receive-loop for this process, i.e. the "start" process.
 
 create_ring(1, StartPid) ->  %...then stop spawning processes.
-    loop(StartPid);  %receive-loop for the other processes.
+    loop(StartPid);  %The last process gets the "start" process as its NextPid.
 create_ring(NumProcs, StartPid) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
     loop(NextPid).
