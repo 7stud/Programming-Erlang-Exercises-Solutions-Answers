@@ -1,4 +1,4 @@
-I know ruby pretty well, and once again, just like the python datetime exercise in Chapter 4, this is a vast exercise. A Hash in ruby is equivalent to a map in erlang.  One thing you have to know about ruby is that a *block* in ruby is similar to an anonymous function, which is equivalent to a fun in erlang.  So ruby methods that take a block are methods that accept an anonymous function as an argument.  Here is how to interpret the ruby docs:
+I know ruby pretty well, and once again, just like with the python datetime exercise in Chapter 4, this is a vast exercise. A Hash in ruby is equivalent to a map in erlang.  One thing you have to know about ruby is that a *block* in ruby is similar to an anonymous function, which is equivalent to a fun in erlang.  So ruby methods that take a block are methods that accept an anonymous function as an argument.  Here is how to interpret the ruby docs:
 
     any? [{ |(key, value)| block }] → true or false 
     
