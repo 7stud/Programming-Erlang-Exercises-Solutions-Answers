@@ -8,14 +8,15 @@ I found the ring exercise extremely difficult.  I wrote a solution program five 
 ring(NumProcs, NumLoops) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, self()) end),
     NextPid ! {NumLoops, "hello"},
-    start(NextPid).
+    start(NextPid).  %receive loop for the "start" process
 
 create_ring(1, StartPid) ->
-    loop(StartPid);
+    loop(StartPid);  %receive loop for the other processes:
 create_ring(NumProcs, StartPid) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
     loop(NextPid).
 
+%receive loop for the "start" process:
 start(NextPid) ->
     receive 
         {1, Msg} ->
@@ -26,7 +27,8 @@ start(NextPid) ->
             NextPid ! {NumLoops-1, Msg},
             start(NextPid)
     end.
-            
+   
+%receive loop for the other processes:
 loop(NextPid) ->
     receive
         {NumLoops, Msg} ->
