@@ -47,7 +47,7 @@ In the shell:
 21> c(ring2).
 {ok,ring2}
         
-22> ring2:ring(3,4).
+22> ring2:ring(3,4).  %3 processes, 4 loops
 Process <0.154.0> received message: hello (4)
 Process <0.155.0> received message: hello (4)
 *start* received message: hello (4)
