@@ -131,3 +131,102 @@ Total                                                      51793  1046386    9
 ok
 
 ```
+
+### *Benchmarks*:
+
+I commented out the io:format() statements then benchmarked the code:
+```erlang
+-module(ring4).
+-export([ring/2]).
+-include_lib("eunit/include/eunit.hrl"). 
+ 
+                   
+ring(NumProcs, NumLoops) ->
+    
+    statistics(runtime),
+    statistics(wall_clock),
+
+    StartPid = self(),
+    NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
+    NextPid ! {NumLoops, "hello"},
+    start(NextPid),  %receive loop for this process, i.e. the "start" process
+
+    {_,RunTime} = statistics(runtime),
+    {_,WallTime} = statistics(wall_clock),
+    io:format("RunTime: ~w, WallTime: ~w (~w, ~w)~n", 
+             [RunTime,WallTime,NumProcs,NumLoops] 
+             ).
+
+
+
+create_ring(1, StartPid) ->  %...then stop spawning processes.
+    loop(StartPid);  %receive loop for the other processes.
+create_ring(NumProcs, StartPid) ->
+    NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
+    loop(NextPid).
+
+%receive loop for the "start" process:
+start(NextPid) ->
+    receive 
+        {1, _Msg} ->  %...then stop looping.
+            %io:format("**start ~w received: ~s (~w)~n", [self(), Msg, 1]),
+            NextPid ! stop;  %kill other processes; this processs will die because it stops looping.
+ 
+        {NumLoops, Msg} ->
+            %io:format("**start ~w received: ~s (~w)~n", [self(), Msg, NumLoops]),
+            NextPid ! {NumLoops-1, Msg},
+            start(NextPid)
+    end.
+   
+%receive loop for the other processes:
+loop(NextPid) ->
+    receive 
+        {NumLoops, Msg} ->
+            %io:format("Process ~w received message: ~s (~w)~n", [self(), Msg, NumLoops]),
+            NextPid ! {NumLoops, Msg},
+            loop(NextPid);
+
+        stop -> 
+            NextPid ! stop  % When sent to non-existent "start" process, this still returns stop.
+    end.
+    
+```
+
+In the shell:
+
+```
+10> c(ring4).               
+{ok,ring4}
+11> ring4:ring(1000, 500).  
+RunTime: 290, WallTime: 330 (1000, 500)
+ok
+12> ring4:ring(500, 1000).
+RunTime: 290, WallTime: 314 (500, 1000)
+ok
+13> ring4:ring(2000, 1000).
+RunTime: 1310, WallTime: 1436 (2000, 1000)
+ok
+14> ring4:ring(1000, 2000).
+RunTime: 1160, WallTime: 1276 (1000, 2000)
+ok
+15> ring4:ring(4000, 2000).
+RunTime: 5730, WallTime: 6199 (4000, 2000)
+ok
+16> ring4:ring(2000, 4000).
+RunTime: 5270, WallTime: 5710 (2000, 4000)
+ok
+17> ring4:ring(8000, 1000).
+RunTime: 5880, WallTime: 6431 (8000, 1000)
+ok
+18> ring4:ring(1000, 8000).
+RunTime: 4490, WallTime: 4901 (1000, 8000)
+ok
+19> ring4:ring(12000, 1000).
+RunTime: 8790, WallTime: 9596 (12000, 1000)
+ok
+20> ring4:ring(1000, 12000). 
+RunTime: 6790, WallTime: 7419 (1000, 12000)
+ok
+```
+
+It looks like creating fewer processes and running more loops is faster.
