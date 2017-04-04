@@ -9,7 +9,7 @@ my_spawn(Mod, Func, Args) ->
     io:format("Pid: ~w, Ref: ~w~n", [Pid, Ref]),
 
     receive
-        {'DOWN', Ref, process, Pid, Why} ->  %See description on p.206 of spawn_monitor().
+        {'DOWN', Ref, process, Pid, Why} ->  %Ref and Pid are already bound!
             {_, RunTime} = statistics(runtime),
             {_, WallTime} = statistics(wall_clock),
             
