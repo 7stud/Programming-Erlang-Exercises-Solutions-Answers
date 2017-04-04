@@ -29,7 +29,7 @@ my_spawn(Mod, Func, Args) ->
 
 calc() ->
     receive
-        after 5000 ->
+        after 5000 ->   %This is the default indenting using emacs, which I don't care for.
                 10/0
         end.       
 ```
