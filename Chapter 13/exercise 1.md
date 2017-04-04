@@ -40,8 +40,10 @@ In the shell:
 18> c(a).                     
 a.erl:8: Warning: this expression will fail with a 'badarith' exception
 {ok,a}
+
 19> c(ex1).                   
 {ok,ex1}
+
 20> ex1:my_spawn(a, calc, []).
 Pid: <0.112.0>, Ref: #Ref<0.0.0.634>
 Process <0.112.0> (#Ref<0.0.0.634>) lived for 0 (5005) milliseconds,
