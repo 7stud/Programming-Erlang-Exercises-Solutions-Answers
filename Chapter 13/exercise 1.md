@@ -24,35 +24,47 @@ my_spawn(Mod, Func, Args) ->
 
 ```erlang
 -module(a).
--export([calc/0]).
+-export([calc/1]).
 
-
-calc() ->
+calc(Denominator) ->
     receive
-        after 5000 ->   %This is the default indenting using emacs, which I don't care for.
-                10/0
-        end.       
+    after 5000 ->
+        10/Denominator
+    end.  
 ```
 
 In the shell:
 
 ```
-18> c(a).                     
-a.erl:8: Warning: this expression will fail with a 'badarith' exception
+28> c(a).                      
 {ok,a}
 
-19> c(ex1).                   
+29> c(ex1).                    
 {ok,ex1}
 
-20> ex1:my_spawn(a, calc, []).
-Pid: <0.112.0>, Ref: #Ref<0.0.0.634>
-Process <0.112.0> (#Ref<0.0.0.634>) lived for 0 (5005) milliseconds,
-then died due to: {badarith,[{a,calc,0,[{file,"a.erl"},{line,8}]}]}
+30> ex1:my_spawn(a, calc, [0]).
+Pid: <0.150.0>, Ref: #Ref<0.0.0.912>
+
+=ERROR REPORT==== 4-Apr-2017::02:50:53 ===
+Error in process <0.150.0> with exit value: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
+
+Process <0.150.0> (#Ref<0.0.0.912>) lived for 0 (5005) milliseconds,
+then died due to: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
 *---------*
-=ERROR REPORT==== 4-Apr-2017::01:14:03 ===
-Error in process <0.112.0> with exit value: {badarith,[{a,calc,0,[{file,"a.erl"},{line,8}]}]}
-
 ok
-21> 
 
+31> ex1:my_spawn(a, calc, [0]).
+Pid: <0.152.0>, Ref: #Ref<0.0.0.922>
+Process <0.152.0> (#Ref<0.0.0.922>) lived for 0 (5005) milliseconds,
+then died due to: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
+
+=ERROR REPORT==== 4-Apr-2017::02:51:16 ===
+Error in process <0.152.0> with exit value: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
+
+*---------*
+ok
+
+32> 
 ```
+
+In my tests, the ERROR REPORT can get interleaved anywhere in the output.
