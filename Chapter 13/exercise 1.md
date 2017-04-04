@@ -24,33 +24,33 @@ my_spawn(Mod, Func, Args) ->
 
 ```erlang
 -module(a).
--export([test/0]).
+-export([calc/0]).
 
 
-test() ->
+calc() ->
     receive
         after 5000 ->
-                10/0   %Make process crash with badarith error
-        end.
-        
+                10/0
+        end.       
 ```
 
 In the shell:
 
 ```
-12> c(ex1).                   
+18> c(a).                     
+a.erl:8: Warning: this expression will fail with a 'badarith' exception
+{ok,a}
+19> c(ex1).                   
 {ok,ex1}
-
-13> c(a).
-
-14> ex1:my_spawn(a, test, []).
-Pid: <0.88.0>, Ref: #Ref<0.0.0.454>
-Process <0.88.0> (#Ref<0.0.0.454>) lived for 0 (5005) milliseconds,
-then died due to: {badarith,[{a,test,0,[{file,"a.erl"},{line,8}]}]}
+20> ex1:my_spawn(a, calc, []).
+Pid: <0.112.0>, Ref: #Ref<0.0.0.634>
+Process <0.112.0> (#Ref<0.0.0.634>) lived for 0 (5005) milliseconds,
+then died due to: {badarith,[{a,calc,0,[{file,"a.erl"},{line,8}]}]}
 *---------*
-=ERROR REPORT==== 4-Apr-2017::01:04:30 ===
-Error in process <0.88.0> with exit value: {badarith,[{a,test,0,[{file,"a.erl"},{line,8}]}]}
+=ERROR REPORT==== 4-Apr-2017::01:14:03 ===
+Error in process <0.112.0> with exit value: {badarith,[{a,calc,0,[{file,"a.erl"},{line,8}]}]}
 
 ok
-15>
+21> 
+
 ```
