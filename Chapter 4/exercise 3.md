@@ -315,7 +315,7 @@ So `~w` takes a single integer 2017, and converts it into a list of four integer
 ok
 ```
 
-After `lib_format()` converts the single integer 2017 to a list of four integers [50,48,49,55], `lib_format()` returns the result wrapped in a list:
+After `io_lib:format()` converts the single integer 2017 to a list of four integers [50,48,49,55], `io_lib:format()` returns the result wrapped in a list:
 
     ["2017"]
 
@@ -338,7 +338,7 @@ The whole result is equivalent to:
     %      V              V
     [ [50,48,49,55], 45, [50], .... ]
     %                ^
-    %                | an integer, which is also the ascii code for a '-'
+    %                | an integer, which is also the ascii code for '-'
     
 That looks like a nightmare of nested lists!  How do we get a single, flat list out of that?  Well, look at what the ***control sequence*** `~s` does to a list of nested lists:
 
