@@ -27,7 +27,7 @@ my_spawn(Mod, Fun, Args) ->
         end,
 
     on_exit(Pid, TerminationFun), %%Returns Pid of monitor.
-    Pid.  %%Need to return the Pid of the function that is being monitored.
+    Pid.  %%Need to return Pid of function being monitored.
 
     
 atomizer() ->
