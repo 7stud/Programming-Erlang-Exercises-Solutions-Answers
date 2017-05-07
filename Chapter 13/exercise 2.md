@@ -74,7 +74,7 @@ $ erl
 2> my:test().
 
 ```
-over and over again, so I created a shell script in the same directory called `run.sh`:
+over and over again.  I shortened my module names to two letters, which makes things easier, but it's still a pain.  So I created a shell script in the same directory called `run.sh`:
 
 ```
 #!/usr/bin/env sh
