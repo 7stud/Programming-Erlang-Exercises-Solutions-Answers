@@ -1,5 +1,5 @@
 ```erlang
--module(ex1).
+-module(e1).
 -export([my_spawn/3, atomize/0, test/0]).
 
 my_spawn(Mod, Func, Args) ->
@@ -33,11 +33,10 @@ test() ->
                       %%so output appears after 1> prompt.
     io:format("testing...~n"),  
 
-    Atomizer = my_spawn(ex1, atomize, []),
+    Atomizer = my_spawn(e1, atomize, []),
     timer:sleep(2000), %%Let atomize() run for awhile.
     Atomizer ! hello,
     ok.
-
 
 ```
 
@@ -53,13 +52,14 @@ Eshell V8.2  (abort with ^G)
 1> testing...
 Process <0.59.0> lived for 2001 milliseconds,
 then died due to: {badarg,[{erlang,list_to_atom,[hello],[]},
-                           {ex1,atomize,0,[{file,"ex1.erl"},{line,27}]}]}
+                           {e1,atomize,0,[{file,"e1.erl"},{line,27}]}]}
 
-=ERROR REPORT==== 7-May-2017::14:54:54 ===
+=ERROR REPORT==== 7-May-2017::15:23:31 ===
 Error in process <0.59.0> with exit value:
 {badarg,[{erlang,list_to_atom,[hello],[]},
-         {ex1,atomize,0,[{file,"ex1.erl"},{line,27}]}]}
+         {e1,atomize,0,[{file,"e1.erl"},{line,27}]}]}
 *---------*
+
 
 ```
 I'm sick of typing:
@@ -67,9 +67,9 @@ I'm sick of typing:
 ```
 $ erl
 
-1> c(my).
+1> c(e1).
 
-2> my:test().
+2> e1:test().
 
 ```
 over and over again.  I shortened my module names to two letters, which makes things easier, but it's still a pain.  So I created a shell script in the same directory called `run.sh`:
@@ -77,8 +77,8 @@ over and over again.  I shortened my module names to two letters, which makes th
 ```
 #!/usr/bin/env sh
 
-erlc -W ex1.erl
-erl -s ex1 test
+erlc -W e1.erl
+erl -s e1 test
 ```
 
 Then I made it executable:
