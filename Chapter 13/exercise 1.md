@@ -85,10 +85,10 @@ Then I made it executable:
 ```
 $ chmod u+x run.sh
 ```
-Now, I can run my elrang program like this:
+Now, I can run my elrang program from the command line like this:
 ```
 $ ./run.sh
 ```
-And if I need to run my program again, I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
+And if I need to run my program again, I kill the erlang shell with Ctrl+CC, then I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
 
 Note that sometimes after running my shell script, the shell will be unresponsive, so I can't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  Just keep that in mind when you use a shell script.
