@@ -62,7 +62,7 @@ Error in process <0.59.0> with exit value:
 
 
 ```
-I'm sick of typing:
+I got sick of typing:
 
 ```
 $ erl
