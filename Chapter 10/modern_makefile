@@ -32,7 +32,7 @@ modules = a w2 b
 
 #The following is the first "target" in this makefile, which
 #means that make will try to create the file "all" (and only
-#the minimum necessary to creat the file "all) by
+#the minimum necessary to create the file "all") by
 #first creating the "prerequisite" files, which are listed to
 #the right of the colon after "all".  The syntax used to the right
 #of the colon converts the names in the modules variable
