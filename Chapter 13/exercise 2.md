@@ -93,4 +93,4 @@ $ ./run.sh
 ```
 And if I need to run my program again, I just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
 
-(Sometimes I need to spawn() the test function to keep the shell from freezing, say when I want to check `i()`.  If the shell is unresponsive when I run my `test()` function, and I need the shell to be responsive, then I create a function called `test_init()`, which spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.) 
+(Sometimes I need to spawn() the test function to keep the shell from freezing, say when I want to check `i()`.  If the shell is unresponsive when I run my `test()` function, and I need the shell to be responsive, then I create a function called `test_init()`, which spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  Just keep that in mind when you use the shell script.) 
