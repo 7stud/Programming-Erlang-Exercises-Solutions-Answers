@@ -1,70 +1,65 @@
 ```erlang
 -module(ex1).
--export([my_spawn/3]).
+-export([my_spawn/3, atomize/0, test/0]).
 
 my_spawn(Mod, Func, Args) ->
-    {Pid, Ref}  = spawn_monitor(Mod, Func, Args),
-    statistics(runtime),
+    %%Create separate process to run Func:
+    FuncPid = spawn(Mod, Func, Args),
     statistics(wall_clock),
-    io:format("Pid: ~w, Ref: ~w~n", [Pid, Ref]),
+    
+    %%Create separate process for the monitor:
+    spawn(fun() ->
+        Ref = monitor(process, FuncPid),  %%Ref identifies the FuncPid process
+        receive
+            {'DOWN', Ref, process, FuncPid, Why} -> %% Ref and FuncPid are bound!
+                {_, WallTime} = statistics(wall_clock),
+                io:format("Process ~w lived for ~w milliseconds,~n", 
+                          [FuncPid, WallTime]),
+                io:format("then died due to: ~p~n", [Why]),
+                io:format("*---------*~n")
+        end 
+    end),  %%Monitor process dies after receiving a 'DOWN' message.
 
+    FuncPid. %%To mimic spawn(Mod, Func, Args), return the Pid of the
+             %%process that is running Func.
+
+atomize() ->
     receive
-        {'DOWN', Ref, process, Pid, Why} ->  %Ref and Pid are already bound!
-            {_, RunTime} = statistics(runtime),
-            {_, WallTime} = statistics(wall_clock),
-            
-            io:format("Process ~w (~w) lived for ~w (~w) milliseconds,~n", [Pid, Ref, RunTime, WallTime]),
-            io:format("then died due to: ~p~n", [Why]),
-            io:format("*---------*", [])
+        List -> list_to_atom(List)
     end.
 
+test() ->
+    timer:sleep(500), %%Allow time for shell startup
+                      %%so output appears after 1> prompt.
+    io:format("testing...~n"),  
+
+    Atomizer = my_spawn(ex1, atomize, []),
+    timer:sleep(2000), %%Let atomize() run for awhile.
+    Atomizer ! hello,
+    ok.
+
+
 ```
 
--------
-
-```erlang
--module(a).
--export([calc/1]).
-
-calc(Denominator) ->
-    receive
-    after 5000 ->
-        10/Denominator
-    end.  
-```
 
 In the shell:
 
 ```
-28> c(a).                      
-{ok,a}
+$ ./run.sh 
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
-29> c(ex1).                    
-{ok,ex1}
+Eshell V8.2  (abort with ^G)
 
-30> ex1:my_spawn(a, calc, [0]).
-Pid: <0.150.0>, Ref: #Ref<0.0.0.912>
+1> testing...
+Process <0.59.0> lived for 2001 milliseconds,
+then died due to: {badarg,[{erlang,list_to_atom,[hello],[]},
+                           {ex1,atomize,0,[{file,"ex1.erl"},{line,27}]}]}
 
-=ERROR REPORT==== 4-Apr-2017::02:50:53 ===
-Error in process <0.150.0> with exit value: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
-
-Process <0.150.0> (#Ref<0.0.0.912>) lived for 0 (5005) milliseconds,
-then died due to: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
+=ERROR REPORT==== 7-May-2017::14:54:54 ===
+Error in process <0.59.0> with exit value:
+{badarg,[{erlang,list_to_atom,[hello],[]},
+         {ex1,atomize,0,[{file,"ex1.erl"},{line,27}]}]}
 *---------*
-ok
 
-31> ex1:my_spawn(a, calc, [0]).
-Pid: <0.152.0>, Ref: #Ref<0.0.0.922>
-Process <0.152.0> (#Ref<0.0.0.922>) lived for 0 (5005) milliseconds,
-then died due to: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
-
-=ERROR REPORT==== 4-Apr-2017::02:51:16 ===
-Error in process <0.152.0> with exit value: {badarith,[{a,calc,1,[{file,"a.erl"},{line,8}]}]}
-
-*---------*
-ok
-
-32> 
 ```
 
-In my tests, the ERROR REPORT can get interleaved anywhere in the output.
