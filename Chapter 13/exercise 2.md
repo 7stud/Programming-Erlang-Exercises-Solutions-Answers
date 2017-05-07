@@ -27,22 +27,23 @@ my_spawn(Mod, Fun, Args) ->
         end,
 
     on_exit(Pid, TerminationFun), %%Returns Pid of monitor.
-    Pid.  %%Need to return Pid of function being monitored.
+    Pid. %%Need to return Pid of function being monitored.
 
     
-atomizer() ->
+atomize() ->
     receive
         List -> list_to_atom(List)
     end.
     
 test() ->
-    timer:sleep(500),  %%Give everything time to start up, so output appears after 1> prompt.
+    timer:sleep(500),  %%Allow time for shell to startup. 
     io:format("testing...~n"),
 
-    Pid = my_spawn(my, atomizer, []),
+    Pid = my_spawn(my, atomize, []),
 
-    timer:sleep(1000),
+    timer:sleep(2000),  %%Allow atomize() to run for awhile.
     Pid ! hello.
+
 
 ```
 
@@ -54,14 +55,14 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 
 1> testing...
-Process (<0.59.0>) terminated. It lived for 1001 milliseconds.
+Process (<0.59.0>) terminated. It lived for 2001 milliseconds.
 Then it died due to: {badarg,[{erlang,list_to_atom,[hello],[]},
-                              {my,atomizer,0,[{file,"my.erl"},{line,32}]}]}
+                              {e2,atomize,0,[{file,"e2.erl"},{line,32}]}]}
 
-=ERROR REPORT==== 7-May-2017::13:10:23 ===
+=ERROR REPORT==== 7-May-2017::15:16:44 ===
 Error in process <0.59.0> with exit value:
 {badarg,[{erlang,list_to_atom,[hello],[]},
-         {my,atomizer,0,[{file,"my.erl"},{line,32}]}]}
+         {e2,atomize,0,[{file,"e2.erl"},{line,32}]}]}
 ```
 
 
