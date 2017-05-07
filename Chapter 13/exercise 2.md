@@ -1,3 +1,5 @@
+Using on_exit() in my_spawn/3:
+
 ```erlang
 -module(my).
 -export([atomizer/0, my_spawn/3, test/0]).
