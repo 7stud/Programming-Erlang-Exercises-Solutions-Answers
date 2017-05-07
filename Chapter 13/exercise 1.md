@@ -77,8 +77,8 @@ over and over again.  I shortened my module names to two letters, which makes th
 ```
 #!/usr/bin/env sh
 
-erlc -W my.erl
-erl -s my test
+erlc -W ex1.erl
+erl -s ex1 test
 ```
 
 Then I made it executable:
