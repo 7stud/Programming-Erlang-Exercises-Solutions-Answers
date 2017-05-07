@@ -74,8 +74,7 @@ $ erl
 2> my:test().
 
 ```
-
-So I created a shell script in the same directory called `run.sh`:
+over and over again, so I created a shell script in the same directory called `run.sh`:
 
 ```
 #!/usr/bin/env sh
