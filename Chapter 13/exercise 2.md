@@ -1,4 +1,4 @@
-Using on_exit() in my_spawn/3:
+Using `on_exit()` in `my_spawn/3`:
 
 ```erlang
 -module(my).
