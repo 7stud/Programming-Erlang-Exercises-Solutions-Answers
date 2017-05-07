@@ -64,33 +64,4 @@ Error in process <0.59.0> with exit value:
          {my,atomizer,0,[{file,"my.erl"},{line,32}]}]}
 ```
 
-I'm sick of typing:
 
-```
-$ erl
-
-1> c(my).
-
-2> my:test().
-
-```
-over and over again.  I shortened my module names to two letters, which makes things easier, but it's still a pain.  So I created a shell script in the same directory called `run.sh`:
-
-```
-#!/usr/bin/env sh
-
-erlc -W my.erl
-erl -s my test
-```
-
-Then I made it executable:
-```
-$ chmod u+x run.sh
-```
-Now, I can run my elrang program like this:
-```
-$ ./run.sh
-```
-And if I need to run my program again, I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
-
-(Note that sometimes after running my shell script, the shell will be unresponsive, so I can't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  Just keep that in mind when you use the shell script.) 
