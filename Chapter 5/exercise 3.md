@@ -16,7 +16,7 @@ The part between the pipes:
 
     |(key, value)|
     
-is the parameter list for the anonymouse function. And `block`here:
+is the parameter list for the anonymous function. And `block`here:
 
     { |(key, value)| block }
 
