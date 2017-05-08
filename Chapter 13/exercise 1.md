@@ -1,4 +1,4 @@
-My first attempt is below.  It has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the monitor will not detect the failure:
+My first attempt is below.  It has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the information about the process life will not be output:
 ```erlang
 -module(e1).
 -export([my_spawn/3, atomize/0, test/0]).
