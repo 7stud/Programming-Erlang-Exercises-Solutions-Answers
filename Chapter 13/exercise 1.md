@@ -63,8 +63,55 @@ Error in process <0.59.0> with exit value:
          {e1,atomize,0,[{file,"e1.erl"},{line,27}]}]}
 *---------*
 
-
 ```
+
+I think the following solution covers the problems with my first solution:
+
+```erlang
+-module(e1).
+-export([my_spawn/3, atomize/0, test/0]).
+
+my_spawn(Mod, Func, Args) ->
+    MySpawn = self(),
+    Tag = make_ref(),  %%Tag needs to be accesible in the spawned func as well
+                       %%as in the receive at the end of this func.
+    %%Create separate process for the monitor:
+    Monitor =
+        spawn(fun() ->
+            {FuncPid, Ref} = spawn_monitor(Mod, Func, Args),  %%Erlang will include Ref in the 'DOWN' message
+            statistics(wall_clock),
+            MySpawn ! {self(), Tag, FuncPid},
+            receive
+                {'DOWN', Ref, process, FuncPid, Why} -> %% Ref and FuncPid are bound!
+                    {_, WallTime} = statistics(wall_clock),   %%Elapsed time since last call.
+                    io:format("Process ~w lived for ~w milliseconds,~n", 
+                              [FuncPid, WallTime]),
+                    io:format("then died due to: ~p~n", [Why]),
+                    io:format("*---------*~n")
+            end 
+        end),  %%Monitor process dies after receiving a 'DOWN' message.
+    
+    receive %%Blocks until the line that sends the message in Monitor executes.
+        {Monitor, Tag, FuncPid} -> FuncPid
+    end.
+ 
+
+atomize() ->
+    receive
+        List -> list_to_atom(List)
+    end.
+
+test() ->
+    timer:sleep(500), %%Allow time for shell startup
+                      %%so output appears after 1> prompt.
+    io:format("testing...~n"),  
+
+    Atomizer = my_spawn(e1, atomize, []),
+    timer:sleep(2000), %%Let atomize() run for awhile.
+    Atomizer ! hello,
+    ok.
+```
+
 I got sick of typing:
 
 ```
