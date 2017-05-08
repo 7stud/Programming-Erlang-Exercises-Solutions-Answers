@@ -12,7 +12,7 @@ my_spawn(Mod, Func, Args) ->
     
     %%Create separate process for the monitor:
     spawn(fun() ->
-        Ref = monitor(process, FuncPid),  %%Ref identifies the FuncPid process
+        Ref = monitor(process, FuncPid),  %%Ref is sent in the 'DOWN' message.
         receive
             {'DOWN', Ref, process, FuncPid, Why} -> %% Ref and FuncPid are bound!
                 {_, WallTime} = statistics(wall_clock),   %%Get the elapsed since the last call to statistics(wall_clock).
