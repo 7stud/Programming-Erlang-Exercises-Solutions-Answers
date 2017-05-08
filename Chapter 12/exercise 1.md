@@ -97,7 +97,7 @@ start(Name, Fun) ->
           end).
 ```
 
-With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).  The difference between my solution and the fix is that my start/2 function first checks if the name is registered, then spawns a fun, while the fix first spawns a fun and inside the spawned fun checks if the name is registered.
+With that code, if register() throws an exception then the spawned process will fail (also taking down the process that called start/2).  The difference between my solution and the fix is that my start/2 function first checks if the name is registered, then spawns a fun, while the fix first spawns a fun and inside the spawned fun the fix tries to register the name.
 
 I found the fix here:
 
