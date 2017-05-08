@@ -31,6 +31,8 @@ loop(N) ->
     end.
     
 ```
+If `Func` is trapping exits, then the process won't die unless you send it a 'kill' signal.
+
 In the shell,
 ```
 $ ./run
