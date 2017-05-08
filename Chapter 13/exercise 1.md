@@ -91,7 +91,7 @@ my_spawn(Mod, Func, Args) ->
             end 
         end),  %%Monitor process dies after receiving a 'DOWN' message.
     
-    receive %%Blocks until the line that sends the message in Monitor executes.
+    receive %%Blocks until the line that sends the message in Monitor is able to execute.
         {Monitor, Tag, FuncPid} -> FuncPid
     end.
  
