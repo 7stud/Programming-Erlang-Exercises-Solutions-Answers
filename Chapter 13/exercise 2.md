@@ -16,13 +16,15 @@ on_exit(Pid, Fun) ->
 
 my_spawn(Mod, Fun, Args) ->
     Pid = spawn(Mod, Fun, Args),
-    statistics(wall_clock), %%Get the elapsed time since the previous call to statistics(wall_clock) and throw it away.
+    statistics(wall_clock), %%Get the elapsed time since the previous call 
+                            %%to statistics(wall_clock) and throw it away.
 
     %%exit(Pid, kill),
 
     TerminationFun = 
         fun(Why) ->
-                {_, WallTime} = statistics(wall_clock),  %%Get the elapsed time since the previous call to statistics(wall_clock).
+                {_, WallTime} = statistics(wall_clock),  %%Get the elapsed time since the 
+                                                         %%previous call to statistics(wall_clock).
                 io:format("Process (~w) terminated. ", [Pid]),
                 io:format("It lived for ~w milliseconds.~n", [WallTime]),
                 io:format("Then it died due to: ~p~n", [Why])
