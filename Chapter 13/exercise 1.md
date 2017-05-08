@@ -113,6 +113,32 @@ test() ->
 
 ```
 
+In the shell:
+```
+$ ./run
+-----Now, do some Erlang for great Good!------
+
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+-----Now, do some Erlang for great Good!------
+
+Eshell V8.2  (abort with ^G)
+1> testing...
+Executing fun...
+Can't get here.
+FuncPid: <0.60.0>, ThisRef: #Ref<0.0.4.133>
+Got: <0.60.0>
+Process <0.60.0> lived for 2001 milliseconds,
+then died due to: {badarg,[{erlang,list_to_atom,[hello],[]},
+                           {e1,atomize,0,[{file,"e1.erl"},{line,39}]}]}
+
+=ERROR REPORT==== 7-May-2017::22:48:10 ===
+Error in process <0.60.0> with exit value:
+{badarg,[{erlang,list_to_atom,[hello],[]},
+         {e1,atomize,0,[{file,"e1.erl"},{line,39}]}]}
+*---------*
+
+```
 I got sick of typing:
 
 ```
