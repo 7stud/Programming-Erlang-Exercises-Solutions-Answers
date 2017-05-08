@@ -32,7 +32,7 @@ loop(N) ->
     end.
     
 ```
-Note that if `Func` is trapping exits, then the process it is running in won't die unless you send the process a 'kill' signal.
+Note that if `Func` is trapping exits, then the process that `Func` is running in won't die unless you send the process a 'kill' signal.
 
 In the shell,
 ```
