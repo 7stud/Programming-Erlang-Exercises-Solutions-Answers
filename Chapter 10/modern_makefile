@@ -62,7 +62,8 @@ all: $(modules:%=%.beam)
 #           $< 
 #It represents the full file name of the file that matched 
 #the pattern on the right side of the colon.
-#Yep, it's scary looking syntax. Welcome to perl!
+#Yep, it's scary looking syntax. Welcome to perl! 
+#($rhs would have been a better choice in my opinion!). 
 #The -W option is for warnings.
 
 %.beam: %.erl
