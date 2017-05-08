@@ -8,7 +8,7 @@ my_spawn(Mod, Func, Args) ->
     FuncPid = spawn(Mod, Func, Args),
     statistics(wall_clock),   %%Get the start time (and throw away the return value).
     
-    %%****WHAT IF THE PIDFUNC PROCESS FAILS HERE???******
+    %%****WHAT IF THE FuncPid PROCESS FAILS HERE???******
     
     %%Create separate process for the monitor:
     spawn(fun() ->
