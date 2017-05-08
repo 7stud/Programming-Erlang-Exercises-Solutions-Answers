@@ -62,7 +62,7 @@ all: $(modules:%=%.beam)
 #It represents the full file name of the file that matched 
 #the pattern on the right side of the colon.
 #Yep, it's scary looking syntax. Welcome to perl!
-#The -W options is for warnings.
+#The -W option is for warnings.
 %.beam: %.erl
 	erlc -W $< 
 	
