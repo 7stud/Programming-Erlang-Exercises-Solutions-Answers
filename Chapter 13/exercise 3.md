@@ -13,20 +13,21 @@ killer(Pid, Timeout) ->
 my_spawn(Mod, Func, Args, Timeout) ->
     Pid = spawn(Mod, Func, Args),
     %%exit(Pid, testing),
-    io:format("Func running in process: ~w~n", [Pid]),
+    io:format("~w:~w(~w) running in process: ~w~n", [Mod, Func, Args, Pid]),
     spawn(?MODULE, killer, [Pid, Timeout]),
     Pid.
- 
+    
 %-------------                
     
 test() ->
     timer:sleep(500), %%Allow time for the output from the shell startup to be printed.
-    my_spawn(?MODULE, loop, [1], 7500).
+    my_spawn(?MODULE, loop, [1], 7500),
+    testing.
     
 loop(N) ->
     receive
     after 1000 ->
-            io:format("loop: tick ~w~n", [N]),
+            io:format("loop(): tick ~w~n", [N]),
             loop(N+1)
     end.
     
@@ -39,13 +40,13 @@ $ ./run
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
 
-1> Func running in process: <0.59.0>
-loop: tick 1
-loop: tick 2
-loop: tick 3
-loop: tick 4
-loop: tick 5
-loop: tick 6
-loop: tick 7
+1> e3:loop([1]) running in process: <0.59.0>
+loop(): tick 1
+loop(): tick 2
+loop(): tick 3
+loop(): tick 4
+loop(): tick 5
+loop(): tick 6
+loop(): tick 7
 killer(): <0.59.0> sent 'kill' signal after 7500 milliseconds.
 ```
