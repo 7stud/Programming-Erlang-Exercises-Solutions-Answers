@@ -73,14 +73,14 @@ I think the following attempt covers the problems with my first solution:
 
 my_spawn(Mod, Func, Args) ->
     MySpawn = self(),
-    Tag = make_ref(),  %%Tag needs to be accesible in the spawned func as well
+    Tag = make_ref(),  %%Tag needs to be accesible in the Monitor as well
                        %%as in the receive at the end of this func.
     %%Create separate process for the monitor:
     Monitor =
         spawn(fun() ->
             {FuncPid, Ref} = spawn_monitor(Mod, Func, Args),  %%Erlang will include Ref in the 'DOWN' message
             statistics(wall_clock),
-            MySpawn ! {self(), Tag, FuncPid},
+            MySpawn ! {self(), Tag, FuncPid},  %%Use the Monitor pid and a reference to tag the message.
             receive
                 {'DOWN', Ref, process, FuncPid, Why} -> %% Ref and FuncPid are bound!
                     {_, WallTime} = statistics(wall_clock),   %%Elapsed time since last call.
