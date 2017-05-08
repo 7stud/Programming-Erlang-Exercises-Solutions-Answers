@@ -1,3 +1,4 @@
+```erlang
 -module(e3).
 -export([my_spawn/4, killer/2, test/0, loop/1]).
 
@@ -29,3 +30,4 @@ loop(N) ->
             loop(N+1)
     end.
     
+```
