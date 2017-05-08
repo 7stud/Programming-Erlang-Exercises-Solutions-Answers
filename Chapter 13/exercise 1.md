@@ -1,4 +1,4 @@
-My first attempt is below.  It has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the information about the process life will not be output:
+My first attempt is below. 
 ```erlang
 -module(e1).
 -export([my_spawn/3, atomize/0, test/0]).
@@ -43,7 +43,6 @@ test() ->
 
 ```
 
-
 In the shell:
 
 ```
@@ -65,7 +64,7 @@ Error in process <0.59.0> with exit value:
 
 ```
 
-I think the following attempt covers the problems with my first solution:
+That solution has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the information about the process life will not be output.  I think the following attempt covers the problems with my first solution:
 
 ```erlang
 -module(e1).
