@@ -17,6 +17,8 @@ erlc -W e1.erl
 erl -s e1 test
 ```
 
+(You are not supposed to use extensions with shell script file names, but a .sh/.bash extension will allow my editor's syntax highlighting to take effect.)
+
 Then I made it executable:
 ```
 $ chmod u+x run
