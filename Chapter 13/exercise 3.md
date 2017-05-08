@@ -31,3 +31,18 @@ loop(N) ->
     end.
     
 ```
+In the shell,
+
+$ ./run
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+Eshell V8.2  (abort with ^G)
+
+1> Func running in process: <0.59.0>
+loop: tick 1
+loop: tick 2
+loop: tick 3
+loop: tick 4
+loop: tick 5
+loop: tick 6
+loop: tick 7
+killer(): <0.59.0> sent 'kill' signal after 7500 milliseconds.
