@@ -5,14 +5,14 @@
 my_spawn(Mod, Func, Args) ->
     %%Create separate process to run Func:
     FuncPid = spawn(Mod, Func, Args),
-    statistics(wall_clock),
+    statistics(wall_clock),   %%Get the start time (and throw away the return value).
     
     %%Create separate process for the monitor:
     spawn(fun() ->
         Ref = monitor(process, FuncPid),  %%Ref identifies the FuncPid process
         receive
             {'DOWN', Ref, process, FuncPid, Why} -> %% Ref and FuncPid are bound!
-                {_, WallTime} = statistics(wall_clock),
+                {_, WallTime} = statistics(wall_clock),   %%Get the elapsed since the last call to statistics(wall_clock).
                 io:format("Process ~w lived for ~w milliseconds,~n", 
                           [FuncPid, WallTime]),
                 io:format("then died due to: ~p~n", [Why]),
