@@ -43,9 +43,8 @@ test() ->
     io:format("testing...~n"),
 
     Pid = my_spawn(my, atomize, []),
-
     timer:sleep(2000),  %%Allow atomize() to run for awhile.
-    Pid ! hello.
+    Pid ! hello.  %%Causes error in Pid.
 
 
 ```
