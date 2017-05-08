@@ -43,6 +43,7 @@ modules = a w2 b
 #is equivalent to:
 #     a.beam w2.beam b.beam
 #
+
 all: $(modules:%=%.beam) 
 .PHONY: all
 
@@ -63,6 +64,7 @@ all: $(modules:%=%.beam)
 #the pattern on the right side of the colon.
 #Yep, it's scary looking syntax. Welcome to perl!
 #The -W option is for warnings.
+
 %.beam: %.erl
 	erlc -W $< 
 	
