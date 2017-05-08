@@ -1,3 +1,4 @@
+My first attempt is below.  It has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the monitor will not detect the failure:
 ```erlang
 -module(e1).
 -export([my_spawn/3, atomize/0, test/0]).
@@ -6,6 +7,8 @@ my_spawn(Mod, Func, Args) ->
     %%Create separate process to run Func:
     FuncPid = spawn(Mod, Func, Args),
     statistics(wall_clock),   %%Get the start time (and throw away the return value).
+    
+    %%****WHAT IF THE PIDFUNC PROCESS FAILS HERE???******
     
     %%Create separate process for the monitor:
     spawn(fun() ->
