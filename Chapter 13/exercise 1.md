@@ -64,7 +64,7 @@ Error in process <0.59.0> with exit value:
 
 ```
 
-That solution has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the information about the process life will not be output. (**Edit:** Nope!  A monitor still works if the process doesn't exist when the monitor is created: in the 'DOWN' message Why will be `noproc`, which means _no process_).  I think the following attempt covers the problems with my first solution:
+That solution has a serious problem though: if the FuncPid process fails immediately after being spawned, the monitor will not be hooked up yet, so the information about the process life will not be output. (**Edit:** Nope!  A monitor will still work if the process doesn't exist when the monitor is created: the monitor will receive a 'DOWN' message and `Why`will be `noproc`, meaning _no process_).  I think the following attempt covers the problems with my first solution:
 ```erlang
 -module(e1).
 -export([my_spawn/3, atomize/0, test/0]).
