@@ -65,4 +65,4 @@ Error in process <0.59.0> with exit value:
          {e2,atomize,0,[{file,"e2.erl"},{line,32}]}]}
 ```
 
-Once again, there's a serious problem with that solution: if the process running the funtion dies before the monitor can be created, then the timing info won't be printed out.  If we are forced to use `on_ext()`, which requires a Pid as an argument, then we have to create the process first theand ensure that whenever the process running the function dies the timing information will be output.
+Once again, there's a serious problem with the solution: if the process running the funtion dies before the monitor can be created, then the timing info won't be printed out.  If we are forced to use `on_ext()`, which requires a Pid as an argument, then we have to create the process first, which means there will always be a chance that the process will die before the monitor can be established.
