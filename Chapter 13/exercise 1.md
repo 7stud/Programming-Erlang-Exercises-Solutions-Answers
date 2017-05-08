@@ -65,7 +65,7 @@ Error in process <0.59.0> with exit value:
 
 ```
 
-I think the following solution covers the problems with my first solution:
+I think the following attempt covers the problems with my first solution:
 
 ```erlang
 -module(e1).
