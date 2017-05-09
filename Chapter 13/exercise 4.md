@@ -56,16 +56,6 @@ monitor_test() ->
     timer:sleep(2200),
 
     stop().
-
-
-
-        
-    
-                  
-                  
-                  
-                
-
 ```
 
 In the shell:
