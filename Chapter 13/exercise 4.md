@@ -38,6 +38,8 @@ my_monitor() ->
             From ! {reply, shutdown, self()}
     end.
 
+%-------------
+
 start() ->
     monitor_init().
 
