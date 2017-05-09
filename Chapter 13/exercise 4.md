@@ -19,7 +19,7 @@ func() ->
             func()
     end.
 
-%-------------
+%%-------------
 
 monitor_init() ->
     register(monitor, spawn(?MODULE, my_monitor, [])).
@@ -33,25 +33,19 @@ my_monitor() ->
         {'DOWN', Ref, process, Func, Why} ->
             io:format("~w went down: ~w~nrestarting...~n", [Func, Why]),
             my_monitor();
-        {request, stop, From} ->
-            Func ! stop,
-            From ! {reply, shutdown, self()}
+        {request, stop} ->
+            Func ! stop
     end.
 
-%-------------
+%%-----------
 
 start() ->
     monitor_init().
 
 stop() ->
-    monitor ! {request, stop, self()},
-    Monitor = whereis(monitor),
-    receive
-        {reply, Response, Monitor} ->
-            Response
-    end.
+    monitor ! {request, stop},
+    shutdown.
     
-
 monitor_test() ->
     start(),
 
@@ -62,6 +56,15 @@ monitor_test() ->
     timer:sleep(2200),
 
     stop().
+
+
+
+        
+    
+                  
+                  
+                  
+                
 
 ```
 
@@ -76,25 +79,26 @@ Eshell V8.2  (abort with ^G)
 {ok,e4}
 
 2> e4:monitor_test().
-Func is running in process: <0.73.0>
+Func is running in process: <0.44.0>
 I'm still running.
 I'm still running.
 I'm still running.
-<0.73.0> went down: my_stop
+<0.44.0> went down: my_stop
 restarting...
-Func is running in process: <0.74.0>
+Func is running in process: <0.45.0>
 I'm still running.
 I'm still running.
 I'm still running.
 I'm still running.
-<0.74.0> went down: killed
+<0.45.0> went down: killed
 restarting...
-Func is running in process: <0.75.0>
+Func is running in process: <0.46.0>
 I'm still running.
 I'm still running.
 shutdown
 
 3> 
+
 
 
 
