@@ -38,7 +38,7 @@ test() ->
 
     Atomizer = my_spawn(e1, atomize, []),
     timer:sleep(2000), %%Let atomize() run for awhile.
-    Atomizer ! hello,
+    Atomizer ! hello,  %%Will cause an error in Atomizer.
     ok.
 
 ```
