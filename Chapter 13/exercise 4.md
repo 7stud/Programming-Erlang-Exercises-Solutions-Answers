@@ -2,7 +2,7 @@
 -module(e4).
 %%-compile(export_all).
 -export([func_init/0, func/0, monitor_init/0, my_monitor/0]).
--export([start/0, stop/1]).
+-export([start/0, stop/0]).
 -include_lib("eunit/include/eunit.hrl").
 
 func_init() ->
@@ -20,7 +20,7 @@ func() ->
 %-------------
 
 monitor_init() ->
-    spawn(?MODULE, my_monitor, []).
+    register(monitor, spawn(?MODULE, my_monitor, [])).
     
 my_monitor() ->
     Func = func_init(),
@@ -39,8 +39,9 @@ my_monitor() ->
 start() ->
     monitor_init().
 
-stop(Monitor) ->
-    Monitor ! {request, stop, self()},
+stop() ->
+    monitor ! {request, stop, self()},
+    Monitor = whereis(monitor),
     receive
         {reply, Response, Monitor} ->
             Response
@@ -56,7 +57,7 @@ monitor_test() ->
     exit(whereis(e4), kill),
     timer:sleep(2200),
 
-    stop(Monitor).
+    stop().
 
 ```
 
