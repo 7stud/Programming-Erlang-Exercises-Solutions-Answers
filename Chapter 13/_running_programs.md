@@ -31,6 +31,6 @@ When I need to run my program again, I kill the erlang shell with `Ctrl+CC`, the
 
 Note that sometimes after running my shell script with particular programs, the shell was unresponsive, so I couldn't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  Keep that trick in mind if that happens to you.
 
-Also, sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.  hello world.
+Also, sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.
 
 
