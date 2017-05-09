@@ -1,3 +1,5 @@
+I found this exercise pretty difficult.  At some point, I abandoned the verbatim description in the exercise, and I just tried to come up with any solution.  Then, I added the user interface: `start()`, `stop()`.
+
 ```erlang
 -module(e4).
 %%-compile(export_all).
