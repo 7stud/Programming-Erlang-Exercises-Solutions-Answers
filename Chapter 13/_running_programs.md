@@ -29,8 +29,12 @@ $ ./run
 ```
 When I need to run my program again, I kill the erlang shell with `Ctrl+CC`, then I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
 
-Note that sometimes after running my shell script with particular programs, the shell was unresponsive, so I couldn't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  Keep that trick in mind if that happens to you.
+Potential problems when using a shell script:
 
-Also, sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.
+1. Sometimes after running my shell script on particular programs, the shell is unresponsive, so I can't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  
+
+2. Typically, you need to start a test() function with a short timer:sleep(500), so that the shell initialization output has time to print before the program output prints.
+
+3. Sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.  A shell script runs in a different process than the erlang shell, and the shell script process is not in a read-evaluate loop like the erlang shell, so the shell script process won't automaticaly output the return value of a function on the last line of your program.
 
 
