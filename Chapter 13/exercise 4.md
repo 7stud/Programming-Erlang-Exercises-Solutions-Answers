@@ -49,7 +49,7 @@ stop() ->
     
 
 monitor_test() ->
-    Monitor = start(),
+    start(),
 
     timer:sleep(3200),
     exit(whereis(e4), my_stop),
