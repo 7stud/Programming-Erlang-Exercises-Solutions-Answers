@@ -1,4 +1,4 @@
-I thought the ring exercise was very difficult.  I wrote five or six different solutions, and every time my program would hang somewhere.  Finally, I got something to work--but it seems overly complex. I created a separate receive loop for the "start" process in order to decrement the loop count as well as a receive loop for the other processes.  I also passed the pid of the next process as an argument to the receive loops to keep the pid from going out of scope.
+I thought the ring exercise was very difficult.  I wrote five or six different solutions, and every time my program would hang somewhere.  Finally, I got something to work--but it seems overly complex. I created a separate receive loop for the "start" process in order to decrement the loop count in addition to the receive loop for the other processes.  I also passed the pid of the next process as an argument to the receive loops to keep the pid from going out of scope.
 
 ```erlang
 -module(ring3).
