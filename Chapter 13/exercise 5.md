@@ -264,3 +264,103 @@ ok
 ```
 No processes from e5 in there!
 
+
+Here's a version using maps in Erlang 19.2:
+```erlang
+-module(e5).
+%%-compile(export_all).
+-export([monitor_workers_init/1, monitor_workers/1]).
+-export([test/0]).
+
+monitor_workers_init(Funcs) ->
+    spawn(?MODULE, monitor_workers, [Funcs]).
+
+monitor_workers(Funcs) ->
+    Workers = lists:foldl(
+                fun(Func, Map) ->  
+                        Map#{spawn_monitor(Func) => Func}  %%{Pid, Ref} => Func
+                end,
+                #{}, Funcs),
+    io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
+    loop(Workers).
+
+loop(Workers) ->
+    receive
+        {'DOWN', Ref, process, Pid, Why} ->
+            io:format("loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            NewWorkers = restart_worker({Pid, Ref}, Workers),
+            loop(NewWorkers);
+        stop ->
+            ok;
+        {request, current_workers, From} ->
+            From ! {reply, Workers, self()},
+            loop(Workers)
+    end.
+
+restart_worker(PidRef, Workers) ->
+    #{PidRef := Func} = Workers,  %%PidRef and Workers are bound!
+    NewPidRef = spawn_monitor(Func),          
+    io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
+    NewWorkers = maps:remove(PidRef, Workers),
+    NewWorkers#{NewPidRef => Func}.
+    
+shutdown(Monitor) ->
+    Monitor ! {request, current_workers, self()},
+    receive
+        {reply, Workers, Monitor} ->  %%Monitor is bound!
+            lists:foreach(fun({Pid,_}) -> Pid ! stop end, 
+                          maps:keys(Workers) )
+    end,
+    Monitor ! stop,
+    io:format("shutdown(): sent stop message to Monitor.~n").
+    
+%======== TESTS ==========
+
+worker(N) ->
+    receive
+        stop -> ok
+    after N*1000 ->
+            io:format("Worker~w (~w) is still alive.~n", [N, self()] ),
+            worker(N)
+    end.
+
+test() ->
+    timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
+
+    Funcs = [fun() -> worker(N) end || N <- lists:seq(1, 4) ],
+    Monitor = monitor_workers_init(Funcs),
+    io:format("Monitor is: ~w~n", [Monitor]),
+
+    timer:sleep(5200), %%Let monitored processes run for awhile.
+
+    FiveTimes = 5,
+    TimeBetweenKillings = 5200,
+    kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
+
+    shutdown(Monitor).
+
+kill_rand_worker(0, _, _) ->
+    ok;
+kill_rand_worker(NumTimes, TimeBetweenKillings, Monitor) ->
+    Workers = get_workers(Monitor), 
+    kill_rand_worker(Workers),
+    timer:sleep(TimeBetweenKillings),
+    kill_rand_worker(NumTimes-1, TimeBetweenKillings, Monitor).
+
+get_workers(Monitor) ->
+    Monitor ! {request, current_workers, self()},
+    receive
+        {reply, CurrentWorkers, Monitor} -> 
+            CurrentWorkers
+    end.
+
+kill_rand_worker(Workers) ->
+    {Pid, _} = get_random_key(Workers),
+    io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
+    exit(Pid, kill).
+
+get_random_key(Map) ->
+    Keys = maps:keys(Map),
+    RandNum = rand:uniform(length(Keys) ),
+    lists:nth(RandNum, Keys).
+```
