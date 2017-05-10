@@ -221,7 +221,15 @@ Worker1 (<0.68.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.68.0>) is still alive.
 shutdown(): sent stop message to Monitor.
+```
+There are a couple of things in the program output that demonstrate that eveything is working correctly:
 
+1.  The worker numbers 1-4 appear in every secton of the output.
+
+2.  In the restart output, you can actually examine the pid of the process being killed and look for the corresponding Worker number in the prior section of the output that matches that pid, then make note of that Worker number.  Then examine the pid of the new process in the restart output and in the subsequent output check if the new pid corresponds to the same Worker number.
+
+Checking to make sure that none of the processes that were started are still alive:
+```
 i().
 Pid                   Initial Call                          Heap     Reds Msgs
 Registered            Current Function                     Stack              
@@ -284,8 +292,3 @@ ok
 ```
 No processes from e5 in there!
 
-There are a couple of things in the program output that demonstrate that eveything is working correctly:
-
-1.  The worker numbers 1-4 appear in every secton of the output.
-
-2.  In the restart output, you can actually examine the pid of the process being killed and look for the corresponding Worker number in the prior section of the output that matches that pid, then make note of that Worker number.  Then examine the pid of the new process in the restart output and in the subsequent output check if the new pid corresponds to the same Worker number.
