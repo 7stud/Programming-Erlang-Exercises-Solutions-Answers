@@ -27,7 +27,6 @@ monitor_loop(Workers) ->
         stop ->
             ok;
         {request, current_workers, From} ->
-            %%io:format("monitor_loop(): Workers: ~w~n", [Workers]),
             From ! {reply, Workers, self()},
             monitor_loop(Workers)
     end.
@@ -42,18 +41,16 @@ restart_worker(PidRef, Workers) ->
     [{NewPidRef, Func} | NewWorkers].
     
 shutdown(Monitor) ->
-    io:format("shutdown(): "),
     Monitor ! {request, current_workers, self()},
     receive
         {reply, Workers, Monitor} ->  %%Monitor is bound!
-            lists:map(
-              fun( {{Pid, _Ref}, _Func} ) ->
-                      Pid ! stop
-              end,
-              Workers)
+            lists:map( fun({{Pid, _Ref}, _Func}) ->
+                               Pid ! stop
+                       end,
+                       Workers)
     end,
     Monitor ! stop,
-    io:format("Monitor stopped.~n").
+    io:format("shutdown(): Monitor sent stop message.~n").
     
 %======== TESTS ==========
 
@@ -68,6 +65,7 @@ worker(N) ->
 
 test() ->
     timer:sleep(500),  %%Allow output from erlang shell startup to print.
+
     Funcs = lists:map(
               fun(N) ->
                       fun() -> worker(N) end
@@ -75,24 +73,23 @@ test() ->
               lists:seq(1, 4)
              ),
     Monitor = monitor_workers_init(Funcs),
-
     io:format("Monitor is: ~w~n", [Monitor]),
-    timer:sleep(5200),
+
+    timer:sleep(5200), %%Let monitored processes run for awhile.
 
     FiveTimes = 5,
     TimeInterval = 5200,
-    kill_rand_worker(Monitor, FiveTimes, TimeInterval),
+    kill_rand_worker(FiveTimes, TimeInterval, Monitor),
 
-    %%timer:sleep(3000),
     shutdown(Monitor).
 
-kill_rand_worker(_, 0, _) ->
+kill_rand_worker(0, _, _) ->
     ok;
-kill_rand_worker(Monitor, NumTimes, TimeInterval) ->
+kill_rand_worker(NumTimes, TimeInterval, Monitor) ->
     Workers = get_workers(Monitor), 
     kill_rand_worker(Workers),
     timer:sleep(TimeInterval),
-    kill_rand_worker(Monitor, NumTimes-1, TimeInterval).
+    kill_rand_worker( NumTimes-1, TimeInterval, Monitor).
 
 get_workers(Monitor) ->
     Monitor ! {request, current_workers, self()},
@@ -201,4 +198,4 @@ Worker1 (<0.60.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
 shutdown(): Monitor stopped.
 ```
-In the restart output you can actually examine the pid of the process being killed and look for the Client number that matches that pid, then look at the pid of the new process and in the following section check if it corresponds to the same client number.
+In the restart output you can actually examine the pid of the process being killed and look for the corresponding Worker number in the previous output that matches that pid, then examine the pid of the new process and in the subsequent output check if the new pid corresponds to the same Worker number.
