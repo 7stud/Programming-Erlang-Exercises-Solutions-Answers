@@ -1,6 +1,6 @@
 Debugging hell!
 
-Originally, I had the `restart_worker()` function handle the case when the pid of the killed worker is not found in the list of monitored pids, i.e if `lists:keyfind()` returns false, but I don't think that's possible: it would mean that the monitor received a `DOWN` message from a process it wasn't monitoring, so I eliminated that case.
+Originally, I had the `restart_worker()` function handle the case where the pid of the killed worker is not found in the list of monitored pids, i.e if `lists:keyfind()` returns false, but I don't think that's possible: it would mean that the monitor received a `DOWN` message from a process it wasn't monitoring, so I eliminated that case.
 
 
 ```erlang
