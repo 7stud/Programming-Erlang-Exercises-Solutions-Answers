@@ -33,9 +33,9 @@ Potential problems when using a shell script:
 
 1. Sometimes after running my shell script on a particular program, the shell is unresponsive, so I can't check `i()` or run `observer:start()`.  If the shell is unresponsive after I run my shell script, and I need the shell to be responsive, then I create a function called `test_init()`, which just spawns my `test()` function; then I substitute the name `test_init` in place of `test` in my shell script.  
 
-2. Typically, when using a shell script you need to begin a test() function with a short `timer:sleep(500)`, so that the erlang shell initialization output has time to print in the erlang shell before the erlang program begins outputting text.
+2. When I use a shell script to run an erlang program, the program output will interleave with the output that the shell displays on startup.  To keep things tidy, I begin my test() functions with a short `timer:sleep(500)`, so that the erlang shell initialization output has time to print in the erlang shell before my erlang program begins outputting text.
 
 3. Sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.  A shell script runs in a different process than the erlang shell, and the shell script process is not in a read-evaluate loop like the erlang shell, so the shell script process won't automaticaly output the return value of a function on the last line of your program.
 
-Despite those three issues, I find it's still a huge time saver to run erlang programs with a shell script.
+Despite those three issues, I still find that using a shell script to run erlang programs is a _massive_ time saver and will keep you from going insane during long debugging sessions.
 
