@@ -48,8 +48,8 @@ shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
     receive
         {reply, Workers, Monitor} ->  %%Monitor is bound!
-            lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  %% { {Pid, Ref}, Func}
-                          Workers)  %%Doesn't create a useless list.
+            lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  
+                          Workers)  %% { {Pid, Ref}, Func}
     end,
     Monitor ! stop,
     io:format("shutdown(): sent stop message to Monitor.~n").
