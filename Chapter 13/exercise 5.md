@@ -37,12 +37,12 @@ monitor_loop(Workers) ->
     end.
 
 restart_worker(PidRef, Workers) ->
-    {_PidRef, Func} = lists:keyfind(PidRef, 1, Workers),  %%If returns false, then error,  
-                                                          %%but I don't think that's possible.
+    {_PidRef, Func} = lists:keyfind(PidRef, 1, Workers),  %% {{Pid, Ref}, Func}
+                                                          %%If returns false, then error, but I don't think that's possible.                                                          
     NewPidRef = spawn_monitor(Func),          
     io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
 
-    NewWorkers = lists:keydelete(PidRef, 1, Workers),
+    NewWorkers = lists:keydelete(PidRef, 1, Workers),  %% {{Pid, Ref}, Func}
     [{NewPidRef, Func} | NewWorkers].
     
 shutdown(Monitor) ->
