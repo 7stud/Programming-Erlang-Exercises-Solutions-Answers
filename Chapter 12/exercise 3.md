@@ -4,7 +4,6 @@ I thought the ring exercise was very difficult.  I wrote five or six different s
 -module(ring3).
 -export([ring/2]).
 -include_lib("eunit/include/eunit.hrl"). 
- 
                    
 ring(NumProcs, NumLoops) ->
     StartPid = self(),
