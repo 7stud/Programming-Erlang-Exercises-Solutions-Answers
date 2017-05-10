@@ -21,7 +21,7 @@ monitor_workers_init(Funcs) ->
 monitor_workers(Funcs) ->
     Workers = lists:map(
                  fun(Func) -> 
-                         {spawn_monitor(Func), Func} %% {{Pid, Ref}, Func}
+                         {spawn_monitor(Func), Func} %% => {{Pid, Ref}, Func}
                  end,  
                  Funcs),
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
