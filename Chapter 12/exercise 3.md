@@ -10,24 +10,24 @@ ring(NumProcs, NumLoops) ->
     StartPid = self(),
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
     NextPid ! {NumLoops, "hello"},
-    start(NextPid).  %receive-loop for this process, i.e. the "start" process.
+    ring_start(NextPid).  %receive loop for the "start" process.
 
 create_ring(1, StartPid) ->  %...then stop spawning processes.
-    loop(StartPid);  %The last process gets the "start" process as its NextPid.
+    loop(StartPid);  %receive loop for the other processes.
 create_ring(NumProcs, StartPid) ->
     NextPid = spawn(fun() -> create_ring(NumProcs-1, StartPid) end),
     loop(NextPid).
 
 %receive loop for the "start" process:
-start(NextPid) ->
+ring_start(NextPid) ->
     receive 
         {1, Msg} ->  %...then stop looping.
-            io:format("**start ~w received: ~s (~w)~n", [self(), Msg, 1]),
+            io:format("**ring_start ~w received: ~s (~w)~n", [self(), Msg, 1]),
             NextPid ! stop;  %kill other processes; this processs will die because it stops looping.
         {NumLoops, Msg} ->
-            io:format("**start ~w received: ~s (~w)~n", [self(), Msg, NumLoops]),
+            io:format("**ring_start ~w received: ~s (~w)~n", [self(), Msg, NumLoops]),
             NextPid ! {NumLoops-1, Msg},
-            start(NextPid)
+            ring_start(NextPid)
     end.
    
 %receive loop for the other processes:
