@@ -19,7 +19,7 @@ monitor_workers_init(Funcs) ->
     spawn(?MODULE, monitor_workers, [Funcs]).
 
 monitor_workers(Funcs) ->
-    Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs],  %% {{Pid, Ref}, Func}
+    Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid, Ref}, Func}
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
     monitor_loop(Workers).
 
@@ -37,19 +37,18 @@ monitor_loop(Workers) ->
     end.
 
 restart_worker(PidRef, Workers) ->
-    {_PidRef, Func} = lists:keyfind(PidRef, 1, Workers),  %% {{Pid, Ref}, Func}
-                                                          %%If keyfind() returns false, then error, but I don't think that's possible.                                                          
+    {_, Func} = lists:keyfind(PidRef, 1, Workers),  %% { {Pid, Ref}, Func}
     NewPidRef = spawn_monitor(Func),          
     io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
 
-    NewWorkers = lists:keydelete(PidRef, 1, Workers),  %% {{Pid, Ref}, Func}
+    NewWorkers = lists:keydelete(PidRef, 1, Workers), %% { {Pid, Ref}, Func}
     [{NewPidRef, Func} | NewWorkers].
     
 shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
     receive
         {reply, Workers, Monitor} ->  %%Monitor is bound!
-            [ Pid ! stop || { {Pid, _}, _} <- Workers ]  %% { {Pid, Ref}, Func}
+            [ Pid ! stop || {{Pid, _}, _} <- Workers ]  %% { {Pid, Ref}, Func}
     end,
     Monitor ! stop,
     io:format("shutdown(): sent stop message to Monitor.~n").
@@ -63,6 +62,7 @@ worker(N) ->
             io:format("Worker~w (~w) is still alive.~n", [N, self()] ),
             worker(N)
     end.
+
 
 test() ->
     timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
@@ -96,7 +96,7 @@ get_workers(Monitor) ->
 
 kill_rand_worker(Workers) ->
     RandNum = rand:uniform(length(Workers) ),
-    {{Pid, _Ref}, _Func} = lists:nth(RandNum, Workers),
+    {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
 ```
