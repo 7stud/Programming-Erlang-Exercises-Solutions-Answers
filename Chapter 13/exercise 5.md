@@ -303,7 +303,8 @@ restart_worker(PidRef, Workers) ->
     #{PidRef := Func} = Workers,  %%PidRef and Workers are bound!
     NewPidRef = spawn_monitor(Func),          
     io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
-    (maps:remove(PidRef, Workers))#{NewPidRef => Func}.
+    NewWorkers = maps:remove(PidRef, Workers),
+    NewWorkers#{NewPidRef => Func}.
     
 shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
