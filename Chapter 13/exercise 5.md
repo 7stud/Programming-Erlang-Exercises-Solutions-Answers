@@ -1,5 +1,8 @@
 Debugging hell!
 
+Originally, I had the `restart_worker()` function handle the case when the pid of the killed worker is not found in the list of monitored pids (i.e if lists:keyfind() returns false), but I don't think it's possible to get a `DOWN` message from a process you aren't monitoring, so I eliminated that case.
+
+
 ```erlang
 -module(e5).
 %%-compile(export_all).
