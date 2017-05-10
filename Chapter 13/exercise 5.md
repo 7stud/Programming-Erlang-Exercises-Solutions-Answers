@@ -2,7 +2,7 @@ Debugging hell!
 
 1. I kept a list of the monitored Workers, and each monitored Worker has the following strucuture:
     
-        { {Pid, Ref}, Func }
+        { {Pid, Ref}, Func}
         
     `{Pid, Ref}` is returned by `spawn_monitor(Func)`.
 
