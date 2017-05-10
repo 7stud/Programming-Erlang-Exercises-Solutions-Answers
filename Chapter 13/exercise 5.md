@@ -21,19 +21,19 @@ monitor_workers_init(Funcs) ->
 monitor_workers(Funcs) ->
     Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid, Ref}, Func}
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
-    monitor_loop(Workers).
+    loop(Workers).
 
-monitor_loop(Workers) ->
+loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("monitor_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            io:format("loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
             NewWorkers = restart_worker({Pid, Ref}, Workers),
-            monitor_loop(NewWorkers);
+            loop(NewWorkers);
         stop ->
             ok;
         {request, current_workers, From} ->
             From ! {reply, Workers, self()},
-            monitor_loop(Workers)
+            loop(Workers)
     end.
 
 restart_worker(PidRef, Workers) ->
@@ -48,7 +48,7 @@ shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
     receive
         {reply, Workers, Monitor} ->  %%Monitor is bound!
-            [ Pid ! stop || {{Pid, _}, _} <- Workers ]  %% { {Pid, Ref}, Func}
+            [ Pid ! stop || {{Pid, _}, _} <- Workers ]
     end,
     Monitor ! stop,
     io:format("shutdown(): sent stop message to Monitor.~n").
@@ -62,7 +62,6 @@ worker(N) ->
             io:format("Worker~w (~w) is still alive.~n", [N, self()] ),
             worker(N)
     end.
-
 
 test() ->
     timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
@@ -99,23 +98,7 @@ kill_rand_worker(Workers) ->
     {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
-```
-I can spot at least one issue with my `shutdown()` function, which is noted by the comment in all caps:
-```erlang
-shutdown(Monitor) ->
-    Monitor ! {request, current_workers, self()},
-    receive
-        {reply, Workers, Monitor} ->  %%Monitor is bound!
-        
-            %% **** WHAT IF A WORKER FAILS HERE AND RESTARTS ********
-            
-            lists:map( fun({{Pid, _Ref}, _Func}) ->
-                               Pid ! stop
-                       end,
-                       Workers)
-    end,
-    Monitor ! stop,
-    io:format("shutdown(): Monitor sent stop message.~n").
+
 ```
 If a Worker restarts immediately after `shutdown()` receives the Workers list from the Monitor, then the new Worker process will not get sent a stop message, so the new Worker process will continue on forever.
 
@@ -125,12 +108,12 @@ $ ./run
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
 
-1> Monitor is: <0.59.0>
+> Monitor is: <0.59.0>
 moniter_workers(): Workers: 
-[{{<0.60.0>,#Ref<0.0.4.132>},#Fun<e5.3.10310925>},
- {{<0.61.0>,#Ref<0.0.4.133>},#Fun<e5.3.10310925>},
- {{<0.62.0>,#Ref<0.0.4.134>},#Fun<e5.3.10310925>},
- {{<0.63.0>,#Ref<0.0.4.135>},#Fun<e5.3.10310925>}]
+[{{<0.60.0>,#Ref<0.0.3.108>},#Fun<e5.0.59833508>},
+ {{<0.61.0>,#Ref<0.0.3.109>},#Fun<e5.0.59833508>},
+ {{<0.62.0>,#Ref<0.0.3.110>},#Fun<e5.0.59833508>},
+ {{<0.63.0>,#Ref<0.0.3.111>},#Fun<e5.0.59833508>}]
 Worker1 (<0.60.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
@@ -140,73 +123,73 @@ Worker4 (<0.63.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
+kill_rand_worker(): about to kill <0.61.0>
+loop(): Worker {<0.61.0>,#Ref<0.0.3.109>} went down: killed
+....restarting {<0.61.0>,#Ref<0.0.3.109>} => {<0.64.0>,#Ref<0.0.3.126>}) 
+Worker3 (<0.62.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker4 (<0.63.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker3 (<0.62.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
 kill_rand_worker(): about to kill <0.63.0>
-monitor_loop(): Worker {<0.63.0>,#Ref<0.0.4.135>} went down: killed
-....restarting {<0.63.0>,#Ref<0.0.4.135>} => {<0.64.0>,#Ref<0.0.4.150>}) 
-Worker3 (<0.62.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
+loop(): Worker {<0.63.0>,#Ref<0.0.3.111>} went down: killed
+....restarting {<0.63.0>,#Ref<0.0.3.111>} => {<0.65.0>,#Ref<0.0.3.140>}) 
 Worker1 (<0.60.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
 Worker3 (<0.62.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
-Worker4 (<0.64.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
-kill_rand_worker(): about to kill <0.60.0>
-monitor_loop(): Worker {<0.60.0>,#Ref<0.0.4.132>} went down: killed
-....restarting {<0.60.0>,#Ref<0.0.4.132>} => {<0.65.0>,#Ref<0.0.4.165>}) 
-Worker1 (<0.65.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.65.0>) is still alive.
 Worker3 (<0.62.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.65.0>) is still alive.
-Worker4 (<0.64.0>) is still alive.
-Worker1 (<0.65.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.65.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker1 (<0.65.0>) is still alive.
-kill_rand_worker(): about to kill <0.65.0>
-monitor_loop(): Worker {<0.65.0>,#Ref<0.0.4.165>} went down: killed
-....restarting {<0.65.0>,#Ref<0.0.4.165>} => {<0.66.0>,#Ref<0.0.4.179>}) 
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker4 (<0.64.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
 kill_rand_worker(): about to kill <0.62.0>
-monitor_loop(): Worker {<0.62.0>,#Ref<0.0.4.134>} went down: killed
-....restarting {<0.62.0>,#Ref<0.0.4.134>} => {<0.67.0>,#Ref<0.0.4.193>}) 
-Worker4 (<0.64.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker3 (<0.67.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker4 (<0.64.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
+loop(): Worker {<0.62.0>,#Ref<0.0.3.110>} went down: killed
+....restarting {<0.62.0>,#Ref<0.0.3.110>} => {<0.66.0>,#Ref<0.0.3.155>}) 
+Worker1 (<0.60.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
 kill_rand_worker(): about to kill <0.66.0>
-monitor_loop(): Worker {<0.66.0>,#Ref<0.0.4.179>} went down: killed
-....restarting {<0.66.0>,#Ref<0.0.4.179>} => {<0.68.0>,#Ref<0.0.4.207>}) 
-Worker2 (<0.61.0>) is still alive.
+loop(): Worker {<0.66.0>,#Ref<0.0.3.155>} went down: killed
+....restarting {<0.66.0>,#Ref<0.0.3.155>} => {<0.67.0>,#Ref<0.0.3.168>}) 
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.65.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
 Worker3 (<0.67.0>) is still alive.
-Worker1 (<0.68.0>) is still alive.
-Worker1 (<0.68.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.68.0>) is still alive.
-Worker4 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.64.0>) is still alive.
+kill_rand_worker(): about to kill <0.64.0>
+loop(): Worker {<0.64.0>,#Ref<0.0.3.126>} went down: killed
+....restarting {<0.64.0>,#Ref<0.0.3.126>} => {<0.68.0>,#Ref<0.0.3.182>}) 
+Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.65.0>) is still alive.
 Worker3 (<0.67.0>) is still alive.
-Worker1 (<0.68.0>) is still alive.
-Worker2 (<0.61.0>) is still alive.
-Worker1 (<0.68.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.68.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker3 (<0.67.0>) is still alive.
+Worker2 (<0.68.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.65.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
 shutdown(): sent stop message to Monitor.
 ```
 There are a couple of things in the program output that demonstrate that eveything is working correctly:
@@ -224,7 +207,7 @@ Registered            Current Function                     Stack
 init                  init:loop/1                              2              
 <0.1.0>               erts_code_purger:start/0               233        4    0
 erts_code_purger      erts_code_purger:loop/0                  3              
-<0.4.0>               erlang:apply/2                        6772   119366    0
+<0.4.0>               erlang:apply/2                        2586   119174    0
 erl_prim_loader       erl_prim_loader:loop/3                   5              
 <0.30.0>              gen_event:init_it/6                    610      226    0
 error_logger          gen_event:fetch_msg/5                    8              
@@ -260,7 +243,7 @@ standard_error        standard_error:server_loop/1             2
                       gen_server:loop/6                        9              
 <0.48.0>              user_drv:server/2                     1598     4452    0
 user_drv              user_drv:server_loop/6                   9              
-<0.49.0>              group:server/3                         610    12645    0
+<0.49.0>              group:server/3                         610    12679    0
 user                  group:server_loop/3                      4              
 <0.50.0>              group:server/3                         987    12510    0
                       group:server_loop/3                      4              
@@ -272,10 +255,11 @@ user                  group:server_loop/3                      4
 kernel_safe_sup       gen_server:loop/6                        9              
 <0.57.0>              erlang:apply/2                        2586    18839    0
                       c:pinfo/1                               50              
-Total                                                      27612   289136    0
+Total                                                      23426   288978    0
                                                              222              
 ok
 
+2> 
 ```
 No processes from e5 in there!
 
