@@ -19,11 +19,7 @@ monitor_workers_init(Funcs) ->
     spawn(?MODULE, monitor_workers, [Funcs]).
 
 monitor_workers(Funcs) ->
-    Workers = lists:map(
-                 fun(Func) -> 
-                         {spawn_monitor(Func), Func} %% => {{Pid, Ref}, Func}
-                 end,  
-                 Funcs),
+    Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs],  %% {{Pid, Ref}, Func}
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
     monitor_loop(Workers).
 
@@ -53,10 +49,10 @@ shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
     receive
         {reply, Workers, Monitor} ->  %%Monitor is bound!
-            lists:map( fun({{Pid, _Ref}, _Func}) ->
-                               Pid ! stop
-                       end,
-                       Workers)
+            lists:foreach(fun( {{Pid, _}, _} ) ->   %%Doesn't create a useless results list.
+                                  Pid ! stop
+                          end,
+                          Workers)  %% {{Pid,Ref}, Func}
     end,
     Monitor ! stop,
     io:format("shutdown(): sent stop message to Monitor.~n").
@@ -75,12 +71,7 @@ worker(N) ->
 test() ->
     timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
 
-    Funcs = lists:map(
-              fun(N) ->
-                      fun() -> worker(N) end
-              end,
-              lists:seq(1, 4)
-             ),
+    Funcs = [fun() -> worker(N) end || N <- lists:seq(1, 4) ],
     Monitor = monitor_workers_init(Funcs),
     io:format("Monitor is: ~w~n", [Monitor]),
 
