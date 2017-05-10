@@ -220,4 +220,9 @@ Worker1 (<0.60.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
 shutdown(): Monitor stopped.
 ```
-In the restart output you can actually examine the pid of the process being killed and look for the corresponding Worker number in the previous output that matches that pid, then examine the pid of the new process and in the subsequent output check if the new pid corresponds to the same Worker number.
+
+There are a couple of things in the output that demonstrate eveything is working correctly:
+
+1.  The worker numbers 1-4 appear in every secton of the output.
+
+2.  In the restart output you can actually examine the pid of the process being killed and look for the corresponding Worker number in the prior section of output that matches that pid, then examine the pid of the new process and in the subsequent output check if the new pid corresponds to the same Worker number.
