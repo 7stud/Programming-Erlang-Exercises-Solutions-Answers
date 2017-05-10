@@ -1,6 +1,6 @@
 Debugging hell! 
 
-1. I kept a list of the monitored Workers, and each Worker has the following strucuture:
+1. I kept a list of the monitored Workers, and each monitored Worker has the following strucuture:
     
         { {Pid, Ref}, Func }
         
