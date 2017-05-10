@@ -225,4 +225,4 @@ There are a couple of things in the output that demonstrate eveything is working
 
 1.  The worker numbers 1-4 appear in every secton of the output.
 
-2.  In the restart output you can actually examine the pid of the process being killed and look for the corresponding Worker number in the prior section of output that matches that pid, and make note of that Worker number.  Then examine the pid of the new process and in the subsequent output check if the new pid corresponds to the same Worker number.
+2.  In the restart output you can actually examine the pid of the process being killed and look for the corresponding Worker number in the prior section of output that matches that pid, then make note of that Worker number.  Then examine the pid of the new process and in the subsequent output check if the new pid corresponds to the same Worker number.
