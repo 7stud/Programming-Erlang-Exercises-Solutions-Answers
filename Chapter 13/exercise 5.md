@@ -108,6 +108,25 @@ kill_rand_worker(Workers) ->
     exit(Pid, kill).
 ```
 
+I can see at least one issue with my `shutdown()` function:
+```erlang
+shutdown(Monitor) ->
+    Monitor ! {request, current_workers, self()},
+    receive
+        {reply, Workers, Monitor} ->  %%Monitor is bound!
+        
+            %% **** WHAT IF A WORKER FAILS HERE AND RESTARTS ********
+            
+            lists:map( fun({{Pid, _Ref}, _Func}) ->
+                               Pid ! stop
+                       end,
+                       Workers)
+    end,
+    Monitor ! stop,
+    io:format("shutdown(): Monitor sent stop message.~n").
+```
+If a Worker restarted immediately after `shutdown()` received the Workers list from the Monitor, then the new Worker process would not get sent a stop message, so the new Worker process would continue on forever.
+
 In the shell:
 ```
 $ ./run
