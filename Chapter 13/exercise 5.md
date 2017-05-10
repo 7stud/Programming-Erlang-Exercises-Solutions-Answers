@@ -113,7 +113,7 @@ kill_rand_worker(Workers) ->
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
 ```
-I can spot at least one issue with my `shutdown()` function:
+I can spot at least one issue with my `shutdown()` function, which is noted by the comment in all caps:
 ```erlang
 shutdown(Monitor) ->
     Monitor ! {request, current_workers, self()},
