@@ -37,5 +37,5 @@ Potential problems when using a shell script:
 
 3. Sometimes the last line of output won't display, and I have to resort to using the shell again to confirm that everything is working correctly.  A shell script runs in a different process than the erlang shell, and the shell script process is not in a read-evaluate loop like the erlang shell, so the shell script process won't automaticaly output the return value of a function on the last line of your program.
 
-Despite those three issues, I still find that using a shell script to run erlang programs is a _massive_ time saver and will keep you from going insane during long debugging sessions.
+Despite those three issues, I still find that using a shell script to run erlang programs is a _massive_ time saver, and being able to rerun your programs quickly by hitting the up arrow, then hitting Return will keep you from going insane during long debugging sessions.
 
