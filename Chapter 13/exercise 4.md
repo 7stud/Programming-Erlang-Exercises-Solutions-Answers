@@ -1,4 +1,4 @@
-I thought this exercise was pretty difficult.  At some point, I abandoned the verbatim description in the exercise, and I just tried to come up with any solution.  Then, I added the user interface: `start()`, `stop()`.
+I thought this exercise was pretty difficult.  At some point, I abandoned the verbatim description in the exercise, and I just tried to come up with any solution.  After I figured out a solution, I added the user interface: `start()`, `stop()`.
 
 ```erlang
 -module(e4).
