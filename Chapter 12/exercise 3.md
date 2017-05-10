@@ -138,8 +138,7 @@ I commented out the io:format() statements then benchmarked the code:
 -module(ring4).
 -export([ring/2]).
 -include_lib("eunit/include/eunit.hrl"). 
- 
-                   
+                    
 ring(NumProcs, NumLoops) ->
     
     statistics(runtime),
@@ -155,8 +154,6 @@ ring(NumProcs, NumLoops) ->
     io:format("RunTime: ~w, WallTime: ~w (~w, ~w)~n", 
              [RunTime,WallTime,NumProcs,NumLoops] 
              ).
-
-
 
 create_ring(1, StartPid) ->  %...then stop spawning processes.
     loop(StartPid);  %receive loop for the other processes.
@@ -196,6 +193,7 @@ In the shell:
 ```
 10> c(ring4).               
 {ok,ring4}
+
 11> ring4:ring(1000, 500).  
 RunTime: 290, WallTime: 330 (1000, 500)
 ok
