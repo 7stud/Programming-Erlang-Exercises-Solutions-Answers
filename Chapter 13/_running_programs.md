@@ -37,5 +37,5 @@ Potential problems when using a shell script:
 
 3. Sometimes the last line of output won't display the same as in the erlang sheel, so I have to resort to using the shell again to confirm that everything is working correctly.  A shell script runs in a different process than the erlang shell, and the script process is not in a read-evaluate loop like the erlang shell, so the script process won't automaticaly output the result of the expression on the last line of your program.  Of course, you can just call `io:format()` to print out the value of that last expression.
 
-Despite those three issues, I still find that using a shell script to run an erlang program is a _massive_ time saver, and being able to rerun your program quickly by hitting the up arrow, then hitting Return will keep you from going insane during a long debugging session.
+Despite those three issues, I still find that using a shell script to run an erlang program is a _massive_ time saver, and being able to rerun your program quickly by hitting the up arrow, then hitting Return will keep you from going insane during long debugging sessions.
 
