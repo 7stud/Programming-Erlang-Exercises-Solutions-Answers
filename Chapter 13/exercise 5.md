@@ -1,4 +1,4 @@
-I spent a long time debugging this one! 
+Debugging hell! 
 
 1. I kept a list of the monitored Workers, and each Worker has the following strucuture:
     
