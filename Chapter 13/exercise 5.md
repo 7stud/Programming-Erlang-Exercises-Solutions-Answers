@@ -8,6 +8,8 @@ Debugging hell!
 
 2. Originally, I had `restart_worker()` handle the case where the pid of the killed worker is not found in the list of monitored pids, i.e if `lists:keyfind()` returns false, but I don't think that's possible: it would mean that the monitor received a 'DOWN' message from a process that it wasn't monitoring, so I eliminated that case.
 
+3. At the bottom, there is a version that uses maps in Erlang 19.2.
+
 
 ```erlang
 -module(e5).
