@@ -221,7 +221,68 @@ Worker1 (<0.68.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.68.0>) is still alive.
 shutdown(): sent stop message to Monitor.
+
+i().
+Pid                   Initial Call                          Heap     Reds Msgs
+Registered            Current Function                     Stack              
+<0.0.0>               otp_ring0:start/2                      376      637    0
+init                  init:loop/1                              2              
+<0.1.0>               erts_code_purger:start/0               233        4    0
+erts_code_purger      erts_code_purger:loop/0                  3              
+<0.4.0>               erlang:apply/2                        6772   119366    0
+erl_prim_loader       erl_prim_loader:loop/3                   5              
+<0.30.0>              gen_event:init_it/6                    610      226    0
+error_logger          gen_event:fetch_msg/5                    8              
+<0.31.0>              erlang:apply/2                        1598      416    0
+application_controlle gen_server:loop/6                        7              
+<0.33.0>              application_master:init/4              233       64    0
+                      application_master:main_loop/2           6              
+<0.34.0>              application_master:start_it/4          233       59    0
+                      application_master:loop_it/4             5              
+<0.35.0>              supervisor:kernel/1                    610     1765    0
+kernel_sup            gen_server:loop/6                        9              
+<0.36.0>              erlang:apply/2                        4185   107483    0
+code_server           code_server:loop/1                       3              
+<0.38.0>              rpc:init/1                             233       21    0
+rex                   gen_server:loop/6                        9              
+<0.39.0>              global:init/1                          233       44    0
+global_name_server    gen_server:loop/6                        9              
+<0.40.0>              erlang:apply/2                         233       21    0
+                      global:loop_the_locker/1                 5              
+<0.41.0>              erlang:apply/2                         233        3    0
+                      global:loop_the_registrar/0              2              
+<0.42.0>              inet_db:init/1                         233      249    0
+inet_db               gen_server:loop/6                        9              
+<0.43.0>              global_group:init/1                    233       55    0
+global_group          gen_server:loop/6                        9              
+<0.44.0>              file_server:init/1                     233       78    0
+file_server_2         gen_server:loop/6                        9              
+<0.45.0>              supervisor_bridge:standard_error/      233       34    0
+standard_error_sup    gen_server:loop/6                        9              
+<0.46.0>              erlang:apply/2                         233       10    0
+standard_error        standard_error:server_loop/1             2              
+<0.47.0>              supervisor_bridge:user_sup/1           233       53    0
+                      gen_server:loop/6                        9              
+<0.48.0>              user_drv:server/2                     1598     4452    0
+user_drv              user_drv:server_loop/6                   9              
+<0.49.0>              group:server/3                         610    12645    0
+user                  group:server_loop/3                      4              
+<0.50.0>              group:server/3                         987    12510    0
+                      group:server_loop/3                      4              
+<0.51.0>              erlang:apply/2                        4185     9788    0
+                      shell:shell_rep/4                       17              
+<0.52.0>              kernel_config:init/1                   233      258    0
+                      gen_server:loop/6                        9              
+<0.53.0>              supervisor:kernel/1                    233       56    0
+kernel_safe_sup       gen_server:loop/6                        9              
+<0.57.0>              erlang:apply/2                        2586    18839    0
+                      c:pinfo/1                               50              
+Total                                                      27612   289136    0
+                                                             222              
+ok
+
 ```
+No processes from e5 in there!
 
 There are a couple of things in the output that demonstrate that eveything is working correctly:
 
