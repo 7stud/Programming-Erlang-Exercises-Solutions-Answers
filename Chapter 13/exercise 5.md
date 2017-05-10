@@ -64,7 +64,6 @@ worker(N) ->
             worker(N)
     end.
 
-
 test() ->
     timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
 
