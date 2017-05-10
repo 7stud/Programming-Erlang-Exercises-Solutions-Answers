@@ -284,7 +284,7 @@ ok
 ```
 No processes from e5 in there!
 
-There are a couple of things in the output that demonstrate that eveything is working correctly:
+There are a couple of things in the program output that demonstrate that eveything is working correctly:
 
 1.  The worker numbers 1-4 appear in every secton of the output.
 
