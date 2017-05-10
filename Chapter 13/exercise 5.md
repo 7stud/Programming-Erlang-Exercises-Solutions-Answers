@@ -67,7 +67,7 @@ worker(N) ->
 
 
 test() ->
-    timer:sleep(500),  %%Allow output from erlang shell startup to print.
+    timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
 
     Funcs = lists:map(
               fun(N) ->
