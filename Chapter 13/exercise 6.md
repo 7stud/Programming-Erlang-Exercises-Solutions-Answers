@@ -1,3 +1,7 @@
+1. My first version involved monitors--pretty much following the literal description in the exercise.
+
+2. In my second version, I created a _link set_ where all the Workers were linked to a MasterLink.  That way if one Worker failed, they would all fail--including the MasterLink. Then, I created a process to monitor the MasterLink, which meant that when any Worker failed the Monitor would detect the MasterLink failing.  For testing,  I used erlang's observer app, `observer:start()`, to kill random Workers.  In observer window, you can click on the Processes tab, and you can right click on a running process, then choose Kill Process.  After killing a process, you can selelct View>Refresh to display the new Worker processes that were created.
+
 ```erlang
 -module(e6).
 -compile(export_all).
@@ -277,4 +281,223 @@ ok
 2> 
 ```
     
+Here's a version that uses links:
+```erlang
+-module(e6).
+-compile(export_all).
+
+monitor_init(NumWorkers) ->
+    register(?MODULE, Pid = spawn(?MODULE, monitor, [NumWorkers]) ),
+    Pid.
+    
+monitor(NumWorkers) ->
+    MasterLink = create_link_set(NumWorkers),  %% => {Pid, Ref}
+    monitor_loop(MasterLink, NumWorkers).
+
+monitor_loop({MasterPid, MasterRef}, NumWorkers) ->
+    receive
+        {'DOWN', MasterRef, process, MasterPid, Why} ->
+            io:format("monitor_loop(): MasterLink ~w went down: ~w~n", [{MasterPid,MasterRef}, Why]),
+            io:format("...restarting all workers.~n"),
+
+            NewMasterLink = create_link_set(NumWorkers),
+            monitor_loop(NewMasterLink, NumWorkers);
+        {request, stop, _From} ->
+             exit(MasterPid, kill),
+            io:format("\tMonitor sent kill signal to MasterLink.~n"),
+            io:format("\tMonitor terminating normally.~n")
+    end.
+
+create_link_set(NumWorkers) ->
+    NewMasterLink =
+        fun() -> 
+                NewWorkers = [ spawn_link(?MODULE, worker, [Id]) || Id <- lists:seq(1, NumWorkers)],
+                io:format("create_link_set(): NewWorkers: ~w~n", [NewWorkers]),
+                receive 
+                after infinity -> ok   %%MasterLink sits and does nothing.
+                end
+        end,
+    MasterPidRef = spawn_monitor(NewMasterLink),  %% monitor_loop() monitors MasterLink
+    io:format("create_link_set(): NewMasterLink: ~w~n", [MasterPidRef]),
+    MasterPidRef.
+
+stop() ->
+    ?MODULE ! {request, stop, self()}.
+    
+
+%%==== TESTS ========
+
+worker(Id) ->
+    receive 
+        stop -> ok
+    after Id*1000 ->
+        io:format("Worker~w: I'm still alive in ~w~n", [Id, self()]),
+        worker(Id)
+    end.
+
+test() ->
+    observer:start(),  %%I use the Processes tab to kill random workers.
+    timer:sleep(500),  %%Allow output from erlang shell startup to print.
+
+    NumWorkers = 4,
+    monitor_init(NumWorkers),
+   
+    timer:sleep(30000),  %%Give me time to kill some processes in observer app.
+
+    stop().
+```
+
+In the shell:
+```
+$ ./run
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+Eshell V8.2  (abort with ^G)
+
+1> create_link_set(): NewMasterLink: {<0.79.0>,#Ref<0.0.4.277>}
+create_link_set(): NewWorkers: [<0.80.0>,<0.81.0>,<0.82.0>,<0.83.0>]
+Worker1: I'm still alive in <0.80.0>
+Worker2: I'm still alive in <0.81.0>
+Worker1: I'm still alive in <0.80.0>
+Worker3: I'm still alive in <0.82.0>
+Worker1: I'm still alive in <0.80.0>
+Worker4: I'm still alive in <0.83.0>
+Worker2: I'm still alive in <0.81.0>
+Worker1: I'm still alive in <0.80.0>
+Worker1: I'm still alive in <0.80.0>
+Worker3: I'm still alive in <0.82.0>
+Worker2: I'm still alive in <0.81.0>
+Worker1: I'm still alive in <0.80.0>
+Worker1: I'm still alive in <0.80.0>
+monitor_loop(): MasterLink {<0.79.0>,#Ref<0.0.4.277>} went down: killed
+...restarting all workers.
+create_link_set(): NewMasterLink: {<0.603.0>,#Ref<0.0.4.1863>}
+create_link_set(): NewWorkers: [<0.604.0>,<0.605.0>,<0.606.0>,<0.607.0>]
+Worker1: I'm still alive in <0.604.0>
+Worker2: I'm still alive in <0.605.0>
+Worker1: I'm still alive in <0.604.0>
+Worker3: I'm still alive in <0.606.0>
+Worker1: I'm still alive in <0.604.0>
+Worker4: I'm still alive in <0.607.0>
+Worker2: I'm still alive in <0.605.0>
+Worker1: I'm still alive in <0.604.0>
+Worker1: I'm still alive in <0.604.0>
+monitor_loop(): MasterLink {<0.603.0>,#Ref<0.0.4.1863>} went down: killed
+...restarting all workers.
+create_link_set(): NewMasterLink: {<0.1072.0>,#Ref<0.0.4.3279>}
+create_link_set(): NewWorkers: [<0.1073.0>,<0.1074.0>,<0.1075.0>,<0.1076.0>]
+Worker1: I'm still alive in <0.1073.0>
+Worker2: I'm still alive in <0.1074.0>
+Worker1: I'm still alive in <0.1073.0>
+Worker3: I'm still alive in <0.1075.0>
+Worker1: I'm still alive in <0.1073.0>
+Worker4: I'm still alive in <0.1076.0>
+Worker2: I'm still alive in <0.1074.0>
+Worker1: I'm still alive in <0.1073.0>
+Worker1: I'm still alive in <0.1073.0>
+monitor_loop(): MasterLink {<0.1072.0>,#Ref<0.0.4.3279>} went down: killed
+...restarting all workers.
+create_link_set(): NewMasterLink: {<0.1302.0>,#Ref<0.0.4.3974>}
+create_link_set(): NewWorkers: [<0.1303.0>,<0.1304.0>,<0.1305.0>,<0.1306.0>]
+Worker1: I'm still alive in <0.1303.0>
+Worker2: I'm still alive in <0.1304.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker3: I'm still alive in <0.1305.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker4: I'm still alive in <0.1306.0>
+Worker2: I'm still alive in <0.1304.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker3: I'm still alive in <0.1305.0>
+Worker2: I'm still alive in <0.1304.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker1: I'm still alive in <0.1303.0>
+Worker4: I'm still alive in <0.1306.0>
+Worker2: I'm still alive in <0.1304.0>
+Worker1: I'm still alive in <0.1303.0>
+monitor_loop(): MasterLink {<0.1302.0>,#Ref<0.0.4.3974>} went down: killed
+...restarting all workers.
+create_link_set(): NewMasterLink: {<0.1757.0>,#Ref<0.0.4.5356>}
+create_link_set(): NewWorkers: [<0.1758.0>,<0.1759.0>,<0.1760.0>,<0.1761.0>]
+Worker1: I'm still alive in <0.1758.0>
+Worker2: I'm still alive in <0.1759.0>
+Worker1: I'm still alive in <0.1758.0>
+        Monitor sent kill signal to MasterLink.
+        Monitor terminating normally.
+```
+
+After closing the observer window, I checked to see if there were any left over processes from my program:
+
+```
+i().
+Pid                   Initial Call                          Heap     Reds Msgs
+Registered            Current Function                     Stack              
+<0.0.0>               otp_ring0:start/2                      376      637    0
+init                  init:loop/1                              2              
+<0.1.0>               erts_code_purger:start/0               233        4    0
+erts_code_purger      erts_code_purger:loop/0                  3              
+<0.4.0>               erlang:apply/2                        1598   250248    0
+erl_prim_loader       erl_prim_loader:loop/3                   5              
+<0.30.0>              gen_event:init_it/6                    610      242    0
+error_logger          gen_event:fetch_msg/5                    8              
+<0.31.0>              erlang:apply/2                        1598      416    0
+application_controlle gen_server:loop/6                        7              
+<0.33.0>              application_master:init/4              233       64    0
+                      application_master:main_loop/2           6              
+<0.34.0>              application_master:start_it/4          233       59    0
+                      application_master:loop_it/4             5              
+<0.35.0>              supervisor:kernel/1                    610     1765    0
+kernel_sup            gen_server:loop/6                        9              
+<0.36.0>              erlang:apply/2                        6772   117111    0
+code_server           code_server:loop/1                       3              
+<0.38.0>              rpc:init/1                             233       21    0
+rex                   gen_server:loop/6                        9              
+<0.39.0>              global:init/1                          233       44    0
+global_name_server    gen_server:loop/6                        9              
+<0.40.0>              erlang:apply/2                         233       21    0
+                      global:loop_the_locker/1                 5              
+<0.41.0>              erlang:apply/2                         233        3    0
+                      global:loop_the_registrar/0              2              
+<0.42.0>              inet_db:init/1                         233      249    0
+inet_db               gen_server:loop/6                        9              
+<0.43.0>              global_group:init/1                    233       55    0
+global_group          gen_server:loop/6                        9              
+<0.44.0>              file_server:init/1                     610      447    0
+file_server_2         gen_server:loop/6                        9              
+<0.45.0>              supervisor_bridge:standard_error/      233       34    0
+standard_error_sup    gen_server:loop/6                        9              
+<0.46.0>              erlang:apply/2                         233       10    0
+standard_error        standard_error:server_loop/1             2              
+<0.47.0>              supervisor_bridge:user_sup/1           233       53    0
+                      gen_server:loop/6                        9              
+<0.48.0>              user_drv:server/2                     2586     4172    0
+user_drv              user_drv:server_loop/6                   9              
+<0.49.0>              group:server/3                        2586    11381    0
+user                  group:server_loop/3                      4              
+<0.50.0>              group:server/3                         987    12514    0
+                      group:server_loop/3                      4              
+<0.51.0>              erlang:apply/2                        4185     9788    0
+                      shell:shell_rep/4                       17              
+<0.52.0>              kernel_config:init/1                   233      258    0
+                      gen_server:loop/6                        9              
+<0.53.0>              supervisor:kernel/1                    233      131    0
+kernel_safe_sup       gen_server:loop/6                        9              
+<0.58.0>              erlang:apply/2                        2586    18804    0
+                      c:pinfo/1                               50              
+<0.61.0>              wxe_master:init/1                     2586      747    0
+wxe_master            gen_server:loop/6                        9              
+<0.62.0>              erlang:apply/2                         610    12865    0
+                      timer:sleep/1                            5              
+<0.64.0>              timer:init/1                           376      491    0
+timer_server          gen_server:loop/6                        9              
+Total                                                      31938   442634    0
+                                                             245              
+ok
+2> 
+```
+Nothing that starts with `e6` in there!
+    
+    
                     
+
+
+
