@@ -22,7 +22,7 @@ monitor_workers_init(Funcs) ->
 
 monitor_workers(Funcs) ->
     Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid, Ref}, Func}
-    io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
+    io:format("monitor_workers(): Workers: ~n~p~n", [Workers]),
     monitor_loop(Workers).
 
 monitor_loop(Workers) ->
@@ -106,7 +106,7 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 
 1> Monitor is: <0.59.0>
-moniter_workers(): Workers: 
+monitor_workers(): Workers: 
 [{{<0.60.0>,#Ref<0.0.4.132>},#Fun<e5.1.10904260>},
  {{<0.61.0>,#Ref<0.0.4.133>},#Fun<e5.1.10904260>},
  {{<0.62.0>,#Ref<0.0.4.134>},#Fun<e5.1.10904260>},
