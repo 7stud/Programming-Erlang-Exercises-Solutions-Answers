@@ -42,13 +42,19 @@ monitor_loop(Workers) ->
             monitor_loop(Workers)           
     end.                                   
 
-restart_worker(PidRef, Workers) ->
+restart_worker(PidRef, Workers) ->  %%Monitor calls this function in response to a 'DOWN' message.
     {_, Func} = lists:keyfind(PidRef, 1, Workers),  %% { {Pid, Ref}, Func}
     NewPidRef = spawn_monitor(Func),          
     io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
 
     NewWorkers = lists:keydelete(PidRef, 1, Workers), %% { {Pid, Ref}, Func}
     [{NewPidRef, Func} | NewWorkers].
+    
+kill_rand_worker(Workers) ->   %%Monitor calls this function in response to a kill_worker request
+    RandNum = rand:uniform(length(Workers) ),
+    {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
+    io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
+    exit(Pid, kill).
     
 stop_monitor(Monitor) ->
     Monitor ! {request, stop}.
@@ -85,13 +91,6 @@ kill_rand_worker(NumTimes, TimeBetweenKillings, Monitor) ->
     Monitor ! {request, kill_worker, self()},
     timer:sleep(TimeBetweenKillings),
     kill_rand_worker(NumTimes-1, TimeBetweenKillings, Monitor).
-
-kill_rand_worker(Workers) ->   %%Monitor calls this function in response to a kill_worker request
-    RandNum = rand:uniform(length(Workers) ),
-    {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
-    io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
-    exit(Pid, kill).
-
 ```
 In the shell:
 ```
@@ -258,7 +257,6 @@ ok
 2> 
 ```
 No processes from e5 in there!
-
 
 Here's a version using maps in Erlang 19.2:
 ```erlang
