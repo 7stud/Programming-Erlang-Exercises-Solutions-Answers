@@ -34,13 +34,13 @@ monitor_loop(Workers) ->
         {request, stop} ->
             lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  
                           Workers),  %% { {Pid, Ref}, Func}
-            io:format("monitor_loop():~n"),
-            io:format("\tMonitor finished shutting down workers.~n"),
-            io:format("\tMonitor terminating normally.~n");
-        {request, current_workers, From} ->  %Used to randomly kill a Worker.
-             From ! {reply, Workers, self()},
-             monitor_loop(Workers)
-    end.
+            io:format("\tMonitor sent stop messages to all workers.~n"),
+            io:format("\tMonitor terminating: normal.~n");
+            
+        {request, kill_worker, _From}  ->  %%For testing.
+            kill_rand_worker(Workers),          
+            monitor_loop(Workers)           
+    end.                                   
 
 restart_worker(PidRef, Workers) ->
     {_, Func} = lists:keyfind(PidRef, 1, Workers),  %% { {Pid, Ref}, Func}
@@ -52,12 +52,13 @@ restart_worker(PidRef, Workers) ->
     
 stop_monitor(Monitor) ->
     Monitor ! {request, stop}.
-    
+
 %======== TESTS ==========
 
 worker(N) ->
     receive
-        stop -> ok
+        stop -> 
+            io:format("\tWorker~w stopping: normal.~n", [N]) 
     after N*1000 ->
             io:format("Worker~w (~w) is still alive.~n", [N, self()] ),
             worker(N)
@@ -81,23 +82,16 @@ test() ->
 kill_rand_worker(0, _, _) ->
     ok;
 kill_rand_worker(NumTimes, TimeBetweenKillings, Monitor) ->
-    Workers = get_workers(Monitor), 
-    kill_rand_worker(Workers),
+    Monitor ! {request, kill_worker, self()},
     timer:sleep(TimeBetweenKillings),
     kill_rand_worker(NumTimes-1, TimeBetweenKillings, Monitor).
 
-get_workers(Monitor) ->
-    Monitor ! {request, current_workers, self()},
-    receive
-        {reply, CurrentWorkers, Monitor} -> 
-            CurrentWorkers
-    end.
-
-kill_rand_worker(Workers) ->
+kill_rand_worker(Workers) ->   %%Monitor calls this function in response to a kill_worker request
     RandNum = rand:uniform(length(Workers) ),
     {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
+
 ```
 In the shell:
 ```
@@ -107,10 +101,10 @@ Eshell V8.2  (abort with ^G)
 
 1> Monitor is: <0.59.0>
 monitor_workers(): Workers: 
-[{{<0.60.0>,#Ref<0.0.4.132>},#Fun<e5.1.10904260>},
- {{<0.61.0>,#Ref<0.0.4.133>},#Fun<e5.1.10904260>},
- {{<0.62.0>,#Ref<0.0.4.134>},#Fun<e5.1.10904260>},
- {{<0.63.0>,#Ref<0.0.4.135>},#Fun<e5.1.10904260>}]
+[{{<0.60.0>,#Ref<0.0.3.132>},#Fun<e5.1.131436102>},
+ {{<0.61.0>,#Ref<0.0.3.133>},#Fun<e5.1.131436102>},
+ {{<0.62.0>,#Ref<0.0.3.134>},#Fun<e5.1.131436102>},
+ {{<0.63.0>,#Ref<0.0.3.135>},#Fun<e5.1.131436102>}]
 Worker1 (<0.60.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
@@ -119,76 +113,80 @@ Worker1 (<0.60.0>) is still alive.
 Worker4 (<0.63.0>) is still alive.
 Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-kill_rand_worker(): about to kill <0.61.0>
-monitor_loop(): Worker {<0.61.0>,#Ref<0.0.4.133>} went down: killed
-....restarting {<0.61.0>,#Ref<0.0.4.133>} => {<0.64.0>,#Ref<0.0.4.150>}) 
-Worker3 (<0.62.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker4 (<0.63.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
 kill_rand_worker(): about to kill <0.63.0>
-monitor_loop(): Worker {<0.63.0>,#Ref<0.0.4.135>} went down: killed
-....restarting {<0.63.0>,#Ref<0.0.4.135>} => {<0.65.0>,#Ref<0.0.4.164>}) 
+monitor_loop(): Worker {<0.63.0>,#Ref<0.0.3.135>} went down: killed
+....restarting {<0.63.0>,#Ref<0.0.3.135>} => {<0.64.0>,#Ref<0.0.3.150>}) 
+Worker3 (<0.62.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.60.0>) is still alive.
 Worker3 (<0.62.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
+Worker4 (<0.64.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
 Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker4 (<0.65.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker1 (<0.60.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
 kill_rand_worker(): about to kill <0.60.0>
-monitor_loop(): Worker {<0.60.0>,#Ref<0.0.4.132>} went down: killed
-....restarting {<0.60.0>,#Ref<0.0.4.132>} => {<0.66.0>,#Ref<0.0.4.179>}) 
-Worker1 (<0.66.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
+monitor_loop(): Worker {<0.60.0>,#Ref<0.0.3.132>} went down: killed
+....restarting {<0.60.0>,#Ref<0.0.3.132>} => {<0.65.0>,#Ref<0.0.3.165>}) 
+Worker1 (<0.65.0>) is still alive.
 Worker3 (<0.62.0>) is still alive.
-Worker4 (<0.65.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-Worker1 (<0.66.0>) is still alive.
-kill_rand_worker(): about to kill <0.66.0>
-monitor_loop(): Worker {<0.66.0>,#Ref<0.0.4.179>} went down: killed
-....restarting {<0.66.0>,#Ref<0.0.4.179>} => {<0.67.0>,#Ref<0.0.4.192>}) 
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker4 (<0.64.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
 Worker3 (<0.62.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker4 (<0.65.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-kill_rand_worker(): about to kill <0.65.0>
-monitor_loop(): Worker {<0.65.0>,#Ref<0.0.4.164>} went down: killed
-....restarting {<0.65.0>,#Ref<0.0.4.164>} => {<0.68.0>,#Ref<0.0.4.207>}) 
-Worker1 (<0.67.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker2 (<0.64.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-Worker3 (<0.62.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+kill_rand_worker(): about to kill <0.62.0>
+monitor_loop(): Worker {<0.62.0>,#Ref<0.0.3.134>} went down: killed
+....restarting {<0.62.0>,#Ref<0.0.3.134>} => {<0.66.0>,#Ref<0.0.3.179>}) 
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker4 (<0.64.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+kill_rand_worker(): about to kill <0.64.0>
+monitor_loop(): Worker {<0.64.0>,#Ref<0.0.3.150>} went down: killed
+....restarting {<0.64.0>,#Ref<0.0.3.150>} => {<0.67.0>,#Ref<0.0.3.193>}) 
+Worker1 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+Worker4 (<0.67.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+kill_rand_worker(): about to kill <0.67.0>
+monitor_loop(): Worker {<0.67.0>,#Ref<0.0.3.193>} went down: killed
+....restarting {<0.67.0>,#Ref<0.0.3.193>} => {<0.68.0>,#Ref<0.0.3.207>}) 
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
 Worker4 (<0.68.0>) is still alive.
-Worker1 (<0.67.0>) is still alive.
-monitor_loop():
-        Monitor finished shutting down workers.
-        Monitor terminating normally.
+Worker2 (<0.61.0>) is still alive.
+Worker1 (<0.65.0>) is still alive.
+Worker3 (<0.66.0>) is still alive.
+        Monitor sent stop messages to all workers.
+        Worker4 stopping: normal.
+        Worker3 stopping: normal.
+        Worker1 stopping: normal.
+        Worker2 stopping: normal.
+        Monitor terminating: normal.
 ```
 There are a couple of things in the program output that demonstrate that eveything is working correctly:
 
