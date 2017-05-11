@@ -209,6 +209,9 @@ Worker1: I'm still alive in <0.80.0>
 monitor_loop():
         Monitor finished shutting down workers.
         Monitor terminating normally.
+```
+Check to make sure there are no leftover processes:
+```
 i().
 Pid                   Initial Call                          Heap     Reds Msgs
 Registered            Current Function                     Stack              
