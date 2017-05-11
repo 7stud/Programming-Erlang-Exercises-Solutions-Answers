@@ -267,7 +267,7 @@ Here's a version using maps in Erlang 19.2:
 -module(e5).
 %%-compile(export_all).
 -export([monitor_workers_init/1, monitor_workers/1]).
--export([test/0]).
+-export([stop_monitor/1, test/0]).
 
 monitor_workers_init(Funcs) ->
     spawn(?MODULE, monitor_workers, [Funcs]).
@@ -279,19 +279,23 @@ monitor_workers(Funcs) ->
                 end,
                 #{}, Funcs),
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
-    loop(Workers).
+    monitor_loop(Workers).
 
-loop(Workers) ->
+monitor_loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            io:format("monitor_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
             NewWorkers = restart_worker({Pid, Ref}, Workers),
-            loop(NewWorkers);
-        stop ->
-            ok;
-        {request, current_workers, From} ->
+            monitor_loop(NewWorkers);
+        {request, stop} ->
+            lists:foreach(fun({Pid,_}) -> Pid ! stop end,  
+                          maps:keys(Workers) ),  %% {Pid, Ref} => Func
+            io:format("monitor_loop():~n"),
+            io:format("\tMonitor finished shutting down workers.~n"),
+            io:format("\tMonitor terminating normally.~n");
+        {request, current_workers, From} -> 
             From ! {reply, Workers, self()},
-            loop(Workers)
+            monitor_loop(Workers)
     end.
 
 restart_worker(PidRef, Workers) ->
@@ -301,16 +305,9 @@ restart_worker(PidRef, Workers) ->
     NewWorkers = maps:remove(PidRef, Workers),
     NewWorkers#{NewPidRef => Func}.
     
-shutdown(Monitor) ->
-    Monitor ! {request, current_workers, self()},
-    receive
-        {reply, Workers, Monitor} ->  %%Monitor is bound!
-            lists:foreach(fun({Pid,_}) -> Pid ! stop end, 
-                          maps:keys(Workers) )
-    end,
-    Monitor ! stop,
-    io:format("shutdown(): sent stop message to Monitor.~n").
-    
+stop_monitor(Monitor) ->
+    Monitor ! {request, stop}.
+
 %======== TESTS ==========
 
 worker(N) ->
@@ -334,7 +331,7 @@ test() ->
     TimeBetweenKillings = 5200,
     kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
 
-    shutdown(Monitor).
+    stop_monitor(Monitor).
 
 kill_rand_worker(0, _, _) ->
     ok;
@@ -360,4 +357,5 @@ get_random_key(Map) ->
     Keys = maps:keys(Map),
     RandNum = rand:uniform(length(Keys) ),
     lists:nth(RandNum, Keys).
+
 ```
