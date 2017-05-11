@@ -68,7 +68,7 @@ worker(Id) ->
 
 test() ->
     Funcs = [fun() -> worker(Id) end || Id <- lists:seq(1, 4)],
-    Monitor= monitor_init(Funcs),
+    Monitor = monitor_init(Funcs),
    
     timer:sleep(5200),
 
