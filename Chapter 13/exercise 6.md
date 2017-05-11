@@ -1,6 +1,6 @@
 1. For my first version,  I pretty much followed the literal description in the exercise and used monitors.
 
-2. For my second version, I created a _link set_ where all the Workers were linked to a MasterLink.  That way if one Worker failed, they would all fail--including the MasterLink. Then, I created a Monitor process to monitor the MasterLink.  Therefore, when any Worker failed the Monitor would detect the MasterLink failing.  For testing,  I used erlang's observer app, `observer:start()`, to kill random Workers.  In the observer window, you can click on the Processes tab, then you can right click on a running process, then choose Kill Process.  After killing a process, you can selelct View>Refresh to display the new Worker processes that were created.
+2. For my second version, I created a _link set_ where all the Workers were linked to a MasterLink.  That way if one Worker failed, they would all fail--including the MasterLink. Then, I created a Monitor process to monitor the MasterLink.  Therefore, when any Worker failed the Monitor would detect the MasterLink failing.  Then all that was required was to restart the Workers.  For testing,  I used erlang's observer app, `observer:start()`, to kill random Workers.  In the observer window, you can click on the Processes tab, then you can right click on a running process, then choose Kill Process.  After killing a process, you can selelct View>Refresh to display the new Worker processes that were created.
 
 Both versions are included below:
 
