@@ -23,14 +23,14 @@ monitor_workers_init(Funcs) ->
 monitor_workers(Funcs) ->
     Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid, Ref}, Func}
     io:format("monitor_workers(): Workers: ~n~p~n", [Workers]),
-    monitor_loop(Workers).
+    monitor_workers_loop(Workers).
 
-monitor_loop(Workers) ->
+monitor_workers_loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("monitor_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            io:format("monitor_workers_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
             NewWorkers = restart_worker({Pid, Ref}, Workers),
-            monitor_loop(NewWorkers);
+            monitor_workers_loop(NewWorkers);
         {request, stop} ->
             lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  
                           Workers),  %% { {Pid, Ref}, Func}
@@ -39,7 +39,7 @@ monitor_loop(Workers) ->
             
         {request, kill_worker, _From}  ->  %%For testing.
             kill_rand_worker(Workers),          
-            monitor_loop(Workers)           
+            monitor_workers_loop(Workers)           
     end.                                   
 
 restart_worker(PidRef, Workers) ->  %%Monitor calls this function in response to a 'DOWN' message.
@@ -275,23 +275,23 @@ monitor_workers(Funcs) ->
                 end,
                 #{}, Funcs),
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
-    monitor_loop(Workers).
+    monitor_workers_loop(Workers).
 
-monitor_loop(Workers) ->
+monitor_workers_loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("monitor_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            io:format("monitor_workers_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
             NewWorkers = restart_worker({Pid, Ref}, Workers),
-            monitor_loop(NewWorkers);
+            monitor_workers_loop(NewWorkers);
         {request, stop} ->
             lists:foreach(fun({Pid,_}) -> Pid ! stop end,  
                           maps:keys(Workers) ),  %% {Pid, Ref} => Func
-            io:format("monitor_loop():~n"),
+            io:format("monitor_workers_loop():~n"),
             io:format("\tMonitor finished shutting down workers.~n"),
             io:format("\tMonitor terminating normally.~n");
         {request, current_workers, From} -> 
             From ! {reply, Workers, self()},
-            monitor_loop(Workers)
+            monitor_workers_loop(Workers)
     end.
 
 restart_worker(PidRef, Workers) ->
