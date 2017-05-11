@@ -38,7 +38,7 @@ stop_workers(Workers) ->
                           demonitor(Ref),
                           Pid ! stop
                   end,
-                  Workers).
+                  Workers).  %% { {Pid,Ref}, Func}
 
 %%==== TESTS ========
 
