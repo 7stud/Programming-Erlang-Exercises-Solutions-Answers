@@ -24,6 +24,7 @@ supervisor_loop(Workers) ->
             supervisor_loop(NewWorkers);
         stop ->
             stop_workers(Workers),
+            
             io:format("monitor_loop():~n"),
             io:format("\tMonitor finished shutting down workers.~n"),
             io:format("\tMonitor terminating normally.~n");
