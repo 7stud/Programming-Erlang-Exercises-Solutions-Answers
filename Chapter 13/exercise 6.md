@@ -14,10 +14,13 @@ supervisor_loop(Workers) ->
         {'DOWN', Ref, process, Pid, Why} ->
             io:format("supervisor_loop(): Worker ~w went down: ~w~n", [{Pid,Ref}, Why]),
             io:format("...restarting all workers.~n"),
-            io:format("supervisor_loop(): Old Workers:~n~p~n", [Workers]),
+            
             stop_workers(Workers),
             NewWorkers = [ {spawn_monitor(Func), Func} || {_, Func} <- Workers],
+            
+            io:format("supervisor_loop(): Old Workers:~n~p~n", [Workers]),
             io:format("supervisor_loop(): NewWorkers:~n~p~n", [NewWorkers]),
+            
             supervisor_loop(NewWorkers);
         stop ->
             stop_workers(Workers),
