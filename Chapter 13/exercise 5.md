@@ -52,16 +52,6 @@ restart_worker(PidRef, Workers) ->
     
 stop_monitor(Monitor) ->
     Monitor ! {request, stop}.
-
-%% shutdown(Monitor) ->
-%%     Monitor ! {request, current_workers, self()},
-%%     receive
-%%         {reply, Workers, Monitor} ->  %%Monitor is bound!
-%%             lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  
-%%                           Workers)  %% { {Pid, Ref}, Func}
-%%     end,
-%%     Monitor ! stop,
-%%     io:format("shutdown(): sent stop message to Monitor.~n").
     
 %======== TESTS ==========
 
@@ -86,7 +76,6 @@ test() ->
     TimeBetweenKillings = 5200,
     kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
 
-    %%shutdown(Monitor).
     stop_monitor(Monitor).
 
 kill_rand_worker(0, _, _) ->
