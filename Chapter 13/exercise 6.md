@@ -289,24 +289,26 @@ ok
 Here's a version that uses links:
 ```erlang
 -module(e6).
--compile(export_all).
+%%-compile(export_all).
+-export([monitor_workers_init/1, monitor_workers/1]).
+-export([test/0, worker/1]).
 
-monitor_init(NumWorkers) ->
-    register(?MODULE, Pid = spawn(?MODULE, monitor, [NumWorkers]) ),
+monitor_workers_init(NumWorkers) ->
+    register(?MODULE, Pid = spawn(?MODULE, monitor_workers, [NumWorkers]) ),
     Pid.
     
-monitor(NumWorkers) ->
+monitor_workers(NumWorkers) ->
     MasterLink = create_link_set(NumWorkers),  %% => {Pid, Ref}
-    monitor_loop(MasterLink, NumWorkers).
+    monitor_workers_loop(MasterLink, NumWorkers).
 
-monitor_loop({MasterPid, MasterRef}, NumWorkers) ->
+monitor_workers_loop({MasterPid, MasterRef}, NumWorkers) ->
     receive
         {'DOWN', MasterRef, process, MasterPid, Why} ->
-            io:format("monitor_loop(): MasterLink ~w went down: ~w~n", [{MasterPid,MasterRef}, Why]),
+            io:format("monitor_workers_loop(): MasterLink ~w went down: ~w~n", [{MasterPid,MasterRef}, Why]),
             io:format("...restarting all workers.~n"),
 
             NewMasterLink = create_link_set(NumWorkers),
-            monitor_loop(NewMasterLink, NumWorkers);
+            monitor_workers_loop(NewMasterLink, NumWorkers);
         {request, stop, _From} ->
              exit(MasterPid, kill),
             io:format("\tMonitor sent kill signal to MasterLink.~n"),
@@ -322,7 +324,7 @@ create_link_set(NumWorkers) ->
                 after infinity -> ok   %%MasterLink sits and does nothing.
                 end
         end,
-    MasterPidRef = spawn_monitor(NewMasterLink),  %% monitor_loop() monitors MasterLink
+    MasterPidRef = spawn_monitor(NewMasterLink),  %% monitor_workers_loop() monitors MasterLink
     io:format("create_link_set(): NewMasterLink: ~w~n", [MasterPidRef]),
     MasterPidRef.
 
@@ -345,7 +347,7 @@ test() ->
     timer:sleep(500),  %%Allow output from erlang shell startup to print.
 
     NumWorkers = 4,
-    monitor_init(NumWorkers),
+    monitor_workers_init(NumWorkers),
    
     timer:sleep(30000),  %%Give me time to kill some processes in observer app.
 
@@ -358,7 +360,7 @@ $ ./run
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
 
-1> create_link_set(): NewMasterLink: {<0.79.0>,#Ref<0.0.4.277>}
+1> create_link_set(): NewMasterLink: {<0.79.0>,#Ref<0.0.4.279>}
 create_link_set(): NewWorkers: [<0.80.0>,<0.81.0>,<0.82.0>,<0.83.0>]
 Worker1: I'm still alive in <0.80.0>
 Worker2: I'm still alive in <0.81.0>
@@ -373,59 +375,61 @@ Worker3: I'm still alive in <0.82.0>
 Worker2: I'm still alive in <0.81.0>
 Worker1: I'm still alive in <0.80.0>
 Worker1: I'm still alive in <0.80.0>
-monitor_loop(): MasterLink {<0.79.0>,#Ref<0.0.4.277>} went down: killed
+monitor_workers_loop(): MasterLink {<0.79.0>,#Ref<0.0.4.279>} went down: killed
 ...restarting all workers.
-create_link_set(): NewMasterLink: {<0.603.0>,#Ref<0.0.4.1863>}
-create_link_set(): NewWorkers: [<0.604.0>,<0.605.0>,<0.606.0>,<0.607.0>]
-Worker1: I'm still alive in <0.604.0>
-Worker2: I'm still alive in <0.605.0>
-Worker1: I'm still alive in <0.604.0>
-Worker3: I'm still alive in <0.606.0>
-Worker1: I'm still alive in <0.604.0>
-Worker4: I'm still alive in <0.607.0>
-Worker2: I'm still alive in <0.605.0>
-Worker1: I'm still alive in <0.604.0>
-Worker1: I'm still alive in <0.604.0>
-monitor_loop(): MasterLink {<0.603.0>,#Ref<0.0.4.1863>} went down: killed
+create_link_set(): NewMasterLink: {<0.575.0>,#Ref<0.0.4.1781>}
+create_link_set(): NewWorkers: [<0.576.0>,<0.577.0>,<0.578.0>,<0.579.0>]
+Worker1: I'm still alive in <0.576.0>
+Worker2: I'm still alive in <0.577.0>
+Worker1: I'm still alive in <0.576.0>
+Worker3: I'm still alive in <0.578.0>
+Worker1: I'm still alive in <0.576.0>
+Worker4: I'm still alive in <0.579.0>
+Worker2: I'm still alive in <0.577.0>
+Worker1: I'm still alive in <0.576.0>
+Worker1: I'm still alive in <0.576.0>
+Worker3: I'm still alive in <0.578.0>
+Worker2: I'm still alive in <0.577.0>
+Worker1: I'm still alive in <0.576.0>
+Worker1: I'm still alive in <0.576.0>
+monitor_workers_loop(): MasterLink {<0.575.0>,#Ref<0.0.4.1781>} went down: killed
 ...restarting all workers.
-create_link_set(): NewMasterLink: {<0.1072.0>,#Ref<0.0.4.3279>}
-create_link_set(): NewWorkers: [<0.1073.0>,<0.1074.0>,<0.1075.0>,<0.1076.0>]
-Worker1: I'm still alive in <0.1073.0>
-Worker2: I'm still alive in <0.1074.0>
-Worker1: I'm still alive in <0.1073.0>
-Worker3: I'm still alive in <0.1075.0>
-Worker1: I'm still alive in <0.1073.0>
-Worker4: I'm still alive in <0.1076.0>
-Worker2: I'm still alive in <0.1074.0>
-Worker1: I'm still alive in <0.1073.0>
-Worker1: I'm still alive in <0.1073.0>
-monitor_loop(): MasterLink {<0.1072.0>,#Ref<0.0.4.3279>} went down: killed
+create_link_set(): NewMasterLink: {<0.1023.0>,#Ref<0.0.4.3138>}
+create_link_set(): NewWorkers: [<0.1024.0>,<0.1025.0>,<0.1026.0>,<0.1027.0>]
+Worker1: I'm still alive in <0.1024.0>
+Worker2: I'm still alive in <0.1025.0>
+Worker1: I'm still alive in <0.1024.0>
+Worker3: I'm still alive in <0.1026.0>
+Worker1: I'm still alive in <0.1024.0>
+Worker4: I'm still alive in <0.1027.0>
+Worker2: I'm still alive in <0.1025.0>
+Worker1: I'm still alive in <0.1024.0>
+Worker1: I'm still alive in <0.1024.0>
+Worker3: I'm still alive in <0.1026.0>
+Worker2: I'm still alive in <0.1025.0>
+Worker1: I'm still alive in <0.1024.0>
+Worker1: I'm still alive in <0.1024.0>
+monitor_workers_loop(): MasterLink {<0.1023.0>,#Ref<0.0.4.3138>} went down: killed
 ...restarting all workers.
-create_link_set(): NewMasterLink: {<0.1302.0>,#Ref<0.0.4.3974>}
-create_link_set(): NewWorkers: [<0.1303.0>,<0.1304.0>,<0.1305.0>,<0.1306.0>]
-Worker1: I'm still alive in <0.1303.0>
-Worker2: I'm still alive in <0.1304.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker3: I'm still alive in <0.1305.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker4: I'm still alive in <0.1306.0>
-Worker2: I'm still alive in <0.1304.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker3: I'm still alive in <0.1305.0>
-Worker2: I'm still alive in <0.1304.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker1: I'm still alive in <0.1303.0>
-Worker4: I'm still alive in <0.1306.0>
-Worker2: I'm still alive in <0.1304.0>
-Worker1: I'm still alive in <0.1303.0>
-monitor_loop(): MasterLink {<0.1302.0>,#Ref<0.0.4.3974>} went down: killed
+create_link_set(): NewMasterLink: {<0.1303.0>,#Ref<0.0.4.3992>}
+create_link_set(): NewWorkers: [<0.1304.0>,<0.1305.0>,<0.1306.0>,<0.1307.0>]
+Worker1: I'm still alive in <0.1304.0>
+Worker2: I'm still alive in <0.1305.0>
+Worker1: I'm still alive in <0.1304.0>
+Worker3: I'm still alive in <0.1306.0>
+Worker1: I'm still alive in <0.1304.0>
+Worker4: I'm still alive in <0.1307.0>
+Worker2: I'm still alive in <0.1305.0>
+Worker1: I'm still alive in <0.1304.0>
+Worker1: I'm still alive in <0.1304.0>
+Worker3: I'm still alive in <0.1306.0>
+Worker2: I'm still alive in <0.1305.0>
+Worker1: I'm still alive in <0.1304.0>
+monitor_workers_loop(): MasterLink {<0.1303.0>,#Ref<0.0.4.3992>} went down: killed
 ...restarting all workers.
-create_link_set(): NewMasterLink: {<0.1757.0>,#Ref<0.0.4.5356>}
-create_link_set(): NewWorkers: [<0.1758.0>,<0.1759.0>,<0.1760.0>,<0.1761.0>]
-Worker1: I'm still alive in <0.1758.0>
-Worker2: I'm still alive in <0.1759.0>
-Worker1: I'm still alive in <0.1758.0>
+create_link_set(): NewMasterLink: {<0.1792.0>,#Ref<0.0.4.5469>}
+create_link_set(): NewWorkers: [<0.1793.0>,<0.1794.0>,<0.1795.0>,<0.1796.0>]
+Worker1: I'm still alive in <0.1793.0>
         Monitor sent kill signal to MasterLink.
         Monitor terminating normally.
 ```
