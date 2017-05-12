@@ -12,92 +12,85 @@ Debugging hell!
 
 
 ```erlang
--module(e6).
--compile(export_all).
+-module(e5).
+%%-compile(export_all).
+-export([monitor_workers_init/1, monitor_workers/1]).
+-export([stop_monitor/1, test/0]).
 
-monitor_init(Funcs) ->
-    spawn(?MODULE, monitor, [Funcs]).
-    
-monitor(Funcs) ->
-    Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid,Ref}, Func}
-    monitor_loop(Workers).
+monitor_workers_init(Funcs) ->
+    spawn(?MODULE, monitor_workers, [Funcs]).
 
-monitor_loop(Workers) ->
+monitor_workers(Funcs) ->
+    Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid, Ref}, Func}
+    io:format("monitor_workers(): Workers: ~n~p~n", [Workers]),
+    monitor_workers_loop(Workers).
+
+monitor_workers_loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("monitor_loop(): Worker ~w went down: ~w~n", [{Pid,Ref}, Why]),
-            io:format("...restarting all workers.~n"),
+            io:format("monitor_workers_loop(): Worker ~w went down: ~w~n.", [{Pid, Ref}, Why]),
+            NewWorkers = restart_worker({Pid, Ref}, Workers),
+            monitor_workers_loop(NewWorkers);
+        {request, stop} ->
+            lists:foreach(fun({{Pid,_},_}) -> Pid ! stop end,  
+                          Workers),  %% { {Pid, Ref}, Func}
+            io:format("\tMonitor sent stop messages to all workers.~n"),
+            io:format("\tMonitor terminating: normal.~n");
             
-            stop_workers(Workers),
-            NewWorkers = [ {spawn_monitor(Func), Func} || {_, Func} <- Workers],
-            
-            io:format("monitor_loop(): old Workers:~n~p~n", [Workers]),
-            io:format("monitor_loop(): NewWorkers:~n~p~n", [NewWorkers]),
-            
-            monitor_loop(NewWorkers);
-        {request, stop, _From} ->
-            stop_workers(Workers),
-            
-            io:format("monitor_loop():~n"),
-            io:format("\tMonitor finished shutting down workers.~n"),
-            io:format("\tMonitor terminating normally.~n");
-        {request, current_workers, From} ->
-                From ! {reply, Workers, self()},
-                monitor_loop(Workers)
-    end.
+        {request, kill_worker, _From}  ->  %%For testing.
+            kill_rand_worker(Workers),          
+            monitor_workers_loop(Workers)           
+    end.                                   
 
-stop_workers(Workers) ->
-    lists:foreach(fun({{Pid,Ref},_}) ->
-                          demonitor(Ref),
-                          Pid ! stop
-                  end,
-                  Workers).  %% { {Pid,Ref}, Func}
+restart_worker(PidRef, Workers) ->  %%Monitor calls this function in response to a 'DOWN' message.
+    {_, Func} = lists:keyfind(PidRef, 1, Workers),  %% { {Pid, Ref}, Func}
+    NewPidRef = spawn_monitor(Func),          
+    io:format("...restarting ~w => ~w) ~n", [PidRef, NewPidRef]),
 
-stop(Monitor) ->
-    Monitor ! {request, stop, self()}.
-
-%%==== TESTS ========
-
-worker(Id) ->
-    receive 
-        stop -> ok
-    after Id*1000 ->
-        io:format("Worker~w: I'm still alive in ~w~n", [Id, self()]),
-        worker(Id)
-    end.
-
-test() ->
-    Funcs = [fun() -> worker(Id) end || Id <- lists:seq(1, 4)],
-    Monitor = monitor_init(Funcs),
-   
-    timer:sleep(5200),
-
-    FiveTimes = 5,
-    TimeBetweenKillings = 5200,
-    kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
-
-    stop(Monitor).
-
-kill_rand_worker(0, _, _) ->
-    ok;
-kill_rand_worker(NumTimes, TimeBetweenKillings, Monitor) ->
-    Workers = get_workers(Monitor), 
-    kill_rand_worker(Workers),
-    timer:sleep(TimeBetweenKillings),
-    kill_rand_worker(NumTimes-1, TimeBetweenKillings, Monitor).
-
-get_workers(Monitor) ->
-    Monitor ! {request, current_workers, self()},
-    receive
-        {reply, CurrentWorkers, Monitor} -> 
-            CurrentWorkers
-    end.
-
-kill_rand_worker(Workers) ->
+    NewWorkers = lists:keydelete(PidRef, 1, Workers), %% { {Pid, Ref}, Func}
+    [{NewPidRef, Func} | NewWorkers].
+    
+kill_rand_worker(Workers) ->   %%Monitor calls this function in response to a kill_worker request
     RandNum = rand:uniform(length(Workers) ),
     {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
+    
+stop_monitor(Monitor) ->
+    Monitor ! {request, stop}.
+
+%======== TESTS ==========
+
+worker(N) ->
+    receive
+        stop -> 
+            io:format("\tWorker~w stopping: normal.~n", [N]) 
+    after N*1000 ->
+            io:format("Worker~w (~w) is still alive.~n", [N, self()] ),
+            worker(N)
+    end.
+
+test() ->
+    timer:sleep(500),  %%Allow output from startup of the erlang shell to print.
+
+    Funcs = [fun() -> worker(N) end || N <- lists:seq(1, 4) ],
+    Monitor = monitor_workers_init(Funcs),
+    io:format("Monitor is: ~w~n", [Monitor]),
+
+    timer:sleep(5200), %%Let monitored processes run for awhile.
+    
+    FiveTimes = 5,
+    TimeBetweenKillings = 5200,
+    kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
+
+    stop_monitor(Monitor).
+
+kill_rand_worker(0, _, _) ->
+    ok;
+kill_rand_worker(NumTimes, TimeBetweenKillings, Monitor) ->
+    Monitor ! {request, kill_worker, self()},
+    timer:sleep(TimeBetweenKillings),
+    kill_rand_worker(NumTimes-1, TimeBetweenKillings, Monitor).
 ```
 In the shell:
 ```
