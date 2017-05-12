@@ -63,7 +63,7 @@ test() ->
     Funcs = [fun() -> worker(Id) end || Id <- lists:seq(1, 4)],
     Monitor= monitor_workers_init(Funcs),
    
-    timer:sleep(5200),
+    timer:sleep(5200),  %%Let worker's run for awhile.
 
     FiveTimes = 5,
     TimeBetweenKillings = 5200,
