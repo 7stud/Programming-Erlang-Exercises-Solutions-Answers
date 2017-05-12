@@ -8,37 +8,40 @@ Both versions are included below:
 -module(e6).
 -compile(export_all).
 
-monitor_init(Funcs) ->
-    spawn(?MODULE, monitor, [Funcs]).
+monitor_workers_init(Funcs) ->
+    spawn(?MODULE, monitor_workers, [Funcs]).
     
-monitor(Funcs) ->
+monitor_workers(Funcs) ->
     Workers = [ {spawn_monitor(Func), Func} || Func <- Funcs], %% { {Pid,Ref}, Func}
-    monitor_loop(Workers).
+    monitor_workers_loop(Workers).
 
-monitor_loop(Workers) ->
+monitor_workers_loop(Workers) ->
     receive
         {'DOWN', Ref, process, Pid, Why} ->
-            io:format("monitor_loop(): Worker ~w went down: ~w~n", [{Pid,Ref}, Why]),
+            io:format("monitor workers_loop(): Worker ~w went down: ~w~n", [{Pid,Ref}, Why]),
             io:format("...restarting all workers.~n"),
             
             stop_workers(Workers),
             NewWorkers = [ {spawn_monitor(Func), Func} || {_, Func} <- Workers],
             
-            io:format("monitor_loop(): old Workers:~n~p~n", [Workers]),
-            io:format("monitor_loop(): NewWorkers:~n~p~n", [NewWorkers]),
+            io:format("monitor workers_loop(): old Workers:~n~p~n", [Workers]),
+            io:format("monitor workers_loop(): NewWorkers:~n~p~n", [NewWorkers]),
             
-            monitor_loop(NewWorkers);
-        stop ->
+            monitor_workers_loop(NewWorkers);
+        {request, stop, _From} ->
             stop_workers(Workers),
             
-            io:format("monitor_loop():~n"),
+            io:format("monitor workers_loop():~n"),
             io:format("\tMonitor finished shutting down workers.~n"),
             io:format("\tMonitor terminating normally.~n");
         {request, current_workers, From} ->
                 From ! {reply, Workers, self()},
-                monitor_loop(Workers)
+                monitor_workers_loop(Workers)
     end.
 
+stop(Monitor) ->
+    Monitor ! {request, stop, self()}.
+    
 stop_workers(Workers) ->
     lists:foreach(fun({{Pid,Ref},_}) ->
                           demonitor(Ref),
@@ -58,7 +61,7 @@ worker(Id) ->
 
 test() ->
     Funcs = [fun() -> worker(Id) end || Id <- lists:seq(1, 4)],
-    Monitor= monitor_init(Funcs),
+    Monitor= monitor_workers_init(Funcs),
    
     timer:sleep(5200),
 
@@ -66,7 +69,7 @@ test() ->
     TimeBetweenKillings = 5200,
     kill_rand_worker(FiveTimes, TimeBetweenKillings, Monitor),
 
-    Monitor! stop.
+    stop(Monitor).
 
 kill_rand_worker(0, _, _) ->
     ok;
@@ -88,7 +91,6 @@ kill_rand_worker(Workers) ->
     {{Pid, _}, _} = lists:nth(RandNum, Workers),  %% { {Pid, Ref} Func}
     io:format("kill_rand_worker(): about to kill ~w~n", [Pid]),
     exit(Pid, kill).
-
 ```
 
 In the shell:
@@ -107,19 +109,19 @@ Worker4: I'm still alive in <0.61.0>
 Worker2: I'm still alive in <0.59.0>
 Worker1: I'm still alive in <0.58.0>
 Worker1: I'm still alive in <0.58.0>
-kill_rand_worker(): about to kill <0.61.0>
-monitor_loop(): Worker {<0.61.0>,#Ref<0.0.1.57>} went down: killed
+kill_rand_worker(): about to kill <0.59.0>
+monitor workers_loop(): Worker {<0.59.0>,#Ref<0.0.4.127>} went down: killed
 ...restarting all workers.
-monitor_loop(): old Workers:
-[{{<0.58.0>,#Ref<0.0.1.54>},#Fun<e6.1.73819356>},
- {{<0.59.0>,#Ref<0.0.1.55>},#Fun<e6.1.73819356>},
- {{<0.60.0>,#Ref<0.0.1.56>},#Fun<e6.1.73819356>},
- {{<0.61.0>,#Ref<0.0.1.57>},#Fun<e6.1.73819356>}]
-monitor_loop(): NewWorkers:
-[{{<0.64.0>,#Ref<0.0.1.70>},#Fun<e6.1.73819356>},
- {{<0.65.0>,#Ref<0.0.1.71>},#Fun<e6.1.73819356>},
- {{<0.66.0>,#Ref<0.0.1.72>},#Fun<e6.1.73819356>},
- {{<0.67.0>,#Ref<0.0.1.73>},#Fun<e6.1.73819356>}]
+monitor workers_loop(): old Workers:
+[{{<0.58.0>,#Ref<0.0.4.126>},#Fun<e6.1.53031733>},
+ {{<0.59.0>,#Ref<0.0.4.127>},#Fun<e6.1.53031733>},
+ {{<0.60.0>,#Ref<0.0.4.128>},#Fun<e6.1.53031733>},
+ {{<0.61.0>,#Ref<0.0.4.129>},#Fun<e6.1.53031733>}]
+monitor workers_loop(): NewWorkers:
+[{{<0.64.0>,#Ref<0.0.4.148>},#Fun<e6.1.53031733>},
+ {{<0.65.0>,#Ref<0.0.4.149>},#Fun<e6.1.53031733>},
+ {{<0.66.0>,#Ref<0.0.4.150>},#Fun<e6.1.53031733>},
+ {{<0.67.0>,#Ref<0.0.4.151>},#Fun<e6.1.53031733>}]
 Worker1: I'm still alive in <0.64.0>
 Worker2: I'm still alive in <0.65.0>
 Worker1: I'm still alive in <0.64.0>
@@ -129,19 +131,19 @@ Worker4: I'm still alive in <0.67.0>
 Worker2: I'm still alive in <0.65.0>
 Worker1: I'm still alive in <0.64.0>
 Worker1: I'm still alive in <0.64.0>
-kill_rand_worker(): about to kill <0.64.0>
-monitor_loop(): Worker {<0.64.0>,#Ref<0.0.1.70>} went down: killed
+kill_rand_worker(): about to kill <0.66.0>
+monitor workers_loop(): Worker {<0.66.0>,#Ref<0.0.4.150>} went down: killed
 ...restarting all workers.
-monitor_loop(): old Workers:
-[{{<0.64.0>,#Ref<0.0.1.70>},#Fun<e6.1.73819356>},
- {{<0.65.0>,#Ref<0.0.1.71>},#Fun<e6.1.73819356>},
- {{<0.66.0>,#Ref<0.0.1.72>},#Fun<e6.1.73819356>},
- {{<0.67.0>,#Ref<0.0.1.73>},#Fun<e6.1.73819356>}]
-monitor_loop(): NewWorkers:
-[{{<0.68.0>,#Ref<0.0.1.89>},#Fun<e6.1.73819356>},
- {{<0.69.0>,#Ref<0.0.1.90>},#Fun<e6.1.73819356>},
- {{<0.70.0>,#Ref<0.0.1.91>},#Fun<e6.1.73819356>},
- {{<0.71.0>,#Ref<0.0.1.92>},#Fun<e6.1.73819356>}]
+monitor workers_loop(): old Workers:
+[{{<0.64.0>,#Ref<0.0.4.148>},#Fun<e6.1.53031733>},
+ {{<0.65.0>,#Ref<0.0.4.149>},#Fun<e6.1.53031733>},
+ {{<0.66.0>,#Ref<0.0.4.150>},#Fun<e6.1.53031733>},
+ {{<0.67.0>,#Ref<0.0.4.151>},#Fun<e6.1.53031733>}]
+monitor workers_loop(): NewWorkers:
+[{{<0.68.0>,#Ref<0.0.4.167>},#Fun<e6.1.53031733>},
+ {{<0.69.0>,#Ref<0.0.4.168>},#Fun<e6.1.53031733>},
+ {{<0.70.0>,#Ref<0.0.4.169>},#Fun<e6.1.53031733>},
+ {{<0.71.0>,#Ref<0.0.4.170>},#Fun<e6.1.53031733>}]
 Worker1: I'm still alive in <0.68.0>
 Worker2: I'm still alive in <0.69.0>
 Worker1: I'm still alive in <0.68.0>
@@ -151,19 +153,19 @@ Worker4: I'm still alive in <0.71.0>
 Worker2: I'm still alive in <0.69.0>
 Worker1: I'm still alive in <0.68.0>
 Worker1: I'm still alive in <0.68.0>
-kill_rand_worker(): about to kill <0.69.0>
-monitor_loop(): Worker {<0.69.0>,#Ref<0.0.1.90>} went down: killed
+kill_rand_worker(): about to kill <0.70.0>
+monitor workers_loop(): Worker {<0.70.0>,#Ref<0.0.4.169>} went down: killed
 ...restarting all workers.
-monitor_loop(): old Workers:
-[{{<0.68.0>,#Ref<0.0.1.89>},#Fun<e6.1.73819356>},
- {{<0.69.0>,#Ref<0.0.1.90>},#Fun<e6.1.73819356>},
- {{<0.70.0>,#Ref<0.0.1.91>},#Fun<e6.1.73819356>},
- {{<0.71.0>,#Ref<0.0.1.92>},#Fun<e6.1.73819356>}]
-monitor_loop(): NewWorkers:
-[{{<0.72.0>,#Ref<0.0.1.107>},#Fun<e6.1.73819356>},
- {{<0.73.0>,#Ref<0.0.1.108>},#Fun<e6.1.73819356>},
- {{<0.74.0>,#Ref<0.0.1.109>},#Fun<e6.1.73819356>},
- {{<0.75.0>,#Ref<0.0.1.110>},#Fun<e6.1.73819356>}]
+monitor workers_loop(): old Workers:
+[{{<0.68.0>,#Ref<0.0.4.167>},#Fun<e6.1.53031733>},
+ {{<0.69.0>,#Ref<0.0.4.168>},#Fun<e6.1.53031733>},
+ {{<0.70.0>,#Ref<0.0.4.169>},#Fun<e6.1.53031733>},
+ {{<0.71.0>,#Ref<0.0.4.170>},#Fun<e6.1.53031733>}]
+monitor workers_loop(): NewWorkers:
+[{{<0.72.0>,#Ref<0.0.4.185>},#Fun<e6.1.53031733>},
+ {{<0.73.0>,#Ref<0.0.4.186>},#Fun<e6.1.53031733>},
+ {{<0.74.0>,#Ref<0.0.4.187>},#Fun<e6.1.53031733>},
+ {{<0.75.0>,#Ref<0.0.4.188>},#Fun<e6.1.53031733>}]
 Worker1: I'm still alive in <0.72.0>
 Worker2: I'm still alive in <0.73.0>
 Worker1: I'm still alive in <0.72.0>
@@ -173,19 +175,19 @@ Worker4: I'm still alive in <0.75.0>
 Worker2: I'm still alive in <0.73.0>
 Worker1: I'm still alive in <0.72.0>
 Worker1: I'm still alive in <0.72.0>
-kill_rand_worker(): about to kill <0.74.0>
-monitor_loop(): Worker {<0.74.0>,#Ref<0.0.1.109>} went down: killed
+kill_rand_worker(): about to kill <0.73.0>
+monitor workers_loop(): Worker {<0.73.0>,#Ref<0.0.4.186>} went down: killed
 ...restarting all workers.
-monitor_loop(): old Workers:
-[{{<0.72.0>,#Ref<0.0.1.107>},#Fun<e6.1.73819356>},
- {{<0.73.0>,#Ref<0.0.1.108>},#Fun<e6.1.73819356>},
- {{<0.74.0>,#Ref<0.0.1.109>},#Fun<e6.1.73819356>},
- {{<0.75.0>,#Ref<0.0.1.110>},#Fun<e6.1.73819356>}]
-monitor_loop(): NewWorkers:
-[{{<0.76.0>,#Ref<0.0.1.125>},#Fun<e6.1.73819356>},
- {{<0.77.0>,#Ref<0.0.1.126>},#Fun<e6.1.73819356>},
- {{<0.78.0>,#Ref<0.0.1.127>},#Fun<e6.1.73819356>},
- {{<0.79.0>,#Ref<0.0.1.128>},#Fun<e6.1.73819356>}]
+monitor workers_loop(): old Workers:
+[{{<0.72.0>,#Ref<0.0.4.185>},#Fun<e6.1.53031733>},
+ {{<0.73.0>,#Ref<0.0.4.186>},#Fun<e6.1.53031733>},
+ {{<0.74.0>,#Ref<0.0.4.187>},#Fun<e6.1.53031733>},
+ {{<0.75.0>,#Ref<0.0.4.188>},#Fun<e6.1.53031733>}]
+monitor workers_loop(): NewWorkers:
+[{{<0.76.0>,#Ref<0.0.4.203>},#Fun<e6.1.53031733>},
+ {{<0.77.0>,#Ref<0.0.4.204>},#Fun<e6.1.53031733>},
+ {{<0.78.0>,#Ref<0.0.4.205>},#Fun<e6.1.53031733>},
+ {{<0.79.0>,#Ref<0.0.4.206>},#Fun<e6.1.53031733>}]
 Worker1: I'm still alive in <0.76.0>
 Worker2: I'm still alive in <0.77.0>
 Worker1: I'm still alive in <0.76.0>
@@ -196,18 +198,18 @@ Worker2: I'm still alive in <0.77.0>
 Worker1: I'm still alive in <0.76.0>
 Worker1: I'm still alive in <0.76.0>
 kill_rand_worker(): about to kill <0.78.0>
-monitor_loop(): Worker {<0.78.0>,#Ref<0.0.1.127>} went down: killed
+monitor workers_loop(): Worker {<0.78.0>,#Ref<0.0.4.205>} went down: killed
 ...restarting all workers.
-monitor_loop(): old Workers:
-[{{<0.76.0>,#Ref<0.0.1.125>},#Fun<e6.1.73819356>},
- {{<0.77.0>,#Ref<0.0.1.126>},#Fun<e6.1.73819356>},
- {{<0.78.0>,#Ref<0.0.1.127>},#Fun<e6.1.73819356>},
- {{<0.79.0>,#Ref<0.0.1.128>},#Fun<e6.1.73819356>}]
-monitor_loop(): NewWorkers:
-[{{<0.80.0>,#Ref<0.0.1.143>},#Fun<e6.1.73819356>},
- {{<0.81.0>,#Ref<0.0.1.144>},#Fun<e6.1.73819356>},
- {{<0.82.0>,#Ref<0.0.1.145>},#Fun<e6.1.73819356>},
- {{<0.83.0>,#Ref<0.0.1.146>},#Fun<e6.1.73819356>}]
+monitor workers_loop(): old Workers:
+[{{<0.76.0>,#Ref<0.0.4.203>},#Fun<e6.1.53031733>},
+ {{<0.77.0>,#Ref<0.0.4.204>},#Fun<e6.1.53031733>},
+ {{<0.78.0>,#Ref<0.0.4.205>},#Fun<e6.1.53031733>},
+ {{<0.79.0>,#Ref<0.0.4.206>},#Fun<e6.1.53031733>}]
+monitor workers_loop(): NewWorkers:
+[{{<0.80.0>,#Ref<0.0.4.221>},#Fun<e6.1.53031733>},
+ {{<0.81.0>,#Ref<0.0.4.222>},#Fun<e6.1.53031733>},
+ {{<0.82.0>,#Ref<0.0.4.223>},#Fun<e6.1.53031733>},
+ {{<0.83.0>,#Ref<0.0.4.224>},#Fun<e6.1.53031733>}]
 Worker1: I'm still alive in <0.80.0>
 Worker2: I'm still alive in <0.81.0>
 Worker1: I'm still alive in <0.80.0>
@@ -217,7 +219,7 @@ Worker4: I'm still alive in <0.83.0>
 Worker2: I'm still alive in <0.81.0>
 Worker1: I'm still alive in <0.80.0>
 Worker1: I'm still alive in <0.80.0>
-monitor_loop():
+monitor workers_loop():
         Monitor finished shutting down workers.
         Monitor terminating normally.
 ```
