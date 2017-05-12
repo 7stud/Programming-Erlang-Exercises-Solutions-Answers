@@ -310,7 +310,8 @@ monitor_workers_loop({MasterPid, MasterRef}, NumWorkers) ->
             NewMasterLink = create_link_set(NumWorkers),
             monitor_workers_loop(NewMasterLink, NumWorkers);
         {request, stop, _From} ->
-             exit(MasterPid, kill),
+            exit(MasterPid, kill),
+            
             io:format("\tMonitor sent kill signal to MasterLink.~n"),
             io:format("\tMonitor terminating normally.~n")
     end.
