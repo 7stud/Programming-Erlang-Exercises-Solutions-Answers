@@ -269,7 +269,7 @@ monitor_workers_init(Funcs) ->
     spawn(?MODULE, monitor_workers, [Funcs]).
 
 monitor_workers(Funcs) ->
-    Workers = lists:foldl(  %%Very similar to map(), but you get to manipulate the second argument, which becomes the return value.
+    Workers = lists:foldl(  %%Very similar to map(), but you get to manipulate the second argument, which is passed along to each call of fun, and which becomes the ultimate return value of foldl().
                 fun(Func, Map) ->  
                         Map#{spawn_monitor(Func) => Func}  %%{Pid, Ref} => Func
                 end,
