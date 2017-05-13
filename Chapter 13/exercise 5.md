@@ -258,7 +258,8 @@ ok
 ```
 No processes from e5 in there!
 
-Here's a version using maps in Erlang 19.2:
+Below is a version that uses maps in Erlang 19.2.  It also uses `lists:foldl()` which is very similar to `lists:map()` in that they both apply a function to each element in a list.  With `lists:foldl()`, you manipulate the second argument in the body of each function, and you pass the altered second argument onto the next function.  After the function has been applied to the last element in the list, the manipulated second argument becomes the return value of `lists:foldl()`.  In my case, the manipulated second argument is a map, and every time the function is applied to an element of a list, a new entry is entered into the map.  After the function is applied to the last element in the list, the map is returned by `lists:foldl()`.
+
 ```erlang
 -module(e5).
 %%-compile(export_all).
