@@ -17,7 +17,7 @@ erlc -W e1.erl
 erl -s e1 test
 ```
 
-(You are not supposed to use extensions for shell script file names, e.g. run.sh, but a .sh/.bash extension will allow my editor's syntax highlighting to take effect.)
+(You are not supposed to use extensions for shell script file names, e.g. run.sh, but using a .sh/.bash extension will allow my editor's syntax highlighting to take effect.)
 
 Then I made it executable:
 ```
