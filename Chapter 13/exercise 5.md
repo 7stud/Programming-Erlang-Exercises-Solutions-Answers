@@ -258,9 +258,9 @@ ok
 ```
 No processes from e5 in there!
 
-Below is a version that uses maps in Erlang 19.2.  It also employs `lists:foldl()` which is very similar to `lists:map()` in that they both apply a function to each element in a list.  With `lists:foldl()`, you manipulate the second argument in the body of each function, and you pass the altered second argument onto the next function.  After the function has been applied to the last element in the list, the manipulated second argument becomes the return value of `lists:foldl()`.  In my case, the manipulated second argument is a map, and every time the function is applied to an element of a list, a new entry is entered into the map.  After the function is applied to the last element in the list, the map is returned by `lists:foldl()`.
+Below is a version that uses maps in Erlang 19.2.  It also employs `lists:foldl()` which is very similar to `lists:map()` in that they both apply a function to each element in a list.  With `lists:foldl()`, you manipulate the second argument in the body of the function, and you pass the altered second argument to the next function call.  After the function has been applied to the last element in the list, the manipulated second argument becomes the return value of `lists:foldl()`.  In my case, the manipulated second argument is a map, and every time the function is applied to an element of a list, a new entry is entered into the map.  After the function is applied to the last element in the list, the map is returned by `lists:foldl()`.
 
-The difference between `foldl()` and `foldr()` is that `foldr()` applies a function to a list starting on the _right_ end of the list, i.e. the last element of the list, and steps through the list until it reaches the first element in the list.  Sometimes the ordering of computations or results is important, so you can choose the one that provides the ordering you desire. 
+The difference between `foldl()` and `foldr()` is that `foldr()` applies a function to a list starting on the _right_ end of the list, i.e. the last element of the list, and steps through the list until it reaches the first element in the list.  Sometimes the ordering of computations or results is important, so you can choose the version of fold that provides the ordering you desire. 
 
 ```erlang
 -module(e5).
@@ -276,7 +276,7 @@ monitor_workers(Funcs) ->
                 fun(Func, Map) ->  
                         Map#{spawn_monitor(Func) => Func}  %%{Pid, Ref} => Func
                 end,
-                #{}, Funcs),
+                #{}, Funcs),  %% An empty map is the initial value used for Map in the fun.
     io:format("moniter_workers(): Workers: ~n~p~n", [Workers]),
     monitor_workers_loop(Workers).
 
