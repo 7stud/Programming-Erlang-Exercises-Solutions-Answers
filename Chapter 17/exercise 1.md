@@ -4,7 +4,7 @@ _HTTP/1.1 defines the "close" connection option for the sender to signal that th
 
        `Connection: close`
        
-in either the request or the response header fields indicates that the connection SHOULD NOT be considered 'persistent' (section 8.1) after the current request/response is complete._
+_in either the request or the response header fields indicates that the connection SHOULD NOT be considered 'persistent' (section 8.1) after the current request/response is complete._
 
 
 
