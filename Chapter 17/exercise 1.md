@@ -42,7 +42,7 @@ send_request({http, [], Host, Port, Path, Query}) ->
                                          {packet,0}, {reuseaddr,true}]),
     Request = format_request(Host, Path, Query),
     io:format("Request:~n~s~n", [Request]),
-    ok = gen_tcp:send(Socket, Request), %%"GET / HTTP/1.0\r\n\r\n")
+    ok = gen_tcp:send(Socket, Request), 
     read(Socket, []);
 send_request({https, [], Host, Port, Path, Query}) ->
     ssl:start(),
