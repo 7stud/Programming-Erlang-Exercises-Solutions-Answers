@@ -1,4 +1,4 @@
-This exercise was very difficult for me, and it too me a long time to complete.  I used `curl` to examine the format of the request and response:
+This exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
 
      `curl -vIF mail.com`
 
