@@ -41,7 +41,7 @@ client(Url) ->
         {ok, Pieces} ->
             send_request(Pieces);
         {error, no_scheme} ->
-            client("http://" ++ Url);
+            client("http://" ++ Url);  %%Default to http (v. https)
         {error, Other} ->
             io:format("~p~n", [Other])
     end.
