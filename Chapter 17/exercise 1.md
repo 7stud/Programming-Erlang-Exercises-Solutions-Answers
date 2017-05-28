@@ -95,7 +95,7 @@ So I included a `Connection: close` header in the request.
 
 #### https urls
 
-I noticed that `mail.com` (unlike google.com) always redirects to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
+I noticed that `mail.com` (unlike google.com) always redirects to an `https` url.  So I learned about ssl sockets, and I used the `ssl module` to open an ssl socket when the redirect was to an `https` url.  See here:
 
 http://erlang.org/doc/apps/ssl/using_ssl.html
 
