@@ -1,4 +1,6 @@
-This exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
+This exercise took me a long time to complete.  I find erlang very hard to debug because of the poor error messages.  For instance, at one point I mistyped `HTTP` as `HTPP` in the request, and it took me forever to debug.  I eventually had to look at the binary output of my request and compare it byte for byte with a request that I knew did work.  
+
+While working on the exercise, I found it very helpful to use `curl` to examine the format of the request and response:
 
      curl -vIF mail.com
      
