@@ -2,7 +2,7 @@ I used `mail.com` as the host, because it always redirected.  The problem was th
 
 > HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
 
-       `Connection: close`
+>       `Connection: close`
        
 > in either the request or the response header fields indicates that the connection SHOULD NOT be considered 'persistent' (section 8.1) after the current request/response is complete.
 
