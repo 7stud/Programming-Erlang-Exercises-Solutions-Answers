@@ -14,7 +14,7 @@ I used `mail.com` and `google.com` as the hosts for testing--they both redirecte
 
 So I included a `Connection: close` header in the request.  
 
-#### https Urls
+#### https urls
 
 I noticed that `mail.com` (unlike google.com) always redirected to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
 
