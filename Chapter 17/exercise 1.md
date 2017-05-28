@@ -25,16 +25,27 @@ http://erlang.org/doc/apps/ssl/using_ssl.html
 \** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Pratically, what that meant for me was that the response hand hexidecimal numbers littered throughout.  The way that HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split into smaller chunks when it gets transported across a TCP connection to the client, so only some of the chunks that the client reads have a Length at the start of the chunk.  Because the server does not close a persistent connection after sending the response, in order to indicate that the response has ended, the server sends 0 for the Length of the next chunk.  I decided not to try to deal with persistent sockets and reading the chunk lengths, so if you look at the body of the response in my output, the body is preceded by the hexidecimal chunk length `1ff8`.
 
 
-My client requires that it be called with a full url.  That's because my client parses the url using `http_uri:parse()` and without the `http` or `https` part, parsing causes an error.
+My client requires that it be called with a full url.  That's because my client parses the url using `http_uri:parse()` and without the `http` or `https` part, parsing causes an error.  Edit: I added a fix for that.  Now, I can call client() with a url of the form: `mail.com`.
 
 ```erlang
 -module(c2).
 -compile(export_all).
 -include_lib("eunit/include/eunit.hrl").
 
+%%client(Url) ->
+%%    {ok, Pieces} = http_uri:parse(Url),
+%%    send_request(Pieces).
+
 client(Url) ->
-    {ok, Pieces} = http_uri:parse(Url),
-    send_request(Pieces).
+    case http_uri:parse(Url) of
+        {ok, Pieces} ->
+            send_request(Pieces);
+        {error, no_scheme} ->
+            client("http://" ++ Url);
+        {error, Other} ->
+            io:format("~p~n", [Other])
+    end.
+
 
 send_request({http, [], Host, Port, Path, Query}) ->
     %%Host header is required for HTTP/1.1, but HTTP/1.0 won't work without it either.
