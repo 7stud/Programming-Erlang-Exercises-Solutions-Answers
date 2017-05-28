@@ -1,3 +1,7 @@
+This exercise was very difficult for me, and it too me a long time to complete.  I used `curl` to examine the format of the request and response:
+
+     `curl -vIF mail.com`
+
 #### Host header
 
 I used `mail.com` and `google.com` as the hosts for testing--they both redirect.  At some point, I decided to convert everything to `HTTP/1.1`.  `HTTP/1.1` _requires_ a `Host` header, and I found that even `HTTP/1.0` wouldn't work correctly without a Host header.  I read something that said proxies may require the Host header.  
