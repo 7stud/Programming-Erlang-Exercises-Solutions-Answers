@@ -67,8 +67,8 @@ format_request(Host, Path, Query) ->
     %%Connection:close is needed because keep alive is the default in HTTP/1.1.
     HttpLine = io_lib:format("GET ~s~s HTTP/1.1", [Path, Query] ),
     HostHeader =  io_lib:format("Host: ~s", [Host]),
-    UserAgent = "User-Agent: curl/7.43.0",
-    Accept = "Accept: */*",
+    UserAgent = "User-Agent: curl/7.43.0",  %%I used curl to examine request/response: curl -IFv mail.com, 
+    Accept = "Accept: */*",                 %%and I used the same mimimal headers that curl used.
     Connection = "Connection: close",
     End = "\r\n",
     string:join([HttpLine,HostHeader,UserAgent,Accept,Connection,End], "\r\n").
