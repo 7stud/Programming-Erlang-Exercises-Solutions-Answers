@@ -1,6 +1,6 @@
-I used `mail.com` and `google.com` as the hosts for testing--they both redirected.  At some point, I decided to convert everything to `HTTP/1.1`.  HTTP/1.1 _requires_ a Host header (and I found that even HTTP/1.0 wouldn't work correctly without a Host header).  
+I used `mail.com` and `google.com` as the hosts for testing--they both redirected.  At some point, I decided to convert everything to `HTTP/1.1`.  HTTP/1.1 _requires_ a `Host` header (and I found that even HTTP/1.0 wouldn't work correctly without a Host header.  I read something that said proxies may require the Host header).  
 
-In addition,  HTTP/1.1 creates a persistent TCP connection in order to avoid the overhead of setting up a TCP connetion everytime the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
+In addition,  HTTP/1.1 creates a `persistent TCP connection` in order to avoid the overhead of setting up a TCP connetion everytime the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
 
 > HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
 >
@@ -11,11 +11,13 @@ In addition,  HTTP/1.1 creates a persistent TCP connection in order to avoid the
 
 So I included a `Connection: close` header in the request.  
 
-Finally, I noticed that `mail.com` always redirected to an `https` url.  So I started reading about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
+Finally, I noticed that `mail.com` always redirected to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
 
 http://erlang.org/doc/apps/ssl/using_ssl.html
 
-\** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Pratically, what that meant for me was that the response hand hexidecimal numbers littered throughout.  The way that HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split it to smaller chunks when it gets transported across a TCP connection to the client, so the chunks that the client reads do not necessarily have a Length at the start of the chunk.  Persistend connections do not close the socket, so the way that the client knows when the response has ended is when the client reads a 0 for the Length of the next chunk.  I decided not to try to deal with that.
+---
+
+\** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Pratically, what that meant for me was that the response hand hexidecimal numbers littered throughout.  The way HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split into smaller chunks when it gets transported across a TCP connection to the client, so the chunks that the client reads do not necessarily have a Length at the start of the chunk.  The server does not close a persistend connection after sending the response, so the way that the client knows when the response has ended is when the client reads 0 for the Length of the next chunk.  I decided not to try to deal with persistent sockets and reading the chunk lengths, so if you look at the body of the response, which I output, it is preceded by the hexidecimal chunk length `1ff8`.
 
 ```erlang
 -module(c2).
