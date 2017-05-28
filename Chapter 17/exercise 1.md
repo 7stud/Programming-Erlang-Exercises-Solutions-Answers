@@ -1,6 +1,79 @@
 This exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
 
      curl -vIF mail.com
+     
+which produces output like this:
+```
+$ curl -vIL mail.com
+* Rebuilt URL to: mail.com/
+*   Trying 74.208.122.4...
+* Connected to mail.com (74.208.122.4) port 80 (#0)
+> HEAD / HTTP/1.1
+> Host: mail.com
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 301 Moved Permanently
+HTTP/1.1 301 Moved Permanently
+< Date: Sun, 28 May 2017 21:44:57 GMT
+Date: Sun, 28 May 2017 21:44:57 GMT
+< Server: Apache
+Server: Apache
+< Location: https://www.mail.com/
+Location: https://www.mail.com/
+< Vary: Accept-Encoding
+Vary: Accept-Encoding
+< Connection: close
+Connection: close
+< Content-Type: text/html; charset=iso-8859-1
+Content-Type: text/html; charset=iso-8859-1
+
+< 
+* Closing connection 0
+* Issue another request to this URL: 'https://www.mail.com/'
+*   Trying 74.208.122.4...
+* Connected to www.mail.com (74.208.122.4) port 443 (#1)
+* TLS 1.2 connection using TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+* Server certificate: *.mail.com
+* Server certificate: thawte SSL CA - G2
+* Server certificate: thawte Primary Root CA
+> HEAD / HTTP/1.1
+> Host: www.mail.com
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< Date: Sun, 28 May 2017 21:44:57 GMT
+Date: Sun, 28 May 2017 21:44:57 GMT
+< Server: Apache
+Server: Apache
+< Vary: X-Forwarded-Proto,Host,Accept-Encoding
+Vary: X-Forwarded-Proto,Host,Accept-Encoding
+< Set-Cookie: cookieKID=kid%40autoref%40mail.com; Domain=.mail.com; Expires=Tue, 27-Jun-2017 21:44:57 GMT; Path=/
+Set-Cookie: cookieKID=kid%40autoref%40mail.com; Domain=.mail.com; Expires=Tue, 27-Jun-2017 21:44:57 GMT; Path=/
+< Set-Cookie: cookiePartner=kid%40autoref%40mail.com; Domain=.mail.com; Expires=Tue, 27-Jun-2017 21:44:57 GMT; Path=/
+Set-Cookie: cookiePartner=kid%40autoref%40mail.com; Domain=.mail.com; Expires=Tue, 27-Jun-2017 21:44:57 GMT; Path=/
+< Cache-Control: no-cache, no-store, must-revalidate
+Cache-Control: no-cache, no-store, must-revalidate
+< Pragma: no-cache
+Pragma: no-cache
+< Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+< Set-Cookie: JSESSIONID=03CBEC8498A0B2D36FCB9E38A5D1DDCE; Path=/mailcom-webapp/; HttpOnly
+Set-Cookie: JSESSIONID=03CBEC8498A0B2D36FCB9E38A5D1DDCE; Path=/mailcom-webapp/; HttpOnly
+< Content-Language: en-US
+Content-Language: en-US
+< Content-Length: 84952
+Content-Length: 84952
+< Connection: close
+Connection: close
+< Content-Type: text/html;charset=UTF-8
+Content-Type: text/html;charset=UTF-8
+
+< 
+* Closing connection 1
+```
 
 #### Host header
 
