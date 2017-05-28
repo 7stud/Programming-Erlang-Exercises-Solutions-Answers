@@ -1,4 +1,4 @@
-This exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
+his exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
 
      curl -vIF mail.com
      
@@ -81,7 +81,7 @@ I used `mail.com` and `google.com` as the hosts for testing--they both redirect.
 
 #### Connection header
 
-`HTTP/1.1` creates a `persistent TCP connection` in order to avoid the overhead of setting up a TCP connetion everytime the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
+`HTTP/1.1` creates a `persistent TCP connection` in order to avoid the overhead of setting up a TCP connection every time the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
 
 > HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
 >
@@ -99,7 +99,7 @@ http://erlang.org/doc/apps/ssl/using_ssl.html
 
 ---
 
-\** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Pratically, what that meant for me was that the response hand hexidecimal numbers littered throughout.  The way that HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split into smaller chunks when it gets transported across a TCP connection to the client, so only some of the chunks that the client reads have a Length at the start of the chunk.  Because the server does not close a persistent connection after sending the response, in order to indicate that the response has ended, the server sends 0 for the Length of the next chunk.  I decided not to try to deal with persistent sockets and reading the chunk lengths, so if you look at the body of the response in my output, the body is preceded by the hexidecimal chunk length `1ff8`.  The simple fix is just to change to HTTP/1.0 in my `format_request()` function.
+\** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Practically, what that meant for me was that the response hand hexadecimal numbers littered throughout.  The way that HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split into smaller chunks when it gets transported across a TCP connection to the client, so only some of the chunks that the client reads have a Length at the start of the chunk.  Because the server does not close a persistent connection after sending the response, in order to indicate that the response has ended, the server sends 0 for the Length of the next chunk.  I decided not to try to deal with persistent sockets and reading the chunk lengths, so if you look at the body of the response in my output, the body is preceded by the hexadecimal chunk length `1ff8`.  The simple fix is just to change to HTTP/1.0 in my `format_request()` function.
 
 ---
 
@@ -107,8 +107,8 @@ My client requires that it be called with a full url.  That's because my client 
 
 ```erlang
 -module(c2).
--compile(export_all).
--include_lib("eunit/include/eunit.hrl").
+%%-compile(export_all).
+-export([client/1, go/0]).
 
 %%client(Url) ->
 %%    {ok, Pieces} = http_uri:parse(Url),
