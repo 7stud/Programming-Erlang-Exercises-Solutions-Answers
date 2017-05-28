@@ -1,6 +1,6 @@
 This exercise took me a long time to complete.  I used `curl` to examine the format of the request and response:
 
-     `curl -vIF mail.com`
+     curl -vIF mail.com
 
 #### Host header
 
