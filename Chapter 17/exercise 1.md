@@ -46,7 +46,6 @@ client(Url) ->
             io:format("~p~n", [Other])
     end.
 
-
 send_request({http, [], Host, Port, Path, Query}) ->
     {ok, Socket} = gen_tcp:connect(Host, Port, [binary, {active, false},
                                          {packet,0}, {reuseaddr,true}]),
@@ -65,8 +64,8 @@ send_request({https, [], Host, Port, Path, Query}) ->
 format_request(Host, Path, Query) ->
     %%Host header is required for HTTP/1.1, but HTTP/1.0 won't work without it either.
     %%Connection:close is needed because keep alive is the default in HTTP/1.1.
-    HttpLine = lists:flatten(io_lib:format("GET ~s~s HTTP/1.1", [Path, Query] )),
-    HostHeader =  lists:flatten(io_lib:format("Host: ~s", [Host])),
+    HttpLine = io_lib:format("GET ~s~s HTTP/1.1", [Path, Query] ),
+    HostHeader =  io_lib:format("Host: ~s", [Host]),
     UserAgent = "User-Agent: curl/7.43.0",
     Accept = "Accept: */*",
     Connection = "Connection: close",
@@ -102,7 +101,6 @@ handle_status(Response)->
     StatusCode = list_to_integer(binary_to_list(Status)),
     io:format("StatusCode: ~w~n~n", [StatusCode]),
     handle_status(StatusCode, Headers, Response).
-
 
 handle_status(Code, _, Response) when Code >= 200, Code < 300 ->
     io:format("***Response:***~n~s~n~n", [binary:part(Response, 0, 1000)] );
