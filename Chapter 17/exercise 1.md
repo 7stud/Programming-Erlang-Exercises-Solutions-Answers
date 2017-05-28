@@ -1,4 +1,8 @@
+#### Host header
+
 I used `mail.com` and `google.com` as the hosts for testing--they both redirected.  At some point, I decided to convert everything to `HTTP/1.1`.  `HTTP/1.1` _requires_ a `Host` header (and I found that even HTTP/1.0 wouldn't work correctly without a Host header.  I read something that said proxies may require the Host header).  
+
+#### Connection header
 
 In addition,  HTTP/1.1 creates a `persistent TCP connection` in order to avoid the overhead of setting up a TCP connetion everytime the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
 
@@ -8,8 +12,9 @@ In addition,  HTTP/1.1 creates a `persistent TCP connection` in order to avoid t
 >       
 > in either the request or the response header fields indicates that the connection SHOULD NOT be considered 'persistent' (section 8.1) after the current request/response is complete.
 
-
 So I included a `Connection: close` header in the request.  
+
+#### https Urls
 
 Finally, I noticed that `mail.com` always redirected to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
 
