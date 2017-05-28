@@ -48,8 +48,6 @@ client(Url) ->
 
 
 send_request({http, [], Host, Port, Path, Query}) ->
-    %%Host header is required for HTTP/1.1, but HTTP/1.0 won't work without it either.
-    %%Connection:close is needed because keep alive is the default in HTTP/1.1.
     {ok, Socket} = gen_tcp:connect(Host, Port, [binary, {active, false},
                                          {packet,0}, {reuseaddr,true}]),
     Request = format_request(Host, Path, Query),
