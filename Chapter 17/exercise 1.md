@@ -63,6 +63,8 @@ send_request({https, [], Host, Port, Path, Query}) ->
     read_ssl(Socket, []).
 
 format_request(Host, Path, Query) ->
+    %%Host header is required for HTTP/1.1, but HTTP/1.0 won't work without it either.
+    %%Connection:close is needed because keep alive is the default in HTTP/1.1.
     HttpLine = lists:flatten(io_lib:format("GET ~s~s HTTP/1.1", [Path, Query] )),
     HostHeader =  lists:flatten(io_lib:format("Host: ~s", [Host])),
     UserAgent = "User-Agent: curl/7.43.0",
