@@ -16,7 +16,7 @@ So I included a `Connection: close` header in the request.
 
 #### https Urls
 
-Finally, I noticed that `mail.com` always redirected to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
+I noticed that `mail.com` (unlike google.com) always redirected to an `https` url.  So I began learning about ssl sockets, and I used the ssl module to open an ssl socket when the redirect was to an `https` url.  See here:
 
 http://erlang.org/doc/apps/ssl/using_ssl.html
 
@@ -24,6 +24,8 @@ http://erlang.org/doc/apps/ssl/using_ssl.html
 
 \** I discovered that HTTP/1.1 uses *chunked transfer encoding*.  Pratically, what that meant for me was that the response hand hexidecimal numbers littered throughout.  The way HTTP/1.1 persistent connections work is that the server sends data in chunks and preceding each chunk is the length of the chunk.  The tricky part of that is: the chunk the server sends gets split into smaller chunks when it gets transported across a TCP connection to the client, so the chunks that the client reads do not necessarily have a Length at the start of the chunk.  The server does not close a persistent connection after sending the response, so the server indicates that the response has ended by sending 0 for the Length of the next chunk.  I decided not to try to deal with persistent sockets and reading the chunk lengths, so if you look at the body of the response in my output, the body is preceded by the hexidecimal chunk length `1ff8`.
 
+
+My client requires that it be called with a full Url.  That's because my client parses urls using `http_uri:parse()` and without the `http` or `https` part, parsing causes an error.
 ```erlang
 -module(c2).
 -compile(export_all).
