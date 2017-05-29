@@ -1,7 +1,9 @@
+Server:
+
 ```erlang
--module(e2).
+-module(e2s).
 %%-compile(export_all).
--export([server_init/0, client/3, sum/1, go/0]).
+-export([server_init/0]).
 
 server_init() ->
     {ok, ServerSocket} = gen_tcp:listen(33133, [binary, {active,true}, 
@@ -26,7 +28,13 @@ server(ClientSocket) ->
         {tcp_closed, ClientSocket} ->
             io:format("Server: client closed socket.~n")
     end.
+```
 
+Client:
+
+```erlang
+-module(e2c).
+-export([client/3, sum/1, go/0]).
 
 client(Mod, Func, Args) ->
     {ok, Socket} = 
@@ -52,8 +60,8 @@ sum([], Sum) ->
 
 go() ->
     timer:sleep(500),  %%Allow time for shell startup
-    spawn(?MODULE, server_init, []),
-    client(?MODULE, sum, [[1, 2, 3]]).  
+    spawn(e2s, server_init, []),
+    client(?MODULE, sum, [[1, 2, 3]]).
 ```
 
 In the shell:
