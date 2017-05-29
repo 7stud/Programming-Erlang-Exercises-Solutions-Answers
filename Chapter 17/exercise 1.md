@@ -79,7 +79,7 @@ Content-Type: text/html;charset=UTF-8
 
 #### Host header
 
-I used `mail.com` and `google.com` as the hosts for testing--they both redirect.  At some point, I decided to convert everything to `HTTP/1.1`.  `HTTP/1.1` _requires_ a `Host` header, and I found that even `HTTP/1.0` wouldn't work correctly without a Host header.  I read something that said proxies may require the Host header.  
+I used `mail.com` and `google.com` as the hosts for testing--they both redirect.  At some point, I decided to convert everything to `HTTP/1.1`.  `HTTP/1.1` _requires_ a `Host` header, and I found that even `HTTP/1.0` wouldn't work correctly without a Host header.  I read something that said proxies, i.e. something that stands between the client and the host, may require the Host header.  
 
 #### Connection header
 
