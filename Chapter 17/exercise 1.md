@@ -83,7 +83,7 @@ I used `mail.com` and `google.com` as the hosts for testing--they both redirect.
 
 #### Connection header
 
-`HTTP/1.1` creates a `persistent TCP connection` in order to avoid the overhead of setting up a TCP connection every time the client makes a request. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
+In order to avoid the overhead of setting up a TCP connection every time the client makes a request, `HTTP/1.1` creates a `persistent` TCP connection. The problem with that state of affairs is that the only way\** the client knows that it has read the entire response is if the server closes the socket.  
 
 > HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
 >
@@ -95,7 +95,7 @@ So I included a `Connection: close` header in the request.
 
 #### https urls
 
-I noticed that `mail.com` (unlike google.com) always redirects to an `https` url.  So I learned about ssl sockets, and I used the `ssl module` to open an ssl socket when the redirect was to an `https` url.  See here:
+I noticed that `mail.com` (unlike google.com) always redirects to an `https` url.  So I learned about ssl sockets, and I used the `ssl module` to open an ssl socket when the redirect was to an `https` url.  For info about ssl and erlang, see here:
 
 http://erlang.org/doc/apps/ssl/using_ssl.html
 
