@@ -59,9 +59,11 @@ sum([], Sum) ->
     Sum.
 
 go() ->
-    timer:sleep(500),  %%Allow time for shell startup
+    timer:sleep(500), %%Allow time for shell startup output.
     spawn(e2s, server_init, []),
+    timer:sleep(500),  %%Allow time for server to startup.
     client(?MODULE, sum, [[1, 2, 3]]).
+
 ```
 
 In the shell:
