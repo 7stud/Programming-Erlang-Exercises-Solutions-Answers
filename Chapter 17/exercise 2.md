@@ -10,9 +10,9 @@ server_init() ->
 
     {ok, ClientSocket} = gen_tcp:accept(ServerSocket),
     gen_tcp:close(ServerSocket),
-    server_loop(ClientSocket).
+    server(ClientSocket).
 
-server_loop(ClientSocket) ->
+server(ClientSocket) ->
     receive
         {tcp, ClientSocket, WholeMsg} ->
             case binary_to_term(WholeMsg) of
@@ -53,8 +53,7 @@ sum([], Sum) ->
 go() ->
     timer:sleep(500),  %%Allow time for shell startup
     spawn(?MODULE, server_init, []),
-    client(?MODULE, sum, [[1, 2, 3]]).
-   
+    client(?MODULE, sum, [[1, 2, 3]]).  
 ```
 
 In the shell:
