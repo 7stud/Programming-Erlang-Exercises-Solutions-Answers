@@ -1,4 +1,4 @@
-This exercise took me a long time to complete.  I find erlang very hard to debug because of the poor error messages.  For instance, at one point I mistyped `HTTP` as `HTPP` in the request, and it took me forever to debug.  I eventually had to look at the binary output of my request and compare it byte for byte with a seemingly identical request that I knew worked.  
+This exercise took me a long time to complete.  I think erlang is very hard to debug because of the poor error messages.  For instance, at one point I mistyped `HTTP` as `HTPP` in the request, and it took me forever to debug.  I eventually had to look at the binary output of my request and compare it byte for byte with a seemingly identical request that I knew worked.  
 
 While working on the exercise, I found it very helpful to use `curl` to examine the format of the request and response:
 
