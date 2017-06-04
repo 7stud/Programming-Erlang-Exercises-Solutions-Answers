@@ -19,7 +19,7 @@ Eshell V8.2  (abort with ^G)
 (bilbo@7studsMBP)2> net_adm:ping('gandalf@7studsMBP').   %Activate the gandalf Node.
 pong
 
-(bilbo@7studsMBP)3> nl(ml).   %Load the ml (mylib) module on the remote Node.
+(bilbo@7studsMBP)3> nl(ml).   %Load the ml (mylib) module on the gandalf Node.
 abcast
 
 (bilbo@7studsMBP)4> ml:start('gandalf@7studsMBP').
