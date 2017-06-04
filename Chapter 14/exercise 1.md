@@ -1,5 +1,5 @@
 In Terminal window #1:
-```erlang
+```
 ~$ erl -sname gandalf -setcookie abc
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
@@ -8,7 +8,7 @@ Eshell V8.2  (abort with ^G)
 ```
 
 In Terminal window #2:
-```erlang
+```
 $ erl -sname bilbo -setcookie abc
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
