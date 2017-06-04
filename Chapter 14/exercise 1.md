@@ -35,7 +35,7 @@ The code:
 -compile(export_all).
 
 get_greeting() ->
-    timer:sleep(1000 * rand:uniform(5)),  %Mimic doing some work, like accessing a website to get interesting greetings.
+    timer:sleep(1000 * rand:uniform(5)),  %Mimic doing some work, like accessing websites to get interesting greetings.
     Greetings = ["Hello", "Good day", "Fine morning"],
     lists:nth(
       rand:uniform(length(Greetings)),
