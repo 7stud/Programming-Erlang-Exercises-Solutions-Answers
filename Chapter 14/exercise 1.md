@@ -47,6 +47,7 @@ start(Node) ->
 
     Input = io:get_line("Enter your name: "),  %While the user is entering their name, the other node is doing some work.
     Name = string:strip(Input, right, $\n),
-    io:format("~s, ~s!~n", [rpc:yield(Key), Name]). %yield() blocks and watis for the return  
-                                                    %value if Key process hasn't returned yet.
+    io:format("~s, ~s!~n", [rpc:yield(Key), Name]). %If Key process hasn't returned yet,
+                                                    %yield() blocks and waits for the return value.
+                                                    
 ```    
