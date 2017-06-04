@@ -35,7 +35,7 @@ The code:
 -compile(export_all).
 
 get_greeting() ->
-    timer:sleep(1000 * rand:uniform(5)),
+    timer:sleep(1000 * rand:uniform(5)),  %Mimic doing some work, like accessing a website to get interesting greetings.
     Greetings = ["Hello", "Good day", "Fine morning"],
     lists:nth(
       rand:uniform(length(Greetings)),
@@ -47,6 +47,6 @@ start(Node) ->
 
     Input = io:get_line("Enter your name: "),
     Name = string:strip(Input, right, $\n),
-    io:format("~s, ~s!~n", [rpc:yield(Key), Name]). %yield() blocks if Key process   
-                                                    %hasn't returned yet.
+    io:format("~s, ~s!~n", [rpc:yield(Key), Name]). %yield() blocks and watis for the return  
+                                                    %value if Key process hasn't returned yet.
 ```    
