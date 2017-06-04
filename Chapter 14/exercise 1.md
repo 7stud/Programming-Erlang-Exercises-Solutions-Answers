@@ -43,7 +43,7 @@ get_greeting() ->
 
 start(Node) ->
     Key = rpc:async_call(Node,
-                         ml, get_greeting, [] ),
+                         ml, get_greeting, [] ),  %Execution continues immediately on the next line.
 
     Input = io:get_line("Enter your name: "),  %While the user is entering their name, the other node is doing some work.
     Name = string:strip(Input, right, $\n),
