@@ -1,32 +1,45 @@
 In Terminal window #1:
 ```
-~$ erl -sname gandalf -setcookie abc
+~$ erl -sname gandalf
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
 
 (gandalf@7studsMBP)1> 
+
 ```
 
 In Terminal window #2:
 ```
-$ erl -sname bilbo -setcookie abc
+$ erl -sname bilbo
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 Eshell V8.2  (abort with ^G)
 
 (bilbo@7studsMBP)1> nodes().
 []
 
-(bilbo@7studsMBP)2> net_adm:ping('gandalf@7studsMBP').   %Activate the gandalf Node.
+(bilbo@7studsMBP)2> net_adm:ping('gandalf@7studsMBP').  %Activate the gandalf Node.
 pong
 
-(bilbo@7studsMBP)3> nl(ml).   %Load the ml (mylib) module on the gandalf Node.
+(bilbo@7studsMBP)3> nodes().
+[gandalf@7studsMBP]
+
+(bilbo@7studsMBP)4> c(ml).
+{ok,ml}
+
+(bilbo@7studsMBP)5> nl(ml).  %Load the ml (mylib) module on the gandalf Node.
 abcast
 
-(bilbo@7studsMBP)4> ml:start('gandalf@7studsMBP').
+(bilbo@7studsMBP)6> ml:start('gandalf@7studsMBP').
 Enter your name: 7stud
 Hello, 7stud!
 ok
-(bilbo@7studsMBP)5> 
+
+(bilbo@7studsMBP)7> ml:start('gandalf@7studsMBP').
+Enter your name: 7stud 
+Fine morning, 7stud!
+ok
+
+(bilbo@7studsMBP)8> 
 ```
 
 The code:
