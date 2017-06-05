@@ -75,7 +75,7 @@ Mac#1 (the Server) iMac running OSX 10.7.5/Erlang 19.2:
 --Allow access for: Only these Users: Select a user whose password you know.   
 --The green light next to “Remote Login: On” should be lit.   
 --Underneath the green light it says: To log in to this computer remotely type:   
-“ssh FirstLast@new-host.home”.   
+```“ssh FirstLast@new-host.home”. ```  
 You will use whatever it says on that line (without the quotes) for starting an ssh session.  
 
 Mac#2 (the Client) Macbook Pro running OSX 10.10.5/Erlang 19.2: 
