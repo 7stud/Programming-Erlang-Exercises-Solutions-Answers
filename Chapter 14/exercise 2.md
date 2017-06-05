@@ -65,7 +65,7 @@ start(Node) ->
 
 ### ssh setup:
 
-Mac#1 (the Server, iMac running OSX 10.7.5/Erlang 19.2: 
+Mac#1 (the Server) iMac running OSX 10.7.5/Erlang 19.2: 
 ------------------- 
 1. System Preferences > Security & Privacy > Firewall: 
 --Turn Off Firewall
@@ -78,7 +78,7 @@ Mac#1 (the Server, iMac running OSX 10.7.5/Erlang 19.2:
 “ssh FirstLast@new-host.home”. 
 You will use whatever it says on that line (without the quotes) for starting an ssh session.
 
-Mac#2 (the Client), Macbook Pro running OSX 10.10.5/Erlang 19.2: 
+Mac#2 (the Client) Macbook Pro running OSX 10.10.5/Erlang 19.2: 
 --------------------- 
 1. Open a Terminal window.
 
