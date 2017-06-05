@@ -83,13 +83,13 @@ Mac#2 (the Client) Macbook Pro running OSX 10.10.5/Erlang 19.2:
 1. Open a Terminal window.  
 
 2. Start an ssh session:   
-```~$ ssh FirstLast@new-host.home```
-
-(The first time I opened an ssh session, I was presented with a message that said something like, “blah blah keys couldn’t be verified. Continue (yes/no)?” I typed: yes)  
 ```
+~$ ssh FirstLast@new-host.home
 Password: <enter password for the User chosen in step #2 for Mac#1>   
 Last login: Mon Dec 1 11:30:22 1900 from MyMB.home
-
+```
+(The first time I opened an ssh session, I was presented with a message that said something like, “blah blah keys couldn’t be verified. Continue (yes/no)?” I typed: yes)  
+```
 ~$ cd erlang_programs/ (this is the directory on Mac#1 that contains kvs.erl and kvs.beam. 
 ~/erlang_programs$ ls 
 kvs.beam	kvs.erl
