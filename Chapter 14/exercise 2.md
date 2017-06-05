@@ -82,14 +82,14 @@ Mac#2 (the Client) Macbook Pro running OSX 10.10.5/Erlang 19.2:
 --------------------- 
 1. Open a Terminal window.  
 
-2. Start an ssh session: 
-~$ ssh FirstLast@new-host.home  
+2. Start an ssh session:   
+```~$ ssh FirstLast@new-host.home```
 
 (The first time I opened an ssh session, I was presented with a message that said something like, “blah blah keys couldn’t be verified. Continue (yes/no)?” I typed: yes)  
 
 Password: <enter password for the User chosen in step #2 for Mac#1> 
 Last login: Mon Dec 1 11:30:22 1900 from MyMB.home
-
+```
 ~$ cd erlang_programs/ (this is the directory on Mac#1 that contains kvs.erl and kvs.beam. 
 ~/erlang_programs$ ls 
 kvs.beam	kvs.erl
@@ -101,11 +101,11 @@ Eshell V8.2 (abort with ^G)
 (gandalf@new-host.home)1> kvs:start().   
 true   
 (gandalf@new-host.home)2>   
-
+```
 4. Open another Terminal window.
 
 5. It doesn’t matter what directory you are in: 
-
+```
 $ erl -name bilbo -setcookie abc   
 Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]   
 Eshell V8.2 (abort with ^G)  
@@ -115,22 +115,23 @@ Eshell V8.2 (abort with ^G)
 6. 
 (bilbo@MyMBP.home)1> rpc:call('gandalf@new-host.home', kvs, store, [weather, cold]).   
 true
-
+```
 Note that the fully qualified host name needs to be atom quoted--otherwise you will get the error: * 1: syntax error before: '.' Also, note that the fully qualified host name that worked for me is the exact same thing appearing in the prompt for the ssh session in the first Terminal window.
 
 7. 
+```
 (bilbo@MyMBP.home)2> rpc:call('gandalf@new-host.home', kvs, lookup, [weather]).   
 {ok,cold}   
 (bilbo@MyMBP.home)3>   
-
+```
 8. You can end the ssh session like this:
-
+```
 (bilbo@MyMBP.home)3> q().   
 ~/erlang_programs$ exit   
 logout   
 Connection to new-host.home closed.    
 ~$  
-
+```
 Mac#1 (the Server): 
 ------------------- 
 1. System Preferences > Sharing:   
