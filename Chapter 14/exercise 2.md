@@ -117,7 +117,7 @@ Eshell V8.2 (abort with ^G)
 (bilbo@MyMBP.home)1> rpc:call('gandalf@new-host.home', kvs, store, [weather, cold]).   
 true
 ```
-Note that the fully qualified host name needs to be atom quoted--otherwise you will get the error: * 1: syntax error before: '.' Also, note that the fully qualified host name that worked for me is the exact same thing appearing in the prompt for the ssh session in the first Terminal window.
+Note that the fully qualified host name needs to be atom quoted--otherwise you will get the error: ```* 1: syntax error before: '.' ```  Also, note that the fully qualified host name that worked for me is the exact same thing appearing in the prompt for the ssh session in the first Terminal window.
 
 7. 
 ```
