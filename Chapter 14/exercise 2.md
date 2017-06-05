@@ -111,8 +111,9 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2 (abort with ^G)  
 
 (bilbo@MyMBP.home)1>  
-
+```
 6. 
+```
 (bilbo@MyMBP.home)1> rpc:call('gandalf@new-host.home', kvs, store, [weather, cold]).   
 true
 ```
