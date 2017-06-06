@@ -1,0 +1,1 @@
+From what I've read, this it too much of a security risk.  I would have to do port forwarding for port 22 from my router to my local computer.  Then go to the public library and try to connect to my router.  But most ISP's continuously change the ip address of your router, so you won't necessarily know which ip addres to use for the remote node.
