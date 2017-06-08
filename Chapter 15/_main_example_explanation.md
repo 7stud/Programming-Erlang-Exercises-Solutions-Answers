@@ -78,7 +78,7 @@ AND'ing with 0xff effectively zeros out the bits to the left of the first byte w
 
     first_byte = 0000 0001;
 
-To get second byte for the length of the message, the example code then AND's the original length with 0xff:
+To get the second byte for the length of the message, the example code then AND's the original length with 0xff:
 
     second_byte = len & 0xff
  
