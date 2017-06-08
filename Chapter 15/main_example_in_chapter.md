@@ -47,3 +47,24 @@ start() ->
     init:stop().
 ```
 
+In the shell:
+```
+$ gmake
+erlc -W example1.erl
+erlc -W unit_test.erl
+gcc -o example1 example1.c erl_comm.c example1_driver.c
+
+Testing drivers
+All tests worked
+
+~/erlang_programs/chap15$ erl
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+Eshell V8.2  (abort with ^G)
+
+1> example1:start().
+true
+2> example1:sum(45, 32).
+77
+3> example1:twice(10).
+20
+```
