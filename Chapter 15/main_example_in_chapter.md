@@ -8,7 +8,7 @@ erl_comm.c
 
 example1.erl
 ```
-I decided to incoporate a modifed version of the very simple unit_test file, which can be found in the source code, and my version is also included below.
+I decided to incorporate a modified version of the very simple unit_test file, which can be found in the source code, and my version is also included below.
 
 makefile:
 ```
@@ -74,11 +74,11 @@ true
 
 First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length of the message to the front of the message.
 
-I'm also going to use some psuedo code mixed in with the C code in my explanations.
+I'm also going to use some pseudo code mixed in with the C code in my explanations.
 
 ```read_exact([], 2)```
 
-That tries to read two bytes into the empty array, where the two bytes represents the Length of the message sent by the erlang code.
+That tries to read two bytes into the empty array, where the two bytes represent the Length of the message sent by the erlang code.
 
 ```i = read(0, [], 2)```
 
@@ -143,7 +143,7 @@ Now when you AND that result with 0xff:
 
 ```
 
-AND'ing with 0xff effecitively zeros out the bits to the left of the first byte while retaining all the ones in the first byte.  Finally, assigning that result to an unsigned char type, which is one byte long, serves to truncate the leftmost bits, giving you:
+AND'ing with 0xff effectively zeros out the bits to the left of the first byte while retaining all the ones in the first byte.  Finally, assigning that result to an unsigned char type, which is one byte long, serves to truncate the leftmost bits, giving you:
 
     first_byte = 0000 0001;
 
