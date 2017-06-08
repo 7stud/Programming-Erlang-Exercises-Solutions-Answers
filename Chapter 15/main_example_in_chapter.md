@@ -47,7 +47,7 @@ start() ->
     init:stop().
 ```
 
-In the shell:
+Compiling and running:
 ```
 $ gmake
 erlc -W example1.erl
