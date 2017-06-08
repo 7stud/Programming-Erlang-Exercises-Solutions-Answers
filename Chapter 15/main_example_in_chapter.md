@@ -68,3 +68,5 @@ true
 3> example1:twice(10).
 20
 ```
+
+#### Explanation of C code.
