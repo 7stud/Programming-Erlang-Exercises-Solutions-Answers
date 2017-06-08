@@ -99,7 +99,7 @@ When you use the left bitshift operator on buff[0], which is an unsigned char (o
      
 Note that `0000 0001 0000 0010` is 256, but erlang split the length into two single bytes.  When you specify `{packet, 2}`, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes from stdin to get the Length of the message, then stop reading when it has received Length bytes.
 
-The question is how do you convert buff[0], which is 1, and buff[1], which is 2 back into 258?
+The question is how do you convert buff[0], which is the binary representation for 1, and buff[1], which is the binary representation for 2, back into 258?
 
      0000 00001 << 8   ==>  ... 0000 0001 0000 0000  (That is 256.)
 
@@ -119,15 +119,15 @@ first buff[1] will automatically be converted to an int, then the OR'ing will be
 
 As a result, you end up combining two single bytes into an int containg the original length of 258.  
 
-`write_cmd()` does the reverse and converts an integer, representing the length of the result, into two single bytes:
+`write_cmd()` does the reverse and converts an integer, representing the length of the message containing the result, into two single bytes:
 
      first_byte = (len >> 8) & 0xff;
 
-Suppose once again that the length (len) of the message written to stdout is 258 bytes:
+Suppose once again that the length (len) of the message to be written to stdout is 258 bytes:
 
      len = .... 0000 0001 0000 0010
      
-This time bits are shifted off the end:
+This time bits _are_ shifted off the end:
 
      ... 0000 0001 0000 0010  >> 8    ==>  ... 0000 0000 0000 0001
        
@@ -145,7 +145,7 @@ Now when you AND that result with 0xff:
 
 AND'ing with 0xff effecitively zeros out the bits to the left of the first byte while retaining all the ones in the first byte.  Finally, assigning that result to an unsigned char type, which is one byte long, serves to truncate the leftmost bits, giving you:
 
-     first_byte = 0000 0001;
+    first_byte = 0000 0001;
 
 To get second byte for the length of the message, the example code then AND's the original length with 0xff:
 
@@ -159,9 +159,11 @@ The AND'ing accomplishes this:
   -------------------------
     ... 0000 0000 0000 0010
 ```
-Then assigning to an unsigned char type truncates that result to:
+Then assigning that int to an unsigned char type truncates the int:
 
     0000 0010
+    
+
 
 			   
                      
