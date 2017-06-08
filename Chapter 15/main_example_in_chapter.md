@@ -5,7 +5,7 @@ Below is a modern makefile I created for compiling just the files discussed in t
 example1_driver.c
 erl_comm.c
 example1.erl
-``
+```
 I decided to incoporate a modifed version of the very simple unit_test file, which can be found in the source code, and my version is also included below.
 
 makefile:
