@@ -2,6 +2,7 @@ If you wade through the C code (see explanations below) and finally get to the m
 
 Below is a modern makefile I created for compiling just the files discussed in the chapter:
 ```
+example1.c
 example1_driver.c
 erl_comm.c
 example1.erl
