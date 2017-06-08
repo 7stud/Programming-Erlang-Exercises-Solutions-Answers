@@ -100,7 +100,11 @@ The question is how do you convert buff[0], which is 1, and buff[1], which is 2 
 
      0000 00001 << 8   --> ... 0001 0000 0000  (That is 256)
 
-Then if you OR that result with buff[1], first buff[1] will be automatically converted to an int as well:
+Then if you OR that result with buff[1]:
+
+    len = ... 0001 0000 0000 | buff[1]);
+
+buff[1] will be automatically converted to an int then the OR'ing will be done:
 
 ```
 ... 0001 0000 0000
@@ -109,6 +113,8 @@ Then if you OR that result with buff[1], first buff[1] will be automatically con
 --------------------
 ....0001 0000 0010
 ```
+
+So, you end up with an int containg the original length of 256.
 
 
 			   
