@@ -72,7 +72,7 @@ true
 
 #### Explanation of C code.
 
-First note that when you specify `{packet, 2}` as the port option (see p. 240) or as a TCP socket option in chapter 17, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the front of the message.
+First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length of the message to the front of the message.
 
 I'm also going to use some psuedo code mixed in with the C code in my explanations.
 
@@ -82,7 +82,7 @@ That tries to read two bytes into the empty array, where the two bytes represent
 
 ```i = read(0, [], 2)```
 
-That reads from `stdin`, which is identified with a 0, and inserts the bytes read into the empty array. `2` is the number of bytes to read.  `buf+got` is pointer arithmetic and moves the buff pointer to a new spot in the array marking the end of the data read so far.  `read()` returns:
+That reads from `stdin`, which is identified with a 0, and inserts the bytes read into the empty array. `2` is the number of bytes to read.  `buf+got` is pointer arithmetic and moves the `buff` pointer to a new spot in the array marking the end of the data read so far.  `read()` returns:
 
 1. The number of bytes read, or
 2. 0 if read() hits end-of-file, or
