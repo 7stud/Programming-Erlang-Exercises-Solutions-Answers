@@ -1,4 +1,4 @@
-If you wade through the C code (see explanation below) and finally get to the makefile, you might wonder WTF?  example_lid.c?  unit_test?  Where are those files?  At the start of the chapter, on (the unmarked) p. 233, the book describes running foreign language code _inside_ the Erlang virtual machine, and calls that method _unsafe_.  Then the book goes on to say that the chapter won't be covering that method.  Yet, `example_lid.c` is for doing that very _unsafe_ thing, and as a resut it doesn't belong in the example.  
+If you wade through the C code (see explanations below) and finally get to the makefile, you might wonder WTF?  example_lid.c?  unit_test?  Where are those files?  At the start of the chapter, on (the unmarked) p. 233, the book describes running foreign language code _inside_ the Erlang virtual machine, and calls that method _unsafe_.  Then the book goes on to say that the chapter won't be covering that method.  Yet, `example_lid.c` is for doing that very _unsafe_ thing, and as a resut it doesn't belong in the example.  
 
 Below is a modern makefile I created for compiling just the files in the chapter:
 ```
