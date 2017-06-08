@@ -70,3 +70,50 @@ true
 ```
 
 #### Explanation of C code.
+
+I'm going to use some psuedo code mixed in with C code.
+
+```read_exact([], 2)```
+
+That tries to read in two bytes, which represents the Length of the message.
+
+```i = read(0, [], 2)```
+
+That reads from `stdin`, which is identified with a 0, and puts the bytes read into the empty unsigned char array. `2` is the number of bytes to read.  `buf+got` is pointer arithmetic and moves the buff pointer to a new spot in the array marking the end of the data read so far.  `read()` returns:
+
+1. The number of bytes read, or
+2. 0 if read hits end-of-file, or
+3. a negative number if read() encounters an error.
+
+
+The trickiest bit is in ```read_cmd([byte1, byte2])```:
+
+    len = (buff[0] << 8 ) | buff[1]);
+    
+When you use the left bit shift operator on buff[0], which is an unsigned char, or one byte long, the bits are _not_ shifted off to the left leaving 0.  Rather, buff[0] is first converted to an int type (probably 4 bytes long), then the bits are shifted.  An example to illustrate how that line of code works i probably best.  Suppose the length of the message is 258.  That means the two bytes in buff will look like this:
+
+     buff = [0000 0001, 0000 0010]  
+     
+Note that `0000 0001 0000 0010` is 256, but erlang split the length into two single bytes.  When you specify `{packet, 2}` for a port option (or a TCP socket option in chapter 17), erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes of a message stream to get the Length of the message, then stop reading when it has received Length bytes.
+
+The question is how do you convert buff[0], which is 1, and buff[1], which is 2 back into 256.
+
+     0000 00001 << 8   --> ... 0001 0000 0000  (That is 256)
+
+Then if you OR that result with buff[1], first buff[1] will be automatically converted to an int as well:
+
+```
+... 0001 0000 0000
+|   
+....0000 0000 0010
+--------------------
+....0001 0000 0010
+```
+
+
+			   
+                     
+
+    
+  
+
