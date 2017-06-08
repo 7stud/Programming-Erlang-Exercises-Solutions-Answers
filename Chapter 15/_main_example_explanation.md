@@ -8,7 +8,7 @@ I'm also going to use some pseudo code mixed in with the C code in my explanatio
 
 That tries to read two bytes into the empty array, where the two bytes represent the Length of the message sent by the erlang code.
 ```
-               buff
+                buf  (for buffer, i.e. an array to store bytes)
                  |
                  V
      i = read(0, [], 2)
