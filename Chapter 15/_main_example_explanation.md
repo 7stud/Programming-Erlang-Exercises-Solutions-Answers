@@ -1,6 +1,6 @@
 ### Explanation of C code.
 
-First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length to the message.  You have to assume that when you send a message, the message will get split up into an indeterminate number of chunks of indeterminate size.  Thus the other side needs some indicator to know when to stop reading because it has received the whole message.
+First note that in the erlang code when you specify `{packet, 2}` as a port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length to the message.  You have to assume that when you send a message, the message will get split up into an indeterminate number of chunks of indeterminate size.  Thus the other side needs some indicator to know when to stop reading when it has received the whole message.
 
 I'm also going to use some pseudo code mixed in with the C code in my explanations.
 
@@ -19,16 +19,15 @@ That reads from `stdin`, which is identified with a 0, and inserts the bytes rea
 2. 0 if read() hits end-of-file, or
 3. a negative number if read() encounters an error.
 
-
 The trickiest bit is in the function ```read_cmd([)```:
 
     len = (buf[0] << 8 ) | buf[1]);
     
-When you use the left bitshift operator on buf[0], which is an unsigned char (or one byte long), the bits are _not_ shifted off the left end leaving 0.  Rather, buf[0] is first converted to an int type (probably 4 bytes long), then the bits are shifted left.  An example to illustrate how the bitshifting(<<) and bit OR'ing (|) works is probably best.  Suppose the length of the message sent to the C code is 258.  That means the two bytes in buf will look like this:
+When you use the left bitshift operator on buf[0], which is an unsigned char (or one byte long), the bits are _not_ shifted off the left end leaving 0.  Rather, buf[0] is first converted to an int type (probably 4 bytes long), then the bits are shifted left.  An example to illustrate how the bitshifting(<<) and bit OR'ing (|) works should prove illustrative.  Suppose the length of the message sent to the C code is 258.  That means the two bytes inserted into buf will look like this:
 
      buf = [0000 0001, 0000 0010]  
      
-Note that `0000 0001 0000 0010` is 256, but erlang split the length into two single bytes.  When you specify `{packet, 2}`, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes from stdin to get the Length of the message, then stop reading when it has received Length bytes.
+Note that `0000 0001 0000 0010` is 256, but erlang split the length into two single bytes.  When you specify `{packet, 2}`, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes from stdin to get the Length of the message, then stop reading when it has read Length bytes.
 
 The question is how do you convert buf[0], which is the binary representation for 1, and buf[1], which is the binary representation for 2, back into 258?
 
@@ -74,7 +73,7 @@ Now when you AND that result with 0xff:
 
 ```
 
-AND'ing with 0xff effectively zeros out the bits to the left of the first byte while retaining all the ones in the first byte.  Finally, assigning that result to an unsigned char type, which is one byte long, serves to truncate the leftmost bits, giving you:
+AND'ing with 0xff effectively zeros out the bits to the left of the first byte while retaining all the 1's in the first byte.  Finally, assigning that result to an unsigned char type, which is one byte long, serves to truncate the leftmost bits, giving you:
 
     first_byte = 0000 0001;
 
