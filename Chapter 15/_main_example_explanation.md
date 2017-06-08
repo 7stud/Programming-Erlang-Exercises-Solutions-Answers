@@ -1,6 +1,6 @@
 ### Explanation of C code.
 
-First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length to the message.
+First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length to the message.  You have to assume that when you send a message, the message will get split up into an indeterminate number of chunks of indeterminate size.  Thus the other side needs some indicator to know when to stop reading because it has received the whole message.
 
 I'm also going to use some pseudo code mixed in with the C code in my explanations.
 
