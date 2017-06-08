@@ -7,11 +7,12 @@ I'm also going to use some pseudo code mixed in with the C code in my explanatio
 ```read_exact([], 2)```
 
 That tries to read two bytes into the empty array, where the two bytes represent the Length of the message sent by the erlang code.
+```
                buff
                  |
                  V
      i = read(0, [], 2)
-
+```
 That reads from `stdin`, which is identified with a 0, and inserts the bytes read into the empty array. `2` is the number of bytes to read.  `buf+got` is pointer arithmetic and moves the `buff` pointer to a new spot in the array marking the end of the data read so far.  `read()` returns:
 
 1. The number of bytes read, or
