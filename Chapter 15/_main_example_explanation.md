@@ -1,6 +1,6 @@
 ### Explanation of C code.
 
-First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length of the message to the front of the message.
+First note that when you specify `{packet, 2}` as the port option, see p. 240, (or as a TCP socket option in chapter 17), erlang automatically calculates the Length of the message that you are sending, then prepends two bytes containing the Length to the message.
 
 I'm also going to use some pseudo code mixed in with the C code in my explanations.
 
