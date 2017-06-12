@@ -27,7 +27,7 @@ When you use the left bitshift operator on buf[0], which is an unsigned char (or
 
      buf = [0000 0001, 0000 0010]  
      
-Note that `0000 0001 0000 0010` is 256, but erlang split the length into two single bytes.  When you specify `{packet, 2}`, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes from stdin to get the Length of the message, then stop reading when it has read Length bytes.
+Note that `0000 0001 0000 0010` is 256. When you specify `{packet, 2}`, erlang automatically calculates the Length of the message you are sending, then prepends two bytes containing the Length of the message to the beginning of the message.  The other side can then read the first two bytes from stdin to get the Length of the message, then stop reading when it has read Length bytes.
 
 The question is how do you convert buf[0], which is the binary representation for 1, and buf[1], which is the binary representation for 2, back into 258?
 
