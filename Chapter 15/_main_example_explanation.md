@@ -64,7 +64,7 @@ This time bits _are_ shifted off the end:
      ... 0000 0001 0000 0010  >> 8    ==>  ... 0000 0000 0000 0001
        
 
-Now when you AND that result with 0xff:
+Now, here is what happens when you AND that result with 0xff:
 
 ```
 ... 0000 0000 0000 0001
@@ -83,7 +83,7 @@ To get the second byte for the length of the message, the example code then AND'
 
     second_byte = len & 0xff
  
-The AND'ing accomplishes this:
+AND'ing accomplishes this:
 
 ```
     ... 0000 0001 0000 0010
