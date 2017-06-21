@@ -19,7 +19,7 @@ That reads from `stdin`, which is identified with a 0, and inserts the bytes rea
 2. 0 if read() hits end-of-file, or
 3. a negative number if read() encounters an error.
 
-The trickiest bit is in the function ```read_cmd([)```:
+The trickiest bit is in the function ```read_cmd()```:
 
     len = (buf[0] << 8 ) | buf[1]);
     
