@@ -23,7 +23,9 @@ The trickiest bit is in the function ```read_cmd()```:
 
     len = (buf[0] << 8 ) | buf[1]);
     
-When you use the left bitshift operator on buf[0], which is an unsigned char (or one byte long), the bits are _not_ shifted off the left end which would result in 0.  Rather, buf[0] is first converted to an int type (probably 4 bytes long), then the bits are shifted left.  An example to illustrate how the bitshifting(<<) and bit OR'ing (|) works should prove illustrative.  Suppose the length of the message sent to the C code is 258.  That means the two bytes inserted into buf will look like this:
+When you use the left bitshift operator on buf[0], which is an unsigned char (or one byte long), the bits are _not_ shifted off the left end which would result in 0.  Rather, buf[0] is first converted to an int type (probably 4 bytes long), then the bits are shifted left. To illustrate how the bitshifting(<<) and bit OR'ing (|) works an example should prove illustrative. 
+
+Suppose the length of the message sent to the C code is 258.  That means the two bytes inserted into buf will look like this:
 
      buf = [0000 0001, 0000 0010]  
      
