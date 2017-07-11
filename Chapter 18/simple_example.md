@@ -315,8 +315,13 @@ upgrade_success(ConnPid, Headers) ->
 
 You also need to add a special websocket handler to cowboy.  A handler is actually a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
 
-Here's the required cowboy route for a websocket upgrade request:
+Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
 
+`(hello_erlang@127.0.0.1)1>`
+
+You can kill the cowboy server with `Ctrl+CC`.  Here's the required cowboy route for a websocket upgrade request:
+
+***hello_erlang/src/hello_erlang_app.erl***:
 ```erlang
 -module(hello_erlang_app).
 -behaviour(application).
@@ -343,7 +348,9 @@ stop(_State) ->
 	ok.
 ```
 
-Here's the file `hello_erlang/src/myws_handler.erl` that I created to handle the websocket upgrade request:
+Here's the module I created to handle the websocket upgrade request:
+
+***hello_erlang/src/myws_handler.erl***:
 
 ```erlang
 -module(myws_handler).
@@ -362,4 +369,166 @@ websocket_handle(_Other, State) ->  %Ignore
     {ok, State}.
 ```
 
-The handler just prepends the text "Server received: " to whatever text was sent to the server in the request and sends the new text back as the response.
+The handler just prepends the text "Server received: " to whatever text was sent in the request and sends the new text back as the response.
+
+Start cowboy in one terminal window:
+```
+~/erlang_programs/cowboy_apps/hello_erlang$ gmake run
+gmake[1]: Entering directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowboy'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowlib'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowlib'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/ranch'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/ranch'
+ GEN    rebar.config
+gmake[1]: Leaving directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowboy'
+===> Starting relx build process ...
+===> Resolving OTP Applications from directories:
+          /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/ebin
+          /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps
+          /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang/lib
+          /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/apps
+          /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel
+===> Resolved hello_erlang_release-1
+===> rendering builtin_hook_status hook to "/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/bin/hooks/builtin/status"
+===> Including Erts from /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang
+===> release successfully created!
+===> tarball /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/hello_erlang_release-1.tar.gz successfully created!
+Exec: /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/erts-8.2/bin/erlexec -boot /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/releases/1/hello_erlang_release -mode embedded -boot_var ERTS_LIB_DIR /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/lib -config /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/releases/1/sys.config -args_file /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release/releases/1/vm.args -pa -- console
+Root: /Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release
+/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/_rel/hello_erlang_release
+heart_beat_kill_pid = 44891
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.384.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.383.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.385.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+         application: sasl
+          started_at: 'hello_erlang@127.0.0.1'
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+          supervisor: {local,runtime_tools_sup}
+             started: [{pid,<0.391.0>},
+                       {id,ttb_autostart},
+                       {mfargs,{ttb_autostart,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,3000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:40:08 ===
+         application: runtime_tools
+          started_at: 'hello_erlang@127.0.0.1'
+Eshell V8.2  (abort with ^G)
+(hello_erlang@127.0.0.1)1> 
+```
+
+Then start gun in another terminal window:
+```
+~/erlang_programs/my_gun$ gmake run
+gmake[1]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+ GEN    rebar.config
+gmake[1]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+===> Starting relx build process ...
+===> Resolving OTP Applications from directories:
+          /Users/7stud/erlang_programs/my_gun/ebin
+          /Users/7stud/erlang_programs/my_gun/deps
+          /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang/lib
+          /Users/7stud/erlang_programs/my_gun/apps
+          /Users/7stud/erlang_programs/my_gun/_rel
+===> Resolved my_gun_release-1
+===> rendering builtin_hook_status hook to "/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/bin/hooks/builtin/status"
+===> Including Erts from /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang
+===> release successfully created!
+===> tarball /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/my_gun_release-1.tar.gz successfully created!
+Exec: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/erts-8.2/bin/erlexec -boot /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/my_gun_release -mode embedded -boot_var ERTS_LIB_DIR /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/lib -config /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/sys.config -args_file /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/vm.args -pa -- console
+Root: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+heart_beat_kill_pid = 45280
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.353.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.352.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.354.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+         application: sasl
+          started_at: 'my_gun@127.0.0.1'
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+          supervisor: {local,runtime_tools_sup}
+             started: [{pid,<0.360.0>},
+                       {id,ttb_autostart},
+                       {mfargs,{ttb_autostart,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,3000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:49:12 ===
+         application: runtime_tools
+          started_at: 'my_gun@127.0.0.1'
+Eshell V8.2  (abort with ^G)
+(my_gun@127.0.0.1)1> 
+```
+
+Now execute my:ws() in the gun terminal window:
+
+
+
+
