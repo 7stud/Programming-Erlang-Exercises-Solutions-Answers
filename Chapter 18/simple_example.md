@@ -1,12 +1,12 @@
 Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck."  Hmmm...I thought the whole point of posting the code on github was to keep it up to date.  Oh, well.
 
-Instead, I decided to use [gun](https://github.com/ninenines/gun) for the http client, which has websockets support and is maintained by the same person who maintains cowboy, in an effort to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use `kerl` or `evm` to install multiple versions of erlang on your system and switch between them as needed.
+Instead, I decided to try [gun](https://github.com/ninenines/gun) for the http client, which has websockets support and is maintained by the same person who maintains cowboy.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use `kerl` or `evm` to install multiple versions of erlang on your system and switch between them as needed.
 
 To setup cowboy, I followed the cowboy User Guide's [Getting Started](https://ninenines.eu/docs/en/cowboy/2.0/guide/getting_started/) section. Once that was setup correctly, I was at the following prompt:
 
 `(hello_erlang@127.0.0.1)1>`
 
-To setup gun, I opened up another terminal window, and the [gun docs](https://github.com/ninenines/gun/blob/master/doc/src/guide/start.asciidoc) say you can use something called `erlang.mk` and add gun as a dependency to your application.  According to the [Erlang.mk docs](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases), if you create something called _a release_, then you can use the command `make run` (or `gmake run`) to compile and execute your code. After I read the Erlang.mk docs, it wasn't clear to me how to run _an application_ or a _library_, so I opted to create _a release_.  First, I created a directory for my release, then I downloaded erlang.mk:
+To setup gun, I opened up another terminal window, and the [gun docs](https://github.com/ninenines/gun/blob/master/doc/src/guide/start.asciidoc) say you can use something called `erlang.mk` and add gun as a dependency to your application.  According to the [Erlang.mk docs](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases), if you create something called _a release_, then you can use the command `make run` (or `gmake run`) to compile and execute your code. After reading the Erlang.mk docs, it wasn't clear to me how to run _an application_ or a _library_, so I opted to create _a release_.  First, I created a directory for my release, then I downloaded erlang.mk:
 
 ```
 ~/erlang_programs$ mkdir my_gun && cd $_
@@ -39,7 +39,7 @@ rm -rf .erlang.mk.build
 ~/erlang_programs/my_gun$ ls
 Makefile	erlang.mk	rel		relx.config	src
 ```
-As you can see, the erlang.mk command that I used created some files and directories.  Next, I edited the Makefile to add gun as a dependency:
+As you can see, the erlang.mk command that I used created some files and directories.  Next, I edited the Makefile in order to add gun as a dependency:
 
 ```make
 PROJECT = my_gun
@@ -144,7 +144,7 @@ Eshell V8.2  (abort with ^G)
 
 (my_gun@127.0.0.1)1> 
 ```
-At the erlang shell prompt shown above, you can now call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release (I hit `Ctrl+CC` to get out of the erlang shell):
+At the erlang shell prompt, `(my_gun@127.0.0.1)1>`, you can now call gun functions that send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release (I hit `Ctrl+CC` to get out of the erlang shell):
 
 ```erlang
 -module(my).
@@ -448,7 +448,6 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 (hello_erlang@127.0.0.1)1> 
 ```
-
 Then start gun in another terminal window:
 ```
 ~/erlang_programs/my_gun$ gmake run
@@ -526,7 +525,6 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 (my_gun@127.0.0.1)1> 
 ```
-
 Now execute my:ws() in the gun terminal window:
 ```
 (my_gun@127.0.0.1)1> my:ws().
@@ -675,9 +673,7 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 (my_gun@127.0.0.1)1> 
 ```
-
 And:
-
 ```
 (my_gun@127.0.0.1)1> my:ws().
 
