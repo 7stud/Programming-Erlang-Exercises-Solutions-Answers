@@ -528,6 +528,71 @@ Eshell V8.2  (abort with ^G)
 ```
 
 Now execute my:ws() in the gun terminal window:
+```
+(my_gun@127.0.0.1)1> my:ws().
+
+=PROGRESS REPORT==== 10-Jul-2017::22:55:43 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.367.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 10-Jul-2017::22:55:43 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.366.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+Upgraded <0.365.0>. Success!
+Headers:
+[{<<"connection">>,<<"Upgrade">>},
+ {<<"date">>,<<"Tue, 11 Jul 2017 04:55:42 GMT">>},
+ {<<"sec-websocket-accept">>,<<"eann9OkRXioYj7N6HzsNILl2/JI=">>},
+ {<<"server">>,<<"Cowboy">>},
+ {<<"upgrade">>,<<"websocket">>}]
+ok
+(my_gun@127.0.0.1)2> 
+```
+Based on the output, the gun client successfully upgraded the connection to a websocket.  At this point, the gun client only detects whether the upgrade request succeeded or not.  Let's change that so the gun client sends some data to the server if the upgrade request succeeds:
+```erlang
+-module(my).
+-compile(export_all).
+
+get() ->
+    ...
+
+ws() ->
+    {ok, _} = application:ensure_all_started(gun),
+    {ok, ConnPid} = gun:open("localhost", 8080),
+    {ok, _Protocol} = gun:await_up(ConnPid),
+
+    gun:ws_upgrade(ConnPid, "/websocket"),
+    receive
+    {gun_ws_upgrade, ConnPid, ok, Headers} ->
+            upgrade_success(ConnPid, Headers);
+    {gun_response, ConnPid, _, _, Status, Headers} ->
+            exit({ws_upgrade_failed, Status, Headers});
+    {gun_error, _ConnPid, _StreamRef, Reason} ->
+            exit({ws_upgrade_failed, Reason})
+    %% More clauses here as needed.
+    after 1000 ->
+        exit(timeout)
+    end,
+
+    gun:shutdown(ConnPid).
+
+upgrade_success(ConnPid, Headers) ->
+    io:format("Upgraded ~w. Success!~nHeaders:~n~p~n", 
+              [ConnPid, Headers]),
+
+    %% ****** NEW CODE *******
+    gun:ws_send(ConnPid, {text, "It's raining!"}),
+    
+    receive
+        {gun_ws, ConnPid, {text, Msg} } ->
+            io:format("~s~n", [Msg])
+    end.
+```
 
 
 
