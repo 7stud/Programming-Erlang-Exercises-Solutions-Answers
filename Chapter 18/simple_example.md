@@ -333,7 +333,7 @@ start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
         {'_', [
                {"/", hello_handler, []},
-               {"/websocket", myws_handler, []}   % <**** REQUIRED ROUTE FOR A WEBSOCKET UPGRADE REQUEST
+               {"/websocket", myws_handler, []}  %<**** REQUIRED ROUTE FOR A WEBSOCKET UPGRADE REQUEST
         ]}
     ]),
 
