@@ -144,7 +144,7 @@ Eshell V8.2  (abort with ^G)
 
 (my_gun@127.0.0.1)1> 
 ```
-At the erlang shell prompt shown above, you can now call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release:
+At the erlang shell prompt shown above, you can now call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release (I hit `Ctrl+CC` to get out of the erlang shell):
 
 ```erlang
 -module(my).
@@ -173,9 +173,103 @@ start.asciidoc
 http.asciidoc
 ```
 
-`my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080; and the case statement handles the response.  
+`my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080; and the case statement handles the response.  Note that `my:get()` sends the GET request to the same route, "/", that the cowboy Getting Started guide already setup a route and handler for.
+
+Here's the result of compiling and running the release, then running the gun code:
+
+```
+~/erlang_programs/my_gun$ gmake run
+gmake[1]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+ GEN    rebar.config
+gmake[1]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+===> Starting relx build process ...
+===> Resolving OTP Applications from directories:
+          /Users/7stud/erlang_programs/my_gun/ebin
+          /Users/7stud/erlang_programs/my_gun/deps
+          /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang/lib
+          /Users/7stud/erlang_programs/my_gun/apps
+          /Users/7stud/erlang_programs/my_gun/_rel
+===> Resolved my_gun_release-1
+===> rendering builtin_hook_status hook to "/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/bin/hooks/builtin/status"
+===> Including Erts from /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang
+===> release successfully created!
+===> tarball /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/my_gun_release-1.tar.gz successfully created!
+Exec: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/erts-8.2/bin/erlexec -boot /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/my_gun_release -mode embedded -boot_var ERTS_LIB_DIR /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/lib -config /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/sys.config -args_file /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/vm.args -pa -- console
+Root: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+heart_beat_kill_pid = 42813
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.353.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
 
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.352.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.354.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+         application: sasl
+          started_at: 'my_gun@127.0.0.1'
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+          supervisor: {local,runtime_tools_sup}
+             started: [{pid,<0.360.0>},
+                       {id,ttb_autostart},
+                       {mfargs,{ttb_autostart,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,3000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
+         application: runtime_tools
+          started_at: 'my_gun@127.0.0.1'
+Eshell V8.2  (abort with ^G)
+
+(my_gun@127.0.0.1)1> my:get().
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:27 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.367.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:54:27 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.366.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+Hello Erlang!
+ok
+(my_gun@127.0.0.1)2> 
+```
+Okay, on to websockets.
 
 
