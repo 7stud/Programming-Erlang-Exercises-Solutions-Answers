@@ -279,13 +279,13 @@ Okay, on to websockets.  The client needs to send a request asking for an _upgra
 
 ```erlang
 -module(my).
--compile(export_all).
+%-compile(export_all).
+-export([get/0, ws/0]).
 
 get() ->
     ...
-    
-ws() ->
 
+ws() ->
     {ok, _} = application:ensure_all_started(gun),
     {ok, ConnPid} = gun:open("localhost", 8080),
     {ok, _Protocol} = gun:await_up(ConnPid),
@@ -308,8 +308,8 @@ ws() ->
 
 
 upgrade_success(ConnPid, Headers) ->
-    io:format("Upgraded ~w. Success!~nHeaders:~n~w~n", 
+    io:format("Upgraded ~w. Success!~nHeaders:~n~p~n", 
               [ConnPid, Headers]).
 ```
 
-You also need to add a websocket handler to cowboy.  A handler is acutally a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/)
+You also need to add a special websocket handler to cowboy.  A handler is acutally a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/)
