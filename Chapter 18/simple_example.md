@@ -327,7 +327,7 @@ start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
         {'_', [
                {"/", hello_handler, []},
-               {"/websocket", myws_handler, []} 
+               {"/websocket", myws_handler, []}   % <**** HERE IS THE REQUIRED WEBSOCKET ROUTE
         ]}
     ]),
 
@@ -341,3 +341,23 @@ start(_Type, _Args) ->
 stop(_State) ->
 	ok.
 ```
+
+Here's the file `hello_erlang/src/myws_handler.erl` that I created to handle the websocket upgrade request:
+
+```erlang
+-module(myws_handler).
+-compile(export_all).
+
+init(Req, State) ->
+    {cowboy_websocket, Req, State}.  %Perform websocket setup
+
+websocket_handle({text, Msg}, State) ->
+    {
+     reply, 
+     {text, io_lib:format("Server received: ~s", [Msg]) },
+     State
+    };
+websocket_handle(_Other, State) ->  %Ignore
+    {ok, State}.
+```
+
