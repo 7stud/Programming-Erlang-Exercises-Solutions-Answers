@@ -275,7 +275,7 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  The client needs to send a request asking for an _upgrade_ in order to convert a connection to a websocket. You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
+Okay, on to websockets.  The client needs to send a special request to the route `/websocket` in order to upgrade a connection to a websocket. You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
 
 ```erlang
 -module(my).
