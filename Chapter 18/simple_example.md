@@ -275,7 +275,7 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  The client needs to send a request asking for an _upgrade_ to convert a connection to a websocket. You can read about that process in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
+Okay, on to websockets.  The client needs to send a request asking for an _upgrade_ in order to convert a connection to a websocket. You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
 
 ```erlang
 -module(my).
@@ -285,6 +285,7 @@ Okay, on to websockets.  The client needs to send a request asking for an _upgra
 get() ->
     ...
 
+%******** NEW CODE ***********
 ws() ->
     {ok, _} = application:ensure_all_started(gun),
     {ok, ConnPid} = gun:open("localhost", 8080),
@@ -312,9 +313,9 @@ upgrade_success(ConnPid, Headers) ->
               [ConnPid, Headers]).
 ```
 
-You also need to add a special websocket handler to cowboy.  A handler is acutally a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+You also need to add a special websocket handler to cowboy.  A handler is actually a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
 
-Here's the cowboy route required for a websocket upgrade request:
+Here's the required cowboy route for a websocket upgrade request:
 
 ```erlang
 -module(hello_erlang_app).
@@ -327,7 +328,7 @@ start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
         {'_', [
                {"/", hello_handler, []},
-               {"/websocket", myws_handler, []}   % <**** HERE IS THE REQUIRED WEBSOCKET ROUTE
+               {"/websocket", myws_handler, []}   % <**** REQUIRED ROUTE FOR A WEBSOCKET UPGRADE REQUEST
         ]}
     ]),
 
@@ -361,3 +362,4 @@ websocket_handle(_Other, State) ->  %Ignore
     {ok, State}.
 ```
 
+The handler just prepends the text "Server received: " to whatever text was sent to the server in the request and sends the new text back as the response.
