@@ -166,11 +166,14 @@ get() ->
     end.
 ```
 
-That sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080, and the case statement handles the response.  I cobbled that code together from the following files in the [gun docs](https://github.com/ninenines/gun/tree/master/doc/src/guide):
-
+I cobbled that code together from the following files in the [gun docs](https://github.com/ninenines/gun/tree/master/doc/src/guide):
+```
 introduction.asciidoc
 start.asciidoc
 http.asciidoc
+```
+
+`my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080; and the case statement handles the response.  
 
 
 
