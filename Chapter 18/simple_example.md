@@ -39,7 +39,7 @@ rm -rf .erlang.mk.build
 ~/erlang_programs/my_gun$ ls
 Makefile	erlang.mk	rel		relx.config	src
 ```
-As you can see, the erlang.mk command that I used created some files and directories.  Next, I edited the Makefile in order to add gun as a dependency:
+As you can see, the erlang.mk command that I used created some files and directories.  Next, I edited the Makefile to add gun as a dependency:
 
 ```make
 PROJECT = my_gun
