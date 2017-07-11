@@ -1,6 +1,6 @@
 Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck."  Hmmm...I thought the whole point of posting the code on github was to keep it up to date.  Oh, well.
 
-Instead, I decided to try and use [gun](https://github.com/ninenines/gun) for the http client, which has websockets support and is maintained by the same person who maintains cowboy, in my effort to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use `kerl` or `evm` to install multiple versions of erlang on your system and switch between them as needed.
+Instead, I decided to try to use [gun](https://github.com/ninenines/gun) for the http client, which has websockets support and is maintained by the same person who maintains cowboy, in my effort to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use `kerl` or `evm` to install multiple versions of erlang on your system and switch between them as needed.
 
 To setup cowboy, I followed the cowboy User Guide's [Getting Started](https://ninenines.eu/docs/en/cowboy/2.0/guide/getting_started/) section. Once that was setup correctly, I was at the following prompt:
 
