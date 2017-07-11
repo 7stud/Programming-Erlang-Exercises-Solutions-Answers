@@ -175,7 +175,7 @@ http.asciidoc
 
 `my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080; and the case statement handles the response.  Note that `my:get()` sends the GET request to the same route, "/", that the cowboy Getting Started guide already setup a route and handler for.
 
-Here's the result of compiling and running the release, then running the gun code:
+Here's the result of compiling and running the release:
 
 ```
 ~/erlang_programs/my_gun$ gmake run
@@ -249,9 +249,14 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 
 =PROGRESS REPORT==== 10-Jul-2017::21:54:25 ===
          application: runtime_tools
-          started_at: 'my_gun@127.0.0.1'
+          started_at: 'my_gun@127.0.0.1
 Eshell V8.2  (abort with ^G)
+(my_gun@127.0.0.1)1>
+```
 
+At the prompt, I exeucted my:get():
+
+```
 (my_gun@127.0.0.1)1> my:get().
 
 =PROGRESS REPORT==== 10-Jul-2017::21:54:27 ===
