@@ -553,7 +553,8 @@ Headers:
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Based on the output, the gun client successfully upgraded the connection to a websocket.  At this point, the gun client only detects whether the upgrade request succeeded or not.  Let's change that so the gun client sends some data to the server if the upgrade request succeeds:
+Based on the output, the gun client successfully upgraded the connection to a websocket.  At this point, the gun client only detects whether the upgrade request succeeded or not.  Let's change that so that the gun client sends some data to the server if the upgrade request succeeds:
+
 ```erlang
 -module(my).
 -compile(export_all).
@@ -594,6 +595,116 @@ upgrade_success(ConnPid, Headers) ->
     end.
 ```
 
+Here are the results:
+```
+~/erlang_programs/my_gun$ gmake run
+gmake[1]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+ GEN    rebar.config
+gmake[1]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+ DEPEND my_gun.d
+ ERLC   my.erl
+ APP    my_gun
+===> Starting relx build process ...
+===> Resolving OTP Applications from directories:
+          /Users/7stud/erlang_programs/my_gun/ebin
+          /Users/7stud/erlang_programs/my_gun/deps
+          /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang/lib
+          /Users/7stud/erlang_programs/my_gun/apps
+          /Users/7stud/erlang_programs/my_gun/_rel
+===> Resolved my_gun_release-1
+===> rendering builtin_hook_status hook to "/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/bin/hooks/builtin/status"
+===> Including Erts from /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang
+===> release successfully created!
+===> tarball /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/my_gun_release-1.tar.gz successfully created!
+Exec: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/erts-8.2/bin/erlexec -boot /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/my_gun_release -mode embedded -boot_var ERTS_LIB_DIR /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/lib -config /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/sys.config -args_file /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/vm.args -pa -- console
+Root: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+heart_beat_kill_pid = 47215
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.353.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.352.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.354.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+         application: sasl
+          started_at: 'my_gun@127.0.0.1'
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+          supervisor: {local,runtime_tools_sup}
+             started: [{pid,<0.360.0>},
+                       {id,ttb_autostart},
+                       {mfargs,{ttb_autostart,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,3000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:24 ===
+         application: runtime_tools
+          started_at: 'my_gun@127.0.0.1'
+Eshell V8.2  (abort with ^G)
+(my_gun@127.0.0.1)1> 
+```
+
+And:
+
+```
+(my_gun@127.0.0.1)1> my:ws().
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:28 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.367.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 10-Jul-2017::23:07:28 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.366.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+Upgraded <0.365.0>. Success!
+Headers:
+[{<<"connection">>,<<"Upgrade">>},
+ {<<"date">>,<<"Tue, 11 Jul 2017 05:07:28 GMT">>},
+ {<<"sec-websocket-accept">>,<<"RnPQPxQFMHCuzb8SoJtjUjlp558=">>},
+ {<<"server">>,<<"Cowboy">>},
+ {<<"upgrade">>,<<"websocket">>}]
+Server received: It's raining!
+ok
+
+(my_gun@127.0.0.1)2>
+```
 
 
 
