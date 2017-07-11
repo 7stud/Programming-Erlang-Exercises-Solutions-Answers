@@ -254,7 +254,7 @@ Eshell V8.2  (abort with ^G)
 (my_gun@127.0.0.1)1>
 ```
 
-At the prompt, I exeucted my:get():
+At the prompt, I executed `my:get()`:
 
 ```
 (my_gun@127.0.0.1)1> my:get().
