@@ -312,4 +312,32 @@ upgrade_success(ConnPid, Headers) ->
               [ConnPid, Headers]).
 ```
 
-You also need to add a special websocket handler to cowboy.  A handler is acutally a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/)
+You also need to add a special websocket handler to cowboy.  A handler is acutally a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+
+Here's the cowboy route required for a websocket upgrade request:
+
+```erlang
+-module(hello_erlang_app).
+-behaviour(application).
+
+-export([start/2]).
+-export([stop/1]).
+
+start(_Type, _Args) ->
+    Dispatch = cowboy_router:compile([
+        {'_', [
+               {"/", hello_handler, []},
+               {"/websocket", myws_handler, []} 
+        ]}
+    ]),
+
+    {ok, _} = cowboy:start_clear(my_http_listener,
+        [{port, 8080}],
+        #{env => #{dispatch => Dispatch} }
+    ),
+
+    hello_erlang_sup:start_link().
+
+stop(_State) ->
+	ok.
+```
