@@ -50,7 +50,120 @@ DEPS = gun
 include erlang.mk
 ```
 
+Then to compile and execute the code:
 
+```
+~/erlang_programs/my_gun$ gmake run
+ DEP    gun
+gmake[1]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+ DEP    cowlib
+ DEP    ranch
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+ DEPEND cowlib.d
+ ERLC   cow_base64url.erl cow_cookie.erl cow_date.erl cow_hpack.erl cow_http.erl cow_http2.erl cow_http_hd.erl cow_http_te.erl cow_mimetypes.erl cow_multipart.erl cow_qs.erl cow_spdy.erl cow_sse.erl cow_uri.erl cow_ws.erl
+ APP    cowlib
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/cowlib'
+gmake[2]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+ DEPEND ranch.d
+ ERLC   ranch.erl ranch_acceptor.erl ranch_acceptors_sup.erl ranch_app.erl ranch_conns_sup.erl ranch_listener_sup.erl ranch_protocol.erl ranch_server.erl ranch_ssl.erl ranch_sup.erl ranch_tcp.erl ranch_transport.erl
+ APP    ranch
+gmake[2]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/ranch'
+ DEPEND gun.d
+ ERLC   gun.erl gun_app.erl gun_content_handler.erl gun_data.erl gun_http.erl gun_http2.erl gun_spdy.erl gun_sse.erl gun_sup.erl gun_ws.erl gun_ws_handler.erl
+ APP    gun
+ GEN    rebar.config
+gmake[1]: Leaving directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
+ DEPEND my_gun.d
+ APP    my_gun
+ GEN    /Users/7stud/erlang_programs/my_gun/.erlang.mk/relx
+===> Starting relx build process ...
+===> Resolving OTP Applications from directories:
+          /Users/7stud/erlang_programs/my_gun/ebin
+          /Users/7stud/erlang_programs/my_gun/deps
+          /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang/lib
+          /Users/7stud/erlang_programs/my_gun/apps
+===> Resolved my_gun_release-1
+===> rendering builtin_hook_status hook to "/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/bin/hooks/builtin/status"
+===> Including Erts from /Users/7stud/.evm/erlang_versions/otp_src_19.2/lib/erlang
+===> release successfully created!
+===> tarball /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/my_gun_release-1.tar.gz successfully created!
+Exec: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/erts-8.2/bin/erlexec -boot /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/my_gun_release -mode embedded -boot_var ERTS_LIB_DIR /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/lib -config /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/sys.config -args_file /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release/releases/1/vm.args -pa -- console
+Root: /Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+/Users/7stud/erlang_programs/my_gun/_rel/my_gun_release
+heart_beat_kill_pid = 41598
+Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.352.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.351.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.353.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+         application: sasl
+          started_at: 'my_gun@127.0.0.1'
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+          supervisor: {local,runtime_tools_sup}
+             started: [{pid,<0.359.0>},
+                       {id,ttb_autostart},
+                       {mfargs,{ttb_autostart,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,3000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 10-Jul-2017::21:30:00 ===
+         application: runtime_tools
+          started_at: 'my_gun@127.0.0.1'
+Eshell V8.2  (abort with ^G)
+
+(my_gun@127.0.0.1)1> 
+```
+Now, at the erlang shell prompt you can call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I you can create the following file in the src directory of hyour release:
+
+```erlang
+-module(my).
+-compile(export_all).
+
+get() ->
+    {ok, _} = application:ensure_all_started(gun),
+    {ok, ConnPid} = gun:open("localhost", 8080),
+    {ok, _Protocol} = gun:await_up(ConnPid),
+
+    StreamRef = gun:get(ConnPid, "/"),
+
+    case gun:await(ConnPid, StreamRef) of
+        {response, fin, _Status, _Headers} ->
+            no_data;
+        {response, nofin, _Status, _Headers} ->
+            {ok, Body} = gun:await_body(ConnPid, StreamRef),
+            io:format("~s~n", [Body])
+    end.
+```
 
 
 
