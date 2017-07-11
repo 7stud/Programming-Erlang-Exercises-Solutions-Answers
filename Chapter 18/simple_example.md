@@ -371,7 +371,7 @@ websocket_handle(_Other, State) ->  %Ignore
 
 The handler just prepends the text "Server received: " to whatever text was sent in the request and sends the new text back as the response.
 
-Start cowboy in one terminal window:
+Restart cowboy:
 ```
 ~/erlang_programs/cowboy_apps/hello_erlang$ gmake run
 gmake[1]: Entering directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowboy'
@@ -551,7 +551,7 @@ Headers:
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Based on the output, the gun client successfully upgraded the connection to a websocket.  At this point, the gun client only detects whether the upgrade request succeeded or not.  Let's change that so that the gun client sends some data to the server if the upgrade request succeeds:
+Based on that output, the gun client successfully upgraded the connection to a websocket.  At this point, the gun client only detects whether the upgrade request succeeded or not.  Let's change that so that the gun client sends some data to the server if the upgrade request succeeds:
 
 ```erlang
 -module(my).
