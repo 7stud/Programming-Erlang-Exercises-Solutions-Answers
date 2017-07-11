@@ -1,6 +1,6 @@
 Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck."  Hmmm...I thought the whole point of posting the code on github was to keep it up to date.  Oh, well.
 
-I decided to try and use [gun](https://github.com/ninenines/gun) for the http client, which has websocket support and is maintained by the same person who maintains cowboy, to try to interact with a cowboy server.
+I decided to try and use [gun](https://github.com/ninenines/gun) for the http client, which has websocket support and is maintained by the same person who maintains cowboy, in my efforts to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install another version of erlang, you can use kerl or evm to install multiple versions of erlang on your system and switch between them as needed.
 
 To setup cowboy, I followed the cowboy User Guide's [Getting Started](https://ninenines.eu/docs/en/cowboy/2.0/guide/getting_started/) section. Once that was setup correctly, I was at the following prompt:
 
@@ -14,7 +14,7 @@ To setup gun, I opened up another terminal window, and the [gun docs](https://gi
 ~/erlang_programs/my_gun$ curl -O "https:/erlang.mk/erlang.mk"   
 ```
 
-Then I used an erlang.mk [command](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases) to create a release:
+Then I used the following erlang.mk [command](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases) to create a release:
 
 ```
 ~/erlang_programs/my_gun$ gmake -f erlang.mk bootstrap-lib bootstrap-rel
@@ -40,6 +40,7 @@ rm -rf .erlang.mk.build
 Makefile	erlang.mk	rel		relx.config	src
 ```
 As you can see, the erlang.mk command that I used created some files and directories.  Next, I edited the Makefile to add gun as a dependency:
+
 ```make
 PROJECT = my_gun
 PROJECT_DESCRIPTION = New project
@@ -50,7 +51,7 @@ DEPS = gun
 include erlang.mk
 ```
 
-Then to compile and execute the code:
+Then I compiled and executed the release:
 
 ```
 ~/erlang_programs/my_gun$ gmake run
@@ -143,7 +144,7 @@ Eshell V8.2  (abort with ^G)
 
 (my_gun@127.0.0.1)1> 
 ```
-Now, at the erlang shell prompt you can call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I you can create the following file in the src directory of hyour release:
+At the erlang shell prompt shown above, you can now call gun functions to send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release:
 
 ```erlang
 -module(my).
@@ -165,6 +166,11 @@ get() ->
     end.
 ```
 
+That sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080, and the case statement handles the response.  I cobbled that code together from the following files in the [gun docs](https://github.com/ninenines/gun/tree/master/doc/src/guide):
+
+introduction.asciidoc
+start.asciidoc
+http.asciidoc
 
 
 
