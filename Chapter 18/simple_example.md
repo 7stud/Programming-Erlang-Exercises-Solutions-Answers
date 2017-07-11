@@ -1,4 +1,4 @@
-Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck."  Hmmm...I thought the whole point of posting the code on github was to keep it up to date.  Oh, well.
+Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck." Oh, well.
 
 Instead, I decided to try [gun](https://github.com/ninenines/gun) for the http client, which has websockets support and is maintained by the same person who maintains cowboy.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use `kerl` or `evm` to install multiple versions of erlang on your system and switch between them as needed.
 
