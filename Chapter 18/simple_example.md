@@ -1,6 +1,6 @@
 Joe Armstrong's **ezwebrame** code no longer works.  I asked for help on the erlang-questions forum with some of the errors I was getting, and Joe himself answered and essentially said, "It no longer works.  Tough luck."  Hmmm...I thought the whole point of posting the code on github was to keep it up to date.  Oh, well.
 
-I decided to try and use [gun](https://github.com/ninenines/gun) for the http client, which has websocket support and is maintained by the same person who maintains cowboy, in my efforts to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install another version of erlang, you can use kerl or evm to install multiple versions of erlang on your system and switch between them as needed.
+Instead, I decided to try and use [gun](https://github.com/ninenines/gun) for the http client, which has websocket support and is maintained by the same person who maintains cowboy, in my effort to interact with a cowboy server using websockets.  gun is for `erlang 18+`, though, so if you need to install a more recent version of erlang, you can use kerl or evm to install multiple versions of erlang on your system and switch between them as needed.
 
 To setup cowboy, I followed the cowboy User Guide's [Getting Started](https://ninenines.eu/docs/en/cowboy/2.0/guide/getting_started/) section. Once that was setup correctly, I was at the following prompt:
 
@@ -275,6 +275,40 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.
+Okay, on to websockets.  The client needs to send a request asking for an _upgrade_ to convert a connection to websockets. You can read about that process in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
 
+```erlang
+-module(my).
+-compile(export_all).
+
+get() ->
+    ...
+    
+ws() ->
+
+    {ok, _} = application:ensure_all_started(gun),
+    {ok, ConnPid} = gun:open("localhost", 8080),
+    {ok, _Protocol} = gun:await_up(ConnPid),
+
+    gun:ws_upgrade(ConnPid, "/websocket"),
+
+    receive
+        {gun_ws_upgrade, ConnPid, ok, Headers} ->
+            upgrade_success(ConnPid, Headers);
+        {gun_response, ConnPid, _, _, Status, Headers} ->
+            exit({ws_upgrade_failed, Status, Headers});
+        {gun_error, _ConnPid, _StreamRef, Reason} ->
+            exit({ws_upgrade_failed, Reason})
+    %% More clauses here as needed.
+    after 1000 ->
+        exit(timeout)
+    end,
+
+    gun:shutdown(ConnPid).
+
+
+upgrade_success(ConnPid, Headers) ->
+    io:format("Upgraded ~w. Success!~nHeaders:~n~w~n", 
+              [ConnPid, Headers]).
+```
 
