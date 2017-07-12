@@ -275,7 +275,7 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a request to a cowboy route whose handler _upgrades_ the connection to a websocket and handles data that arrives.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket" and you need to create a handler for that route.  A handler is actually a module, and inside the module you are required to define an `init/2` function.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a special upgrade request to a cowboy route whose handler _upgrades_ the connection to a websocket.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket" and you need to create a handler for that route.  A handler is actually a module, and inside the module you are required to define an `init/2` function.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
 
 Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
 
@@ -295,7 +295,7 @@ start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
         {'_', [
                {"/", hello_handler, []},
-               {"/please_upgrade_to_websocket", myws_handler, []} %<**** NEW ROUTE
+               {"/please_upgrade_to_websocket", myws_handler, []} %<**** NEW ROUTE ****
         ]}
     ]),
 
@@ -332,7 +332,7 @@ websocket_handle(_Other, State) ->  %Ignore
     {ok, State}.
 ```
 
-The handler just prepends the text "Server received: " to whatever text arrived through the websocket and sends the new text back.
+The handler just prepends the text "Server received: " to whatever text arrives through the websocket and sends the new text back.
 
 Then, I added the following code to gun:
 
