@@ -351,7 +351,7 @@ ws() ->
     {ok, ConnPid} = gun:open("localhost", 8080),
     {ok, _Protocol} = gun:await_up(ConnPid),
 
-    gun:ws_upgrade(ConnPid, "/websocket"),
+    gun:ws_upgrade(ConnPid, "/please_upgrade_to_websocket"),
 
     receive
         {gun_ws_upgrade, ConnPid, ok, Headers} ->
@@ -366,7 +366,6 @@ ws() ->
     end,
 
     gun:shutdown(ConnPid).
-
 
 upgrade_success(ConnPid, Headers) ->
     io:format("Upgraded ~w. Success!~nHeaders:~n~p~n", 
