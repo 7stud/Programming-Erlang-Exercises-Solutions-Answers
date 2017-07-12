@@ -275,7 +275,11 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  The client needs to send a special request to the route `/websocket` in order to get cowboy to upgrade a connection to a websocket. You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  I added the following code to `my.erl`:
+Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets gun needs to send a request to a cowboy route whose sole purpose is to execute a handler that _upgrades_ the connection to a websocket.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket", and in the handler for that route, you need to add the cowboy code that upgrades a connection to a websocket.  A handler is actually a module, and inside the module you are required to define an `init/2` function, which executes your code.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+
+
+
+I added the following code to `my.erl`:
 
 ```erlang
 -module(my).
@@ -313,8 +317,7 @@ upgrade_success(ConnPid, Headers) ->
               [ConnPid, Headers]).
 ```
 
-You also need to add a special websocket handler to cowboy.  A handler is actually a module, and inside the module you are required to define an `init/2` function.   You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
-
+You also need to add a special websocket handler to cowboy.  
 Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
 
 `(hello_erlang@127.0.0.1)1>`
