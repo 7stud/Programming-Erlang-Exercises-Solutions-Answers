@@ -275,12 +275,68 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a request to a cowboy route whose sole purpose is to execute a handler that _upgrades_ the connection to a websocket.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket", and in the handler for that route you need to add the cowboy code that upgrades a connection to a websocket.  A handler is actually a module, and inside the module you are required to define an `init/2` function, which executes your code.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a request to a cowboy route whose handler _upgrades_ the connection to a websocket and handles data that arrives.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket" and you need to create a handler for that route.  A handler is actually a module, and inside the module you are required to define an `init/2` function.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
 
+Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
 
+`(hello_erlang@127.0.0.1)1>`
 
-I added the following code to `my.erl`:
+You can kill the cowboy server with `Ctrl+CC`. Here's the new cowboy route:
 
+***hello_erlang/src/hello_erlang_app.erl***
+```erlang
+-module(hello_erlang_app).
+-behaviour(application).
+
+-export([start/2]).
+-export([stop/1]).
+
+start(_Type, _Args) ->
+    Dispatch = cowboy_router:compile([
+        {'_', [
+               {"/", hello_handler, []},
+               {"/please_upgrade_to_websocket", myws_handler, []} %<**** NEW ROUTE
+        ]}
+    ]),
+
+    {ok, _} = cowboy:start_clear(my_http_listener,
+        [{port, 8080}],
+        #{env => #{dispatch => Dispatch} }
+    ),
+
+    hello_erlang_sup:start_link().
+
+stop(_State) ->
+	ok.
+
+stop(_State) ->
+	ok.
+```
+Here's the new route's handler:
+
+***hello_erlang/src/myws_handler***
+```erlang
+-module(myws_handler).
+-compile(export_all).
+
+init(Req, State) ->
+    {cowboy_websocket, Req, State}.  %Perform websocket setup
+
+websocket_handle({text, Msg}, State) ->  %Automatically called when data arrives
+    {
+     reply, 
+     {text, io_lib:format("Server received: ~s", [Msg]) },
+     State
+    };
+websocket_handle(_Other, State) ->  %Ignore
+    {ok, State}.
+```
+
+The handler just prepends the text "Server received: " to whatever text arrived through the websocket and sends the new text back.
+
+Then, I added the following code to gun:
+
+***~/erlang_programs/my_gun/src/my.erl***
 ```erlang
 -module(my).
 %-compile(export_all).
@@ -289,7 +345,7 @@ I added the following code to `my.erl`:
 get() ->
     ...
 
-%******** NEW CODE ***********
+%******** NEW CODE BELOW ***********
 ws() ->
     {ok, _} = application:ensure_all_started(gun),
     {ok, ConnPid} = gun:open("localhost", 8080),
@@ -317,64 +373,7 @@ upgrade_success(ConnPid, Headers) ->
               [ConnPid, Headers]).
 ```
 
-You also need to add a special websocket handler to cowboy.  
-Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
-
-`(hello_erlang@127.0.0.1)1>`
-
-You can kill the cowboy server with `Ctrl+CC`.  Here's the required cowboy route for a websocket upgrade request:
-
-***hello_erlang/src/hello_erlang_app.erl***:
-```erlang
--module(hello_erlang_app).
--behaviour(application).
-
--export([start/2]).
--export([stop/1]).
-
-start(_Type, _Args) ->
-    Dispatch = cowboy_router:compile([
-        {'_', [
-               {"/", hello_handler, []},
-               {"/websocket", myws_handler, []}  %<**** REQUIRED ROUTE FOR A WEBSOCKET UPGRADE REQUEST
-        ]}
-    ]),
-
-    {ok, _} = cowboy:start_clear(my_http_listener,
-        [{port, 8080}],
-        #{env => #{dispatch => Dispatch} }
-    ),
-
-    hello_erlang_sup:start_link().
-
-stop(_State) ->
-	ok.
-```
-
-Here's the module I created to handle the websocket upgrade request:
-
-***hello_erlang/src/myws_handler.erl***:
-
-```erlang
--module(myws_handler).
--compile(export_all).
-
-init(Req, State) ->
-    {cowboy_websocket, Req, State}.  %Perform websocket setup
-
-websocket_handle({text, Msg}, State) ->
-    {
-     reply, 
-     {text, io_lib:format("Server received: ~s", [Msg]) },
-     State
-    };
-websocket_handle(_Other, State) ->  %Ignore
-    {ok, State}.
-```
-
-The handler just prepends the text "Server received: " to whatever text was sent in the request and sends the new text back as the response.
-
-Restart cowboy:
+Switch to the cowboy terminal window and restart cowboy:
 ```
 ~/erlang_programs/cowboy_apps/hello_erlang$ gmake run
 gmake[1]: Entering directory '/Users/7stud/erlang_programs/cowboy_apps/hello_erlang/deps/cowboy'
@@ -451,7 +450,7 @@ Erlang/OTP 19 [erts-8.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [
 Eshell V8.2  (abort with ^G)
 (hello_erlang@127.0.0.1)1> 
 ```
-Then start gun in another terminal window:
+Switch to the gun terminal window and restart gun:
 ```
 ~/erlang_programs/my_gun$ gmake run
 gmake[1]: Entering directory '/Users/7stud/erlang_programs/my_gun/deps/gun'
