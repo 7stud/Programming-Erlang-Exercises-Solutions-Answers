@@ -275,7 +275,7 @@ Hello Erlang!
 ok
 (my_gun@127.0.0.1)2> 
 ```
-Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a special upgrade request to a cowboy route whose handler _upgrades_ the connection to a websocket.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket" and you need to create a handler for that route.  A handler is actually a module, and inside the module you are required to define an `init/2` function.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
+Okay, on to websockets.  Once you establish a `gun <---> cowboy`connection, in order to use websockets you need to send a special upgrade request to a cowboy route, and the handler for that route needs to _upgrade_ the connection to a websocket.  As a result, you need to add a new route to cowboy, say, "/please_upgrade_to_websocket" and you need to create a handler for that route.  A handler is actually a module, and inside the module you are required to define an `init/2` function.  You can read about upgrade requests in the gun docs [here](https://github.com/ninenines/gun/blob/master/doc/src/guide/websocket.asciidoc).  You can read about cowboy handlers in general [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/handlers/) and websocket handlers in particular [here](https://ninenines.eu/docs/en/cowboy/2.0/guide/ws_handlers/).
 
 Switch to the terminal window where cowboy is running--the window should be displaying the prompt:
 
@@ -334,7 +334,7 @@ websocket_handle(_Other, State) ->  %Ignore
 
 The handler just prepends the text "Server received: " to whatever text arrives through the websocket and sends the new text back.
 
-Then, I added the following code to gun:
+Here's the special upgrade request that gun needs to send to cowboy:
 
 ***~/erlang_programs/my_gun/src/my.erl***
 ```erlang
@@ -342,8 +342,21 @@ Then, I added the following code to gun:
 %-compile(export_all).
 -export([get/0, ws/0]).
 
+%% No changes to get():
 get() ->
-    ...
+    {ok, _} = application:ensure_all_started(gun),
+    {ok, ConnPid} = gun:open("localhost", 8080),
+    {ok, _Protocol} = gun:await_up(ConnPid),
+
+    StreamRef = gun:get(ConnPid, "/"),
+
+    case gun:await(ConnPid, StreamRef) of
+        {response, fin, _Status, _Headers} ->
+            no_data;
+        {response, nofin, _Status, _Headers} ->
+            {ok, Body} = gun:await_body(ConnPid, StreamRef),
+            io:format("~s~n", [Body])
+    end.
 
 %******** NEW CODE BELOW ***********
 ws() ->
@@ -351,7 +364,7 @@ ws() ->
     {ok, ConnPid} = gun:open("localhost", 8080),
     {ok, _Protocol} = gun:await_up(ConnPid),
 
-    gun:ws_upgrade(ConnPid, "/please_upgrade_to_websocket"),
+    gun:ws_upgrade(ConnPid, "/please_upgrade_to_websocket"),   %<***** SPECIAL UPGRADE REQUEST ****
 
     receive
         {gun_ws_upgrade, ConnPid, ok, Headers} ->
