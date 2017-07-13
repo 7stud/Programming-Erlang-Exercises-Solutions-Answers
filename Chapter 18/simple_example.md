@@ -320,9 +320,9 @@ Here's the new route's handler:
 -compile(export_all).
 
 init(Req, State) ->
-    {cowboy_websocket, Req, State}.  %Perform websocket setup
+    {cowboy_websocket, Req, State}.  %Tells cowboy to setup the websocket.
 
-websocket_handle({text, Msg}, State) ->  %Automatically called when data arrives
+websocket_handle({text, Msg}, State) ->  %Automatically called when data arrives.
     {
      reply, 
      {text, io_lib:format("Server received: ~s", [Msg]) },
@@ -332,7 +332,7 @@ websocket_handle(_Other, State) ->  %Ignore
     {ok, State}.
 ```
 
-The handler just prepends the text "Server received: " to whatever text arrives through the websocket and sends the new text back.
+The handler just prepends the text "Server received: " to whatever text arrives through the websocket and sends the new text back to the client.
 
 Here's the special upgrade request that gun needs to send to cowboy:
 
