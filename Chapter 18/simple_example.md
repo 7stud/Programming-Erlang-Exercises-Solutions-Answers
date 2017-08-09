@@ -144,7 +144,7 @@ Eshell V8.2  (abort with ^G)
 
 (my_gun@127.0.0.1)1> 
 ```
-At the erlang shell prompt, `(my_gun@127.0.0.1)1>`, you can now call gun functions that send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute, and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release (I hit `Ctrl+CC` to get out of the erlang shell):
+At the erlang shell prompt, `(my_gun@127.0.0.1)1>`, you can now call gun functions that send requests to cowboy.  However, typing a lot of code in the shell is a pain, which highlights another advantage of using a release: you can create a function containing the gun commands that you want to execute and call that function from the erlang shell.   When you issue the command `gmake run`, all the code in the `src` directory of your release will be compiled.  So, I created the following file in the `src` directory of my release (I hit `Ctrl+CC` to get out of the erlang shell):
 
 ```erlang
 -module(my).
