@@ -6,7 +6,7 @@ To setup cowboy, I followed the cowboy User Guide's [Getting Started](https://ni
 
 `(hello_erlang@127.0.0.1)1>`
 
-To setup gun, I opened up another terminal window, and the [gun docs](https://github.com/ninenines/gun/blob/master/doc/src/guide/start.asciidoc) say you can use something called `erlang.mk` and add gun as a dependency to your application.  According to the [Erlang.mk docs](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases), if you create something called _a release_, then you can use the command `make run` (or `gmake run`) to compile and execute your code. After reading the Erlang.mk docs, it wasn't clear to me how to run _an application_ or a _library_, so I opted to create _a release_.  First, I created a directory for my release, then I downloaded erlang.mk:
+To setup gun, I opened up another terminal window, and the [gun docs](https://github.com/ninenines/gun/blob/master/doc/src/guide/start.asciidoc) say that you can use something called `erlang.mk` and add gun as a dependency to your application.  According to the [Erlang.mk docs](https://erlang.mk/guide/getting_started.html#_getting_started_with_otp_releases), if you create something called _a release_, then you can use the command `make run` (or `gmake run`) to compile and execute your code. After reading the Erlang.mk docs, it wasn't clear to me how to run _an application_ or a _library_, so I opted to create _a release_.  First, I created a directory for my release, then I downloaded erlang.mk:
 
 ```
 ~/erlang_programs$ mkdir my_gun && cd $_
