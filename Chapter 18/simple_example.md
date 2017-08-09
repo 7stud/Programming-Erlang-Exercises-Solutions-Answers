@@ -173,7 +173,7 @@ start.asciidoc
 http.asciidoc
 ```
 
-`my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080; and the case statement handles the response.  Note that `my:get()` sends the GET request to the same route, "/", that the cowboy Getting Started guide already setup a route and handler for.
+`my:get()` sends a GET request--nothing to do with websockets yet--to the cowboy server that I setup to listen on port 8080, and the case statement handles the response.  Note that `my:get()` sends the GET request to the same route, "/", that the cowboy Getting Started guide already setup a route and handler for.
 
 Here's the result of compiling and running the release:
 
