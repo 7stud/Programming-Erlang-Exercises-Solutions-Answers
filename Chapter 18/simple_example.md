@@ -311,7 +311,7 @@ stop(_State) ->
 ```
 Here's the new route's handler:
 
-***hello_erlang/src/myws_handler***
+***hello_erlang/src/myws_handler.erl***
 ```erlang
 -module(myws_handler).
 -compile(export_all).
