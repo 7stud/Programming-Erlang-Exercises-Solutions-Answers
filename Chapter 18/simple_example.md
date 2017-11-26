@@ -308,9 +308,6 @@ start(_Type, _Args) ->
 
 stop(_State) ->
 	ok.
-
-stop(_State) ->
-	ok.
 ```
 Here's the new route's handler:
 
