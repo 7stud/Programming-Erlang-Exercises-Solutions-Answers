@@ -42,10 +42,12 @@ modules = a w2 b
 #     $(modules:%=%.beam) 
 #is equivalent to:
 #     a.beam w2.beam b.beam
-#The fragemnt `modules:%` matches each word in the modules variable
-#and the fragment `=%.beam` replaces each match on the left hand side
+#The fragment 'modules:%' matches each word in the modules variable
+#and the fragment '=%.beam' replaces each match on the left hand side
 #of the equals sign with a new word that consists of what matched %
-#on the left hand side of the equals sign followed by .beam.
+#on the left hand side of the equals sign followed by .beam.  If instead
+#you wrote $(modules:%xx=%.beam), the %xx would match the words in the
+#modules variable that ended in 'xx'.
 
 all: $(modules:%=%.beam) 
 .PHONY: all
