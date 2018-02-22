@@ -48,7 +48,7 @@ modules = a w2 b
 #on the left hand side of the equals sign followed by .beam.  If instead
 #you wrote $(modules:%.xx=%.beam), the %.xx would match the words in the
 #modules variable that ended in '.xx', e.g. myfile.xx, and on the right
-hand side of the equals sign, % would equal myfile, so the new word would
+hand side of the equals sign, % would equal myfile, so the replacement would
 be 'myfile.beam'.
 
 all: $(modules:%=%.beam) 
