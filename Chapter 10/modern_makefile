@@ -51,7 +51,7 @@ modules = a w2 b
 #then %.xx would match all the words in the modules variable that
 #ended in .xx, e.g. myfile.xx, and on the right hand side of the
 #equals sign, % would equal myfile, so the replacement would be
-#'myfile.beam'.
+#myfile.beam.
 
 all: $(modules:%=%.beam) 
 .PHONY: all
