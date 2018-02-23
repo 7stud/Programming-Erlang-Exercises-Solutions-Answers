@@ -44,12 +44,14 @@ modules = a w2 b
 #     a.beam w2.beam b.beam
 #The fragment 'modules:%' matches each word in the modules variable
 #and the fragment '=%.beam' replaces each match on the left hand side
-#of the equals sign with a new word that consists of what matched %
-#on the left hand side of the equals sign followed by .beam.  If instead
-#you wrote $(modules:%.xx=%.beam), then %.xx would match the words in the
-#modules variable that ended in '.xx', e.g. myfile.xx, and on the right
-hand side of the equals sign, % would equal myfile, so the replacement would
-be 'myfile.beam'.
+#of the equals sign with a new word '%.beam', where % is replaced by 
+#the same thing that matched % on the left hand side of the equals 
+#sign. If instead you wrote,
+#     $(modules:%.xx=%.beam),
+#then %.xx would match all the words in the modules variable that
+#ended in '.xx', e.g. myfile.xx, and on the right hand side of the
+#equals sign, % would equal myfile, so the replacement would be
+#'myfile.beam'.
 
 all: $(modules:%=%.beam) 
 .PHONY: all
