@@ -1,4 +1,4 @@
-#### *Write some some modules that produce dialyzer errors:*
+#### *Write some modules that produce dialyzer errors:*
 
 
 ```erlang
