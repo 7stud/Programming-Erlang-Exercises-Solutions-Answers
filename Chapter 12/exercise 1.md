@@ -58,7 +58,7 @@ member(X, [_|Ys]) ->
     
 ```
 ------
-Okay, to settle my unease with my solution, I did some searching around.  First of all, I overlooked the `whereis()` function listed on p. 195 (alongside the register functions), so here is my code refactored to use `whereis()`:
+Okay, to settle the unease I felt with my solution, I did some searching around.  First of all, I overlooked the `whereis()` function listed on p. 195 (alongside the register functions), so here is my code refactored to use `whereis()`:
 ```erlang
 start(Atom, Fun) ->
     case whereis(Atom) of  %whereis() is listed on p. 195 along with register().
