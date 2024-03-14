@@ -3,7 +3,7 @@ Programming Erlang (2nd Ed.) Joe Armstrong
 
 **Erlang 17.5**  (The book was written for that version, so that's the version I'm using.)
 
-In chapter 13, I got tired of typing commands in the erlang shell to run and test my programs, so I created a shell script to run and test my erlang programs with one command:
+In chapter 13, I got tired of typing commands in the erlang shell to compile and run tests for my programs, so I created a shell script to compile and test my erlang programs with one command:
 ```
 $ ./run
 ```
