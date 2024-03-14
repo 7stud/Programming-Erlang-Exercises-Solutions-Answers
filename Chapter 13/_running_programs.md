@@ -27,7 +27,7 @@ Now, I can run my elrang program from the command line like this:
 ```
 $ ./run
 ```
-When I need to run my program again, I kill the erlang shell with `Ctrl+CC`, then I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
+When I need to run my program again, I kill the erlang shell with `Ctrl-cc`, then I can just hit the up arrow on my keyboard, which will scroll to the previous command, then I hit Return.  No more typing in the shell!  
 
 Potential problems when using a shell script:
 
